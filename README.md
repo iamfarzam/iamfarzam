@@ -21,10 +21,9 @@ I’m an ML enthusiast and have worked on a bunch of **Computer Vision** project
 
 ## Featured Projects 📌
 Here are a few projects I’ve worked on (placeholders for now):
-- **VisionPulse** — Real-time CV pipeline for video analytics
-- **RoadLens** — Road scene understanding with segmentation + detection
-- **MedScan Insight** — Medical image classifier with explainability
-- **QueueFlow API** — Scalable task queue backend for event-driven apps
+- **Sample CV Project** — Real-time CV pipeline for facial expression detection
+- **Sample SDK Project** — SDK for third party legislative signatures 
+- **Sample Attendance Project** — Update on Sample Attendance Project from frappe
 
 [//]: # (## GitHub Stats 📊)
 
