@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portfolio}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    env_file: .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
+    volumes:
+      - backend_static:/app/staticfiles
+      - backend_media:/app/media
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      target: prod
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - backend_static:/static:ro
+      - backend_media:/media:ro
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+  backend_static:
+  backend_media:
