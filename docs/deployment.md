@@ -1,10 +1,23 @@
 # Deployment
 
-## Docker Compose (Self-Hosted)
+## Docker Compose (Self-Hosted VPS)
+
+### Prerequisites
+
+- A VPS with Docker and Docker Compose installed
+- A domain name (optional, but recommended for HTTPS)
 
 ### Production Setup
 
 ```bash
+# Clone the repository
+git clone https://github.com/iamfarzam/iamfarzam.git
+cd iamfarzam
+
+# Configure environment
+cp .env.example .env
+# Edit .env with production values (see below)
+
 # Build and start all services
 docker compose -f docker-compose.prod.yml up --build -d
 
@@ -72,57 +85,7 @@ server {
 
 ---
 
-## Vercel + Railway (Cloud)
-
-For a serverless deployment, split the stack:
-
-| Service | Platform | Hosts |
-|---------|----------|-------|
-| Frontend | Vercel | Next.js |
-| Backend + DB | Railway | Django + PostgreSQL |
-
-### Backend on Railway
-
-1. Create a new project on [Railway](https://railway.app/)
-2. Add a **PostgreSQL** database
-3. Add a **service** pointing to the `backend/` directory
-4. Set environment variables:
-   ```
-   DJANGO_SECRET_KEY=<random-key>
-   DJANGO_SETTINGS_MODULE=config.settings.prod
-   DATABASE_URL=<railway-postgres-url>
-   ALLOWED_HOSTS=your-backend.railway.app
-   CORS_ALLOWED_ORIGINS=https://yourdomain.vercel.app
-   CSRF_TRUSTED_ORIGINS=https://yourdomain.vercel.app
-   ```
-5. Set the start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
-6. Run migrations via Railway CLI or shell:
-   ```bash
-   python manage.py migrate
-   python manage.py createsuperuser
-   ```
-
-### Frontend on Vercel
-
-1. Import the repository on [Vercel](https://vercel.com/)
-2. Set the **root directory** to `frontend`
-3. Set environment variables:
-   ```
-   INTERNAL_API_URL=https://your-backend.railway.app/api/v1
-   NEXT_PUBLIC_API_URL=https://your-backend.railway.app/api/v1
-   NEXT_PUBLIC_SITE_URL=https://yourdomain.vercel.app
-   ```
-4. Deploy — Vercel auto-detects Next.js
-
-### Custom Domain
-
-Point your domain to Vercel for the frontend. The backend runs on a Railway subdomain (or add a custom domain on Railway too).
-
----
-
 ## Updating Content
-
-Regardless of deployment method:
 
 1. Log into Django admin at `/admin/`
 2. Add or edit content
