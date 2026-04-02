@@ -1,10 +1,10 @@
 [build]
-builder = "nixpacks"
-buildCommand = "cd backend && pip install -r requirements.txt && python manage.py collectstatic --noinput"
+builder = "dockerfile"
+dockerfilePath = "backend/Dockerfile"
 watchPatterns = ["backend/**"]
 
 [deploy]
-startCommand = "cd backend && python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3"
+startCommand = "python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3"
 healthcheckPath = "/api/v1/profile/"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
