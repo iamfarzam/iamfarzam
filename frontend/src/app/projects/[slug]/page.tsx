@@ -41,12 +41,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
   const project = await fetchProject(slug);
+  const title = project.title || "Project";
+  const summary = project.summary || "";
+  const technologies = project.technologies || [];
+  const descriptionParagraphs = (project.description || "")
+    .split("\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    name: project.title,
-    description: project.summary,
+    name: title,
+    description: summary,
     url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/projects/${project.slug}`,
     dateCreated: project.created_at,
     image: project.thumbnail,
@@ -67,13 +74,13 @@ export default async function ProjectDetailPage({ params }: Props) {
         </Link>
 
         <h1 className="text-4xl font-bold tracking-tight text-text">
-          {project.title}
+          {title}
         </h1>
-        <p className="mt-3 text-lg text-text-secondary">{project.summary}</p>
+        <p className="mt-3 text-lg text-text-secondary">{summary}</p>
 
-        {project.technologies.length > 0 && (
+        {technologies.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
-            {project.technologies.map((tech) => (
+            {technologies.map((tech) => (
               <Badge key={tech.name}>{tech.name}</Badge>
             ))}
           </div>
@@ -96,7 +103,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           <div className="relative mt-10 aspect-video overflow-hidden rounded-xl border border-border">
             <Image
               src={project.image || project.thumbnail}
-              alt={project.title}
+              alt={title}
               fill
               className="object-cover"
               priority
@@ -106,9 +113,13 @@ export default async function ProjectDetailPage({ params }: Props) {
         )}
 
         <div className="prose prose-slate dark:prose-invert mt-10 max-w-none">
-          {project.description.split("\n").map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+          {descriptionParagraphs.length > 0 ? (
+            descriptionParagraphs.map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))
+          ) : (
+            <p>Project details will be updated soon.</p>
+          )}
         </div>
       </article>
     </>
