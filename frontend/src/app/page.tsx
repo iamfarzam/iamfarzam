@@ -12,17 +12,44 @@ import {
   fetchProjects,
   fetchSkills,
 } from "@/lib/api";
+import type { Profile } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [profile, skills, projects, experience, education] = await Promise.all([
+  const fallbackProfile: Profile = {
+    full_name: "Developer",
+    headline: "Backend Developer",
+    bio: "",
+    avatar: null,
+    resume: null,
+    email: "",
+    location: "",
+    github_url: "",
+    linkedin_url: "",
+    twitter_url: "",
+    website_url: "",
+    meta_title: "",
+    meta_description: "",
+    og_image: null,
+  };
+
+  const [profileResult, skillsResult, projectsResult, experienceResult, educationResult] = await Promise.allSettled([
     fetchProfile(),
     fetchSkills(),
     fetchProjects(),
     fetchExperience(),
     fetchEducation(),
   ]);
+
+  const profile =
+    profileResult.status === "fulfilled" ? profileResult.value : fallbackProfile;
+  const skills = skillsResult.status === "fulfilled" ? skillsResult.value : [];
+  const projects = projectsResult.status === "fulfilled" ? projectsResult.value : [];
+  const experience =
+    experienceResult.status === "fulfilled" ? experienceResult.value : [];
+  const education =
+    educationResult.status === "fulfilled" ? educationResult.value : [];
 
   const jsonLd = {
     "@context": "https://schema.org",

@@ -25,7 +25,11 @@ export async function fetchProfile(): Promise<Profile> {
 }
 
 export async function fetchSkills(): Promise<SkillCategory[]> {
-  return fetchAPI<SkillCategory[]>("/skills/");
+  try {
+    return await fetchAPI<SkillCategory[]>("/skills/");
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchProjects(): Promise<ProjectSummary[]> {
