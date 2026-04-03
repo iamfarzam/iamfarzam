@@ -15,12 +15,16 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    projects.forEach((p) => p.technologies.forEach((t) => tags.add(t.name)));
+    projects.forEach((p) =>
+      (p.technologies || []).forEach((t) => tags.add(t.name))
+    );
     return Array.from(tags).sort();
   }, [projects]);
 
   const filtered = activeTag
-    ? projects.filter((p) => p.technologies.some((t) => t.name === activeTag))
+    ? projects.filter((p) =>
+        (p.technologies || []).some((t) => t.name === activeTag)
+      )
     : projects;
 
   return (
@@ -62,7 +66,7 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
               summary={project.summary}
               thumbnail={project.thumbnail}
               href={`/projects/${project.slug}`}
-              technologies={project.technologies}
+              technologies={project.technologies || []}
               githubUrl={project.github_url}
               liveUrl={project.live_url}
             />

@@ -9,7 +9,7 @@ import Badge from "./Badge";
 interface CardProps {
   title: string;
   summary: string;
-  thumbnail: string;
+  thumbnail?: string | null;
   href: string;
   technologies?: { name: string; icon: string }[];
   githubUrl?: string;
@@ -36,13 +36,19 @@ export default function Card({
     >
       <Link href={href} className="block">
         <div className="relative aspect-video overflow-hidden">
-          <Image
-            src={thumbnail}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {thumbnail ? (
+            <Image
+              src={thumbnail}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-bg-tertiary text-sm text-text-muted">
+              No preview image
+            </div>
+          )}
         </div>
       </Link>
       <div className="p-5">
