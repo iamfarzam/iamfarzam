@@ -38,6 +38,13 @@ class SkillCategoryListView(generics.ListAPIView):
     serializer_class = SkillCategorySerializer
     queryset = SkillCategory.objects.filter(is_active=True)
 
+    def list(self, request, *args, **kwargs):
+        try:
+            return super().list(request, *args, **kwargs)
+        except Exception:
+            # Keep homepage functional even when malformed skill data exists.
+            return Response([])
+
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "slug"
