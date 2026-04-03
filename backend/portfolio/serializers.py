@@ -10,11 +10,22 @@ from .models import (
     SkillCategory,
 )
 
+def safe_file_url(field_file, request=None):
+    if not field_file:
+        return None
+    try:
+        url = field_file.url
+    except Exception:
+        return None
+    if request is not None:
+        return request.build_absolute_uri(url)
+    return url
+
 
 class ProfileSerializer(serializers.ModelSerializer):
-    avatar = serializers.ImageField(use_url=True, required=False)
-    resume = serializers.FileField(use_url=True, required=False)
-    og_image = serializers.ImageField(use_url=True, required=False)
+    avatar = serializers.SerializerMethodField()
+    resume = serializers.SerializerMethodField()
+    og_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -23,6 +34,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             "location", "github_url", "linkedin_url", "twitter_url",
             "website_url", "meta_title", "meta_description", "og_image",
         ]
+
+    def get_avatar(self, obj):
+        return safe_file_url(obj.avatar, self.context.get("request"))
+
+    def get_resume(self, obj):
+        return safe_file_url(obj.resume, self.context.get("request"))
+
+    def get_og_image(self, obj):
+        return safe_file_url(obj.og_image, self.context.get("request"))
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -55,7 +75,7 @@ class TechnologySerializer(serializers.ModelSerializer):
 
 class ProjectListSerializer(serializers.ModelSerializer):
     technologies = TechnologySerializer(many=True, read_only=True)
-    thumbnail = serializers.ImageField(use_url=True)
+    thumbnail = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -64,11 +84,14 @@ class ProjectListSerializer(serializers.ModelSerializer):
             "technologies", "github_url", "live_url", "is_featured",
         ]
 
+    def get_thumbnail(self, obj):
+        return safe_file_url(obj.thumbnail, self.context.get("request"))
+
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     technologies = TechnologySerializer(many=True, read_only=True)
-    thumbnail = serializers.ImageField(use_url=True)
-    image = serializers.ImageField(use_url=True, required=False)
+    thumbnail = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -77,9 +100,15 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "technologies", "github_url", "live_url", "is_featured", "created_at",
         ]
 
+    def get_thumbnail(self, obj):
+        return safe_file_url(obj.thumbnail, self.context.get("request"))
+
+    def get_image(self, obj):
+        return safe_file_url(obj.image, self.context.get("request"))
+
 
 class ExperienceSerializer(serializers.ModelSerializer):
-    company_logo = serializers.ImageField(use_url=True, required=False)
+    company_logo = serializers.SerializerMethodField()
 
     class Meta:
         model = Experience
@@ -88,9 +117,12 @@ class ExperienceSerializer(serializers.ModelSerializer):
             "end_date", "description", "company_url", "company_logo",
         ]
 
+    def get_company_logo(self, obj):
+        return safe_file_url(obj.company_logo, self.context.get("request"))
+
 
 class EducationSerializer(serializers.ModelSerializer):
-    institution_logo = serializers.ImageField(use_url=True, required=False)
+    institution_logo = serializers.SerializerMethodField()
 
     class Meta:
         model = Education
@@ -98,6 +130,9 @@ class EducationSerializer(serializers.ModelSerializer):
             "id", "institution", "degree", "field_of_study",
             "start_date", "end_date", "description", "institution_logo",
         ]
+
+    def get_institution_logo(self, obj):
+        return safe_file_url(obj.institution_logo, self.context.get("request"))
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
