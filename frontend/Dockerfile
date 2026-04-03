@@ -1,8 +1,10 @@
+# syntax=docker/dockerfile:1.7
+
 # --- Dependencies ---
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci --prefer-offline --no-audit --no-fund
 
 # --- Development ---
 FROM node:20-alpine AS dev
@@ -18,7 +20,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 # --- Production ---
 FROM node:20-alpine AS prod
