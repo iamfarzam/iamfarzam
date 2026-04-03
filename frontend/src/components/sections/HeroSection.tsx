@@ -51,6 +51,14 @@ function useTypewriter(words: string[], speed = 100, pause = 2000) {
 
 export default function HeroSection({ profile }: HeroProps) {
   const typedRole = useTypewriter(roles);
+  const fullName = profile.full_name?.trim() || "Developer";
+  const firstName = fullName.split(" ")[0] || "Developer";
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("") || "D";
+  const headline = profile.headline?.trim() || "Backend Developer";
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden">
@@ -73,14 +81,14 @@ export default function HeroSection({ profile }: HeroProps) {
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
             Hi, I&apos;m{" "}
-            <span className="text-accent">{profile.full_name.split(" ")[0]}</span>
+            <span className="text-accent">{firstName}</span>
           </h1>
           <div className="mt-4 h-8 text-xl text-text-secondary sm:text-2xl">
             <span>{typedRole}</span>
             <span className="animate-pulse text-accent">|</span>
           </div>
           <p className="mt-6 max-w-lg text-text-secondary md:text-lg">
-            {profile.headline}
+            {headline}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">
@@ -120,7 +128,7 @@ export default function HeroSection({ profile }: HeroProps) {
             <div className="relative h-64 w-64 overflow-hidden rounded-full border-4 border-accent/20 shadow-2xl shadow-accent/10 sm:h-80 sm:w-80">
               <Image
                 src={profile.avatar}
-                alt={profile.full_name}
+                alt={fullName}
                 fill
                 className="object-cover"
                 priority
@@ -129,10 +137,7 @@ export default function HeroSection({ profile }: HeroProps) {
             </div>
           ) : (
             <div className="flex h-64 w-64 items-center justify-center rounded-full border-4 border-accent/20 bg-bg-tertiary text-6xl font-bold text-accent sm:h-80 sm:w-80">
-              {profile.full_name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+              {initials}
             </div>
           )}
         </motion.div>

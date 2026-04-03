@@ -11,6 +11,17 @@ interface AboutProps {
 }
 
 export default function AboutSection({ profile }: AboutProps) {
+  const fullName = profile.full_name?.trim() || "Developer";
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("") || "D";
+  const bioParagraphs = (profile.bio || "")
+    .split("\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
   return (
     <Section id="about" title="About Me" subtitle="A bit about who I am and what I do">
       <div className="grid items-center gap-12 md:grid-cols-2">
@@ -24,7 +35,7 @@ export default function AboutSection({ profile }: AboutProps) {
             <div className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-2xl shadow-xl">
               <Image
                 src={profile.avatar}
-                alt={profile.full_name}
+                alt={fullName}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 384px"
@@ -32,10 +43,7 @@ export default function AboutSection({ profile }: AboutProps) {
             </div>
           ) : (
             <div className="mx-auto flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl bg-bg-tertiary text-8xl font-bold text-accent">
-              {profile.full_name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+              {initials}
             </div>
           )}
         </motion.div>
@@ -47,9 +55,13 @@ export default function AboutSection({ profile }: AboutProps) {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="space-y-4 text-text-secondary leading-relaxed">
-            {profile.bio.split("\n").map((paragraph, i) => (
-              <p key={i}>{paragraph}</p>
-            ))}
+            {bioParagraphs.length > 0 ? (
+              bioParagraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))
+            ) : (
+              <p>I build reliable backend systems and modern web applications.</p>
+            )}
           </div>
 
           {profile.location && (
