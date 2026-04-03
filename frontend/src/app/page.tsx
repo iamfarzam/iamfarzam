@@ -13,6 +13,8 @@ import {
   fetchSkills,
 } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [profile, skills, projects, experience, education] = await Promise.all([
     fetchProfile(),
