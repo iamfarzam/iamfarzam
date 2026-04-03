@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Explore my portfolio of software engineering projects.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await fetchProjects();
 
