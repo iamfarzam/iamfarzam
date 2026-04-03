@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,14 +8,14 @@ import ScrollToTop from "@/components/ui/ScrollToTop";
 import { fetchProfile } from "@/lib/api";
 import "@/styles/globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "../fonts/Inter-Variable.ttf",
   variable: "--font-inter",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+const jetbrainsMono = localFont({
+  src: "../fonts/JetBrainsMono-Variable.ttf",
   variable: "--font-jetbrains",
   display: "swap",
 });
