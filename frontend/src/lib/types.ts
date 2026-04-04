@@ -1,6 +1,7 @@
 export interface Profile {
   full_name: string;
   headline: string;
+  tagline: string;
   bio: string;
   avatar: string | null;
   resume: string | null;

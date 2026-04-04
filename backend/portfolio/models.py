@@ -5,7 +5,8 @@ class Profile(models.Model):
     """Singleton model for personal profile information."""
 
     full_name = models.CharField(max_length=100)
-    headline = models.CharField(max_length=200, help_text="e.g. Software Engineer | System Architect")
+    headline = models.CharField(max_length=200, help_text="Pipe-separated roles for the typewriter animation, e.g. Software Engineer | System Architect")
+    tagline = models.CharField(max_length=300, blank=True, help_text="Short intro shown below the headline, e.g. I solve complex problems and build software that lasts.")
     bio = models.TextField()
     avatar = models.ImageField(upload_to="profile/", blank=True)
     resume = models.FileField(upload_to="profile/", blank=True)

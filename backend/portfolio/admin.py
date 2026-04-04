@@ -33,6 +33,7 @@ class ProfileAdmin(ModelAdmin):
                 "fields": (
                     "full_name",
                     "headline",
+                    "tagline",
                     "bio",
                     "avatar",
                     "resume",

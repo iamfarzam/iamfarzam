@@ -12,7 +12,7 @@ interface HeroProps {
   profile: Profile;
 }
 
-const roles = [
+const fallbackRoles = [
   "Software Engineer",
   "System Architect",
   "Open Source Contributor",
@@ -56,7 +56,10 @@ function useTypewriter(words: string[], speed = 100, pause = 2000) {
 }
 
 export default function HeroSection({ profile }: HeroProps) {
-  const typedRole = useTypewriter(roles);
+  const roles = profile.headline
+    ? profile.headline.split("|").map((r) => r.trim()).filter(Boolean)
+    : fallbackRoles;
+  const typedRole = useTypewriter(roles.length > 0 ? roles : fallbackRoles);
   const fullName = profile.full_name?.trim() || "Developer";
   const firstName = fullName.split(" ")[0] || "Developer";
   const initials = fullName
@@ -64,7 +67,7 @@ export default function HeroSection({ profile }: HeroProps) {
     .filter(Boolean)
     .map((n) => n[0])
     .join("") || "D";
-  const headline = profile.headline?.trim() || "I solve complex problems and build software that lasts.";
+  const tagline = profile.tagline?.trim() || "I solve complex problems and build software that lasts.";
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden">
@@ -94,7 +97,7 @@ export default function HeroSection({ profile }: HeroProps) {
             <span className="animate-pulse text-accent">|</span>
           </div>
           <p className="mt-6 max-w-lg text-text-secondary md:text-lg">
-            {headline}
+            {tagline}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">

@@ -42,7 +42,7 @@ export default function Header() {
           href="/"
           className="text-xl font-bold tracking-tight text-text transition-colors hover:text-accent"
         >
-          Portfolio<span className="text-accent">.</span>
+          {process.env.NEXT_PUBLIC_SITE_TITLE || "Portfolio"}<span className="text-accent">.</span>
         </Link>
 
         {/* Desktop nav */}

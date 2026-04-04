@@ -46,6 +46,7 @@ class Command(BaseCommand):
         Profile.objects.create(
             full_name="Alex Morgan",
             headline="Software Engineer | System Architect | Open Source Contributor",
+            tagline="I solve complex problems and build software that lasts.",
             bio=(
                 "I'm a software engineer with a passion for designing robust systems "
                 "and writing clean, maintainable code. Over the years, I've worked "
