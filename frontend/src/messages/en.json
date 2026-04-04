@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "experience": "Experience",
+    "contact": "Contact"
+  },
+  "hero": {
+    "kicker": "Design · Build · Ship",
+    "greeting": "Hi, I'm <name>{firstName}</name>",
+    "fallback_tagline": "I solve complex problems and build software that lasts.",
+    "cta_contact": "Get In Touch",
+    "cta_resume": "Download Resume"
+  },
+  "about": {
+    "title": "About Me",
+    "subtitle": "The engineer behind the work",
+    "fallback_bio": "I'm a software engineer driven by curiosity and a love for solving hard problems. I care deeply about writing clean, maintainable code and building systems that stand the test of time."
+  },
+  "skills": {
+    "title": "Skills & Technologies",
+    "subtitle": "What powers my work"
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "subtitle": "From concept to production",
+    "view_all": "View All Projects",
+    "all_title": "All Projects",
+    "all_subtitle": "A showcase of my engineering work",
+    "all_meta_description": "A showcase of my engineering work.",
+    "back": "Back to Projects",
+    "view_github": "View on GitHub",
+    "live_demo": "Live Demo",
+    "no_preview": "Preview coming soon",
+    "no_description": "Full case study coming soon.",
+    "no_filter_results": "No projects match the selected filter.",
+    "filter_all": "All"
+  },
+  "experience": {
+    "title": "Experience",
+    "subtitle": "Where I've made an impact",
+    "present": "Present"
+  },
+  "education": {
+    "title": "Education",
+    "subtitle": "Where it all started"
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Have a project in mind? Let's talk.",
+    "meta_description": "Get in touch to discuss a project or opportunity.",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "email_label": "Email",
+    "email_placeholder": "your@email.com",
+    "subject_label": "Subject",
+    "subject_placeholder": "What's this about?",
+    "message_label": "Message",
+    "message_placeholder": "Your message...",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent successfully! You'll hear back soon.",
+    "error_default": "Something went wrong"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "go_home": "Go Home"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Live Demo"
+  }
+}

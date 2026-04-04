@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
+import { useTranslations } from "next-intl";
+
 import Button from "@/components/ui/Button";
 import SocialLinks from "@/components/ui/SocialLinks";
 import type { Profile } from "@/lib/types";
@@ -56,6 +58,7 @@ function useTypewriter(words: string[], speed = 100, pause = 2000) {
 }
 
 export default function HeroSection({ profile }: HeroProps) {
+  const t = useTranslations("hero");
   const roles = useMemo(() => {
     const parsed = profile.headline
       ? profile.headline.split("|").map((r) => r.trim()).filter(Boolean)
@@ -70,7 +73,7 @@ export default function HeroSection({ profile }: HeroProps) {
     .filter(Boolean)
     .map((n) => n[0])
     .join("") || "D";
-  const tagline = profile.tagline?.trim() || "I solve complex problems and build software that lasts.";
+  const tagline = profile.tagline?.trim() || t("fallback_tagline");
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden">
@@ -89,11 +92,13 @@ export default function HeroSection({ profile }: HeroProps) {
           className="flex-1 text-center md:text-left"
         >
           <p className="text-sm font-medium uppercase tracking-widest text-accent">
-            Design · Build · Ship
+            {t("kicker")}
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
-            Hi, I&apos;m{" "}
-            <span className="text-accent">{firstName}</span>
+            {t.rich("greeting", {
+              firstName,
+              name: (chunks) => <span className="text-accent">{chunks}</span>,
+            })}
           </h1>
           <div className="mt-4 h-8 text-xl text-text-secondary sm:text-2xl">
             <span>{typedRole}</span>
@@ -105,7 +110,7 @@ export default function HeroSection({ profile }: HeroProps) {
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">
             <Button as="a" href="/#contact">
-              Get In Touch
+              {t("cta_contact")}
             </Button>
             {profile.resume && (
               <Button
@@ -115,7 +120,7 @@ export default function HeroSection({ profile }: HeroProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Download Resume
+                {t("cta_resume")}
               </Button>
             )}
           </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import Section from "@/components/ui/Section";
 import type { Education } from "@/lib/types";
@@ -18,8 +19,9 @@ function formatDate(date: string): string {
 }
 
 export default function EducationSection({ education }: EducationProps) {
+  const t = useTranslations("education");
   return (
-    <Section id="education" title="Education" subtitle="Where it all started">
+    <Section id="education" title={t("title")} subtitle={t("subtitle")}>
       <div className="mx-auto max-w-3xl space-y-6">
         {education.map((edu, index) => (
           <motion.div

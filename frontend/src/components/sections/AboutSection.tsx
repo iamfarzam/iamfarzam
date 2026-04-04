@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import Section from "@/components/ui/Section";
 import type { Profile } from "@/lib/types";
@@ -11,6 +12,7 @@ interface AboutProps {
 }
 
 export default function AboutSection({ profile }: AboutProps) {
+  const t = useTranslations("about");
   const fullName = profile.full_name?.trim() || "Developer";
   const initials = fullName
     .split(" ")
@@ -23,7 +25,7 @@ export default function AboutSection({ profile }: AboutProps) {
     .filter(Boolean);
 
   return (
-    <Section id="about" title="About Me" subtitle="The engineer behind the work">
+    <Section id="about" title={t("title")} subtitle={t("subtitle")}>
       <div className="grid items-center gap-12 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -60,7 +62,7 @@ export default function AboutSection({ profile }: AboutProps) {
                 <p key={i}>{paragraph}</p>
               ))
             ) : (
-              <p>I&apos;m a software engineer driven by curiosity and a love for solving hard problems. I care deeply about writing clean, maintainable code and building systems that stand the test of time.</p>
+              <p>{t("fallback_bio")}</p>
             )}
           </div>
 

@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "关于",
+    "skills": "技能",
+    "projects": "项目",
+    "experience": "经历",
+    "contact": "联系"
+  },
+  "hero": {
+    "kicker": "设计 · 构建 · 交付",
+    "greeting": "你好，我是<name>{firstName}</name>",
+    "fallback_tagline": "我解决复杂问题，构建经得起考验的软件。",
+    "cta_contact": "联系我",
+    "cta_resume": "下载简历"
+  },
+  "about": {
+    "title": "关于我",
+    "subtitle": "作品背后的工程师",
+    "fallback_bio": "我是一名软件工程师，驱动我的是好奇心和对解决难题的热爱。我非常重视编写简洁、可维护的代码，以及构建经得起时间考验的系统。"
+  },
+  "skills": {
+    "title": "技能与技术",
+    "subtitle": "驱动我工作的技术栈"
+  },
+  "projects": {
+    "title": "精选项目",
+    "subtitle": "从概念到生产",
+    "view_all": "查看所有项目",
+    "all_title": "所有项目",
+    "all_subtitle": "我的工程作品集",
+    "all_meta_description": "我的工程作品集。",
+    "back": "返回项目列表",
+    "view_github": "在 GitHub 上查看",
+    "live_demo": "在线演示",
+    "no_preview": "预览即将推出",
+    "no_description": "完整案例研究即将推出。",
+    "no_filter_results": "没有项目符合所选筛选条件。",
+    "filter_all": "全部"
+  },
+  "experience": {
+    "title": "工作经历",
+    "subtitle": "我产生影响的地方",
+    "present": "至今"
+  },
+  "education": {
+    "title": "教育背景",
+    "subtitle": "一切开始的地方"
+  },
+  "contact": {
+    "title": "联系我",
+    "subtitle": "有项目想法？让我们聊聊。",
+    "meta_description": "联系我，讨论项目或合作机会。",
+    "name_label": "姓名",
+    "name_placeholder": "您的姓名",
+    "email_label": "邮箱",
+    "email_placeholder": "your@email.com",
+    "subject_label": "主题",
+    "subject_placeholder": "关于什么？",
+    "message_label": "留言",
+    "message_placeholder": "您的留言...",
+    "send": "发送消息",
+    "sending": "发送中...",
+    "success": "消息发送成功！您将很快收到回复。",
+    "error_default": "出了点问题"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "页面未找到",
+    "description": "您要找的页面不存在或已被移动。",
+    "go_home": "返回首页"
+  },
+  "footer": {
+    "rights": "保留所有权利。"
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "在线演示"
+  }
+}

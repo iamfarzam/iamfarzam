@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "À propos",
+    "skills": "Compétences",
+    "projects": "Projets",
+    "experience": "Expérience",
+    "contact": "Contact"
+  },
+  "hero": {
+    "kicker": "Concevoir · Développer · Livrer",
+    "greeting": "Bonjour, je suis <name>{firstName}</name>",
+    "fallback_tagline": "Je résous des problèmes complexes et je conçois des logiciels durables.",
+    "cta_contact": "Me contacter",
+    "cta_resume": "Télécharger le CV"
+  },
+  "about": {
+    "title": "À propos de moi",
+    "subtitle": "L'ingénieur derrière le travail",
+    "fallback_bio": "Je suis un ingénieur logiciel animé par la curiosité et la passion de résoudre des problèmes complexes. J'accorde une grande importance à l'écriture d'un code propre et maintenable, ainsi qu'à la construction de systèmes pérennes."
+  },
+  "skills": {
+    "title": "Compétences et technologies",
+    "subtitle": "Ce qui alimente mon travail"
+  },
+  "projects": {
+    "title": "Projets phares",
+    "subtitle": "Du concept à la production",
+    "view_all": "Voir tous les projets",
+    "all_title": "Tous les projets",
+    "all_subtitle": "Une vitrine de mon travail d'ingénierie",
+    "all_meta_description": "Une vitrine de mon travail d'ingénierie.",
+    "back": "Retour aux projets",
+    "view_github": "Voir sur GitHub",
+    "live_demo": "Démo en ligne",
+    "no_preview": "Aperçu à venir",
+    "no_description": "Étude de cas à venir.",
+    "no_filter_results": "Aucun projet ne correspond au filtre sélectionné.",
+    "filter_all": "Tous"
+  },
+  "experience": {
+    "title": "Expérience",
+    "subtitle": "Là où j'ai eu un impact",
+    "present": "Présent"
+  },
+  "education": {
+    "title": "Formation",
+    "subtitle": "Là où tout a commencé"
+  },
+  "contact": {
+    "title": "Me contacter",
+    "subtitle": "Vous avez un projet en tête ? Parlons-en.",
+    "meta_description": "Contactez-moi pour discuter d'un projet ou d'une opportunité.",
+    "name_label": "Nom",
+    "name_placeholder": "Votre nom",
+    "email_label": "E-mail",
+    "email_placeholder": "votre@email.com",
+    "subject_label": "Objet",
+    "subject_placeholder": "De quoi s'agit-il ?",
+    "message_label": "Message",
+    "message_placeholder": "Votre message...",
+    "send": "Envoyer le message",
+    "sending": "Envoi en cours...",
+    "success": "Message envoyé avec succès ! Vous recevrez une réponse bientôt.",
+    "error_default": "Une erreur est survenue"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "go_home": "Retour à l'accueil"
+  },
+  "footer": {
+    "rights": "Tous droits réservés."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Démo en ligne"
+  }
+}

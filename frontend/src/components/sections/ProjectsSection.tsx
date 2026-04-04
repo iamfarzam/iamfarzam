@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import Card from "@/components/ui/Card";
 import Section from "@/components/ui/Section";
@@ -12,10 +13,11 @@ interface ProjectsProps {
 }
 
 export default function ProjectsSection({ projects }: ProjectsProps) {
+  const t = useTranslations("projects");
   const featured = projects.filter((p) => p.is_featured);
 
   return (
-    <Section id="projects" title="Featured Projects" subtitle="From concept to production">
+    <Section id="projects" title={t("title")} subtitle={t("subtitle")}>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {featured.map((project) => (
           <Card
@@ -33,7 +35,7 @@ export default function ProjectsSection({ projects }: ProjectsProps) {
       {projects.length > featured.length && (
         <div className="mt-10 text-center">
           <Button as={Link} href="/projects" variant="outline">
-            View All Projects
+            {t("view_all")}
           </Button>
         </div>
       )}

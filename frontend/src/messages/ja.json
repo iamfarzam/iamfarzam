@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "自己紹介",
+    "skills": "スキル",
+    "projects": "プロジェクト",
+    "experience": "経歴",
+    "contact": "お問い合わせ"
+  },
+  "hero": {
+    "kicker": "設計 · 構築 · 提供",
+    "greeting": "こんにちは、<name>{firstName}</name>です",
+    "fallback_tagline": "複雑な問題を解決し、長く使われるソフトウェアを構築します。",
+    "cta_contact": "お問い合わせ",
+    "cta_resume": "履歴書をダウンロード"
+  },
+  "about": {
+    "title": "自己紹介",
+    "subtitle": "作品の裏にいるエンジニア",
+    "fallback_bio": "私は好奇心と難問を解くことへの情熱に突き動かされるソフトウェアエンジニアです。クリーンで保守性の高いコードを書くこと、そして時の試練に耐えるシステムを構築することを大切にしています。"
+  },
+  "skills": {
+    "title": "スキルと技術",
+    "subtitle": "私の仕事を支える技術"
+  },
+  "projects": {
+    "title": "注目のプロジェクト",
+    "subtitle": "コンセプトから本番環境まで",
+    "view_all": "すべてのプロジェクトを見る",
+    "all_title": "すべてのプロジェクト",
+    "all_subtitle": "エンジニアリング作品の紹介",
+    "all_meta_description": "エンジニアリング作品の紹介。",
+    "back": "プロジェクト一覧に戻る",
+    "view_github": "GitHubで見る",
+    "live_demo": "ライブデモ",
+    "no_preview": "プレビューは近日公開",
+    "no_description": "ケーススタディは近日公開。",
+    "no_filter_results": "選択したフィルターに一致するプロジェクトはありません。",
+    "filter_all": "すべて"
+  },
+  "experience": {
+    "title": "経歴",
+    "subtitle": "インパクトを残した場所",
+    "present": "現在"
+  },
+  "education": {
+    "title": "学歴",
+    "subtitle": "すべてが始まった場所"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "subtitle": "プロジェクトのご相談はこちら。",
+    "meta_description": "プロジェクトや機会についてご相談ください。",
+    "name_label": "お名前",
+    "name_placeholder": "お名前",
+    "email_label": "メールアドレス",
+    "email_placeholder": "your@email.com",
+    "subject_label": "件名",
+    "subject_placeholder": "どのようなご用件ですか？",
+    "message_label": "メッセージ",
+    "message_placeholder": "メッセージを入力...",
+    "send": "メッセージを送信",
+    "sending": "送信中...",
+    "success": "メッセージが送信されました！近日中にご返信いたします。",
+    "error_default": "エラーが発生しました"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "ページが見つかりません",
+    "description": "お探しのページは存在しないか、移動されました。",
+    "go_home": "ホームに戻る"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "ライブデモ"
+  }
+}

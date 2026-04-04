@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "نبذة عني",
+    "skills": "المهارات",
+    "projects": "المشاريع",
+    "experience": "الخبرات",
+    "contact": "تواصل معي"
+  },
+  "hero": {
+    "kicker": "تصميم · بناء · إطلاق",
+    "greeting": "مرحبًا، أنا <name>{firstName}</name>",
+    "fallback_tagline": "أحلّ المشكلات المعقدة وأبني برمجيات تدوم.",
+    "cta_contact": "تواصل معي",
+    "cta_resume": "تحميل السيرة الذاتية"
+  },
+  "about": {
+    "title": "نبذة عني",
+    "subtitle": "المهندس وراء العمل",
+    "fallback_bio": "أنا مهندس برمجيات يدفعه الفضول وحب حل المشكلات الصعبة. أهتم بشدة بكتابة كود نظيف وسهل الصيانة، وبناء أنظمة تصمد أمام اختبار الزمن."
+  },
+  "skills": {
+    "title": "المهارات والتقنيات",
+    "subtitle": "ما يدعم عملي"
+  },
+  "projects": {
+    "title": "مشاريع مميزة",
+    "subtitle": "من الفكرة إلى الإنتاج",
+    "view_all": "عرض جميع المشاريع",
+    "all_title": "جميع المشاريع",
+    "all_subtitle": "عرض لأعمالي الهندسية",
+    "all_meta_description": "عرض لأعمالي الهندسية.",
+    "back": "العودة إلى المشاريع",
+    "view_github": "عرض على GitHub",
+    "live_demo": "عرض مباشر",
+    "no_preview": "المعاينة قريبًا",
+    "no_description": "دراسة الحالة قريبًا.",
+    "no_filter_results": "لا توجد مشاريع تطابق الفلتر المحدد.",
+    "filter_all": "الكل"
+  },
+  "experience": {
+    "title": "الخبرات",
+    "subtitle": "حيث تركت أثرًا",
+    "present": "الحاضر"
+  },
+  "education": {
+    "title": "التعليم",
+    "subtitle": "حيث بدأ كل شيء"
+  },
+  "contact": {
+    "title": "تواصل معي",
+    "subtitle": "لديك مشروع في ذهنك؟ دعنا نتحدث.",
+    "meta_description": "تواصل معي لمناقشة مشروع أو فرصة.",
+    "name_label": "الاسم",
+    "name_placeholder": "اسمك",
+    "email_label": "البريد الإلكتروني",
+    "email_placeholder": "your@email.com",
+    "subject_label": "الموضوع",
+    "subject_placeholder": "ما الموضوع؟",
+    "message_label": "الرسالة",
+    "message_placeholder": "رسالتك...",
+    "send": "إرسال الرسالة",
+    "sending": "جارٍ الإرسال...",
+    "success": "تم إرسال الرسالة بنجاح! ستتلقى ردًا قريبًا.",
+    "error_default": "حدث خطأ ما"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "go_home": "العودة للرئيسية"
+  },
+  "footer": {
+    "rights": "جميع الحقوق محفوظة."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "عرض مباشر"
+  }
+}

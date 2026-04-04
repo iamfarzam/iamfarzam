@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "Über mich",
+    "skills": "Fähigkeiten",
+    "projects": "Projekte",
+    "experience": "Erfahrung",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "kicker": "Entwerfen · Entwickeln · Ausliefern",
+    "greeting": "Hallo, ich bin <name>{firstName}</name>",
+    "fallback_tagline": "Ich löse komplexe Probleme und entwickle Software, die Bestand hat.",
+    "cta_contact": "Kontakt aufnehmen",
+    "cta_resume": "Lebenslauf herunterladen"
+  },
+  "about": {
+    "title": "Über mich",
+    "subtitle": "Der Ingenieur hinter der Arbeit",
+    "fallback_bio": "Ich bin ein Softwareentwickler, angetrieben von Neugier und der Leidenschaft, schwierige Probleme zu lösen. Mir liegt sauberer, wartbarer Code am Herzen, und ich baue Systeme, die den Test der Zeit bestehen."
+  },
+  "skills": {
+    "title": "Fähigkeiten und Technologien",
+    "subtitle": "Was meine Arbeit antreibt"
+  },
+  "projects": {
+    "title": "Ausgewählte Projekte",
+    "subtitle": "Vom Konzept zur Produktion",
+    "view_all": "Alle Projekte anzeigen",
+    "all_title": "Alle Projekte",
+    "all_subtitle": "Ein Überblick über meine Ingenieurarbeit",
+    "all_meta_description": "Ein Überblick über meine Ingenieurarbeit.",
+    "back": "Zurück zu den Projekten",
+    "view_github": "Auf GitHub ansehen",
+    "live_demo": "Live-Demo",
+    "no_preview": "Vorschau demnächst verfügbar",
+    "no_description": "Fallstudie demnächst verfügbar.",
+    "no_filter_results": "Keine Projekte entsprechen dem ausgewählten Filter.",
+    "filter_all": "Alle"
+  },
+  "experience": {
+    "title": "Erfahrung",
+    "subtitle": "Wo ich Wirkung erzielt habe",
+    "present": "Heute"
+  },
+  "education": {
+    "title": "Ausbildung",
+    "subtitle": "Wo alles begann"
+  },
+  "contact": {
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Sie haben ein Projekt im Sinn? Lassen Sie uns sprechen.",
+    "meta_description": "Nehmen Sie Kontakt auf, um ein Projekt oder eine Möglichkeit zu besprechen.",
+    "name_label": "Name",
+    "name_placeholder": "Ihr Name",
+    "email_label": "E-Mail",
+    "email_placeholder": "ihre@email.com",
+    "subject_label": "Betreff",
+    "subject_placeholder": "Worum geht es?",
+    "message_label": "Nachricht",
+    "message_placeholder": "Ihre Nachricht...",
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "success": "Nachricht erfolgreich gesendet! Sie erhalten bald eine Antwort.",
+    "error_default": "Etwas ist schiefgelaufen"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "go_home": "Zur Startseite"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Live-Demo"
+  }
+}

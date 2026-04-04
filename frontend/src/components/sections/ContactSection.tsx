@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import Button from "@/components/ui/Button";
@@ -8,6 +9,7 @@ import Section from "@/components/ui/Section";
 import { submitContact } from "@/lib/api";
 
 export default function ContactSection() {
+  const t = useTranslations("contact");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -27,7 +29,7 @@ export default function ContactSection() {
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
+      setErrorMsg(err instanceof Error ? err.message : t("error_default"));
     }
   };
 
@@ -37,8 +39,8 @@ export default function ContactSection() {
   return (
     <Section
       id="contact"
-      title="Get In Touch"
-      subtitle="Have a project in mind? Let's talk."
+      title={t("title")}
+      subtitle={t("subtitle")}
       className="bg-bg-secondary"
     >
       <motion.form
@@ -52,7 +54,7 @@ export default function ContactSection() {
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-text">
-              Name
+              {t("name_label")}
             </label>
             <input
               id="name"
@@ -61,12 +63,12 @@ export default function ContactSection() {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className={inputClasses}
-              placeholder="Your name"
+              placeholder={t("name_placeholder")}
             />
           </div>
           <div>
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-text">
-              Email
+              {t("email_label")}
             </label>
             <input
               id="email"
@@ -75,14 +77,14 @@ export default function ContactSection() {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className={inputClasses}
-              placeholder="your@email.com"
+              placeholder={t("email_placeholder")}
             />
           </div>
         </div>
 
         <div>
           <label htmlFor="subject" className="mb-1.5 block text-sm font-medium text-text">
-            Subject
+            {t("subject_label")}
           </label>
           <input
             id="subject"
@@ -91,13 +93,13 @@ export default function ContactSection() {
             value={form.subject}
             onChange={(e) => setForm({ ...form, subject: e.target.value })}
             className={inputClasses}
-            placeholder="What's this about?"
+            placeholder={t("subject_placeholder")}
           />
         </div>
 
         <div>
           <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-text">
-            Message
+            {t("message_label")}
           </label>
           <textarea
             id="message"
@@ -106,17 +108,17 @@ export default function ContactSection() {
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             className={`${inputClasses} resize-none`}
-            placeholder="Your message..."
+            placeholder={t("message_placeholder")}
           />
         </div>
 
         <Button type="submit" className="w-full" disabled={status === "sending"}>
-          {status === "sending" ? "Sending..." : "Send Message"}
+          {status === "sending" ? t("sending") : t("send")}
         </Button>
 
         {status === "sent" && (
           <p className="text-center text-sm text-green-600 dark:text-green-400">
-            Message sent successfully! You&apos;ll hear back soon.
+            {t("success")}
           </p>
         )}
         {status === "error" && (

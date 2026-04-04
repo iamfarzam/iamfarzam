@@ -1,0 +1,79 @@
+{
+  "header": {
+    "about": "Acerca de",
+    "skills": "Habilidades",
+    "projects": "Proyectos",
+    "experience": "Experiencia",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "kicker": "Diseñar · Construir · Entregar",
+    "greeting": "Hola, soy <name>{firstName}</name>",
+    "fallback_tagline": "Resuelvo problemas complejos y construyo software que perdura.",
+    "cta_contact": "Contáctame",
+    "cta_resume": "Descargar CV"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "subtitle": "El ingeniero detrás del trabajo",
+    "fallback_bio": "Soy un ingeniero de software impulsado por la curiosidad y la pasión por resolver problemas difíciles. Me importa profundamente escribir código limpio y mantenible, y construir sistemas que resistan el paso del tiempo."
+  },
+  "skills": {
+    "title": "Habilidades y tecnologías",
+    "subtitle": "Lo que impulsa mi trabajo"
+  },
+  "projects": {
+    "title": "Proyectos destacados",
+    "subtitle": "Del concepto a la producción",
+    "view_all": "Ver todos los proyectos",
+    "all_title": "Todos los proyectos",
+    "all_subtitle": "Una muestra de mi trabajo de ingeniería",
+    "all_meta_description": "Una muestra de mi trabajo de ingeniería.",
+    "back": "Volver a proyectos",
+    "view_github": "Ver en GitHub",
+    "live_demo": "Demo en vivo",
+    "no_preview": "Vista previa próximamente",
+    "no_description": "Caso de estudio próximamente.",
+    "no_filter_results": "Ningún proyecto coincide con el filtro seleccionado.",
+    "filter_all": "Todos"
+  },
+  "experience": {
+    "title": "Experiencia",
+    "subtitle": "Donde he dejado huella",
+    "present": "Presente"
+  },
+  "education": {
+    "title": "Educación",
+    "subtitle": "Donde todo comenzó"
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "¿Tienes un proyecto en mente? Hablemos.",
+    "meta_description": "Ponte en contacto para hablar de un proyecto u oportunidad.",
+    "name_label": "Nombre",
+    "name_placeholder": "Tu nombre",
+    "email_label": "Correo electrónico",
+    "email_placeholder": "tu@correo.com",
+    "subject_label": "Asunto",
+    "subject_placeholder": "¿De qué se trata?",
+    "message_label": "Mensaje",
+    "message_placeholder": "Tu mensaje...",
+    "send": "Enviar mensaje",
+    "sending": "Enviando...",
+    "success": "¡Mensaje enviado con éxito! Recibirás una respuesta pronto.",
+    "error_default": "Algo salió mal"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe o ha sido trasladada.",
+    "go_home": "Ir al inicio"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Demo en vivo"
+  }
+}

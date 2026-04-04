@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import SocialLinks from "@/components/ui/SocialLinks";
 import type { Profile } from "@/lib/types";
 
@@ -6,13 +8,14 @@ interface FooterProps {
 }
 
 export default function Footer({ profile }: FooterProps) {
+  const t = useTranslations("footer");
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border bg-bg-secondary py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 sm:flex-row sm:justify-between sm:px-6 lg:px-8">
         <p className="text-sm text-text-muted">
-          &copy; {year} {profile?.full_name || "Portfolio"}. All rights reserved.
+          &copy; {year} {profile?.full_name || "Portfolio"}. {t("rights")}
         </p>
         {profile && (
           <SocialLinks
