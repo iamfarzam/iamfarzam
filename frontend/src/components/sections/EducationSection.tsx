@@ -48,7 +48,7 @@ export default function EducationSection({ education }: EducationProps) {
               )}
               <p className="text-sm text-text-secondary">{edu.institution}</p>
               <p className="mt-1 text-xs text-text-muted">
-                {formatDate(edu.start_date)} — {edu.end_date ? formatDate(edu.end_date) : "Present"}
+                {formatDate(edu.start_date)} — {edu.end_date ? formatDate(edu.end_date) : t("present")}
               </p>
               {edu.description && (
                 <p className="mt-2 text-sm text-text-secondary leading-relaxed">

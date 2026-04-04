@@ -44,7 +44,8 @@
   },
   "education": {
     "title": "教育背景",
-    "subtitle": "一切开始的地方"
+    "subtitle": "一切开始的地方",
+    "present": "至今"
   },
   "contact": {
     "title": "联系我",

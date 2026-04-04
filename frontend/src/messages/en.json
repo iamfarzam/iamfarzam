@@ -44,7 +44,8 @@
   },
   "education": {
     "title": "Education",
-    "subtitle": "Where it all started"
+    "subtitle": "Where it all started",
+    "present": "Present"
   },
   "contact": {
     "title": "Get In Touch",

@@ -44,7 +44,8 @@
   },
   "education": {
     "title": "学歴",
-    "subtitle": "すべてが始まった場所"
+    "subtitle": "すべてが始まった場所",
+    "present": "現在"
   },
   "contact": {
     "title": "お問い合わせ",
