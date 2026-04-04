@@ -179,6 +179,7 @@ LANGUAGES = [
     ("it", "Italian"),
     ("sm", "Samoan"),
     ("mi", "Maori"),
+    ("fa", "Persian"),
 ]
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
