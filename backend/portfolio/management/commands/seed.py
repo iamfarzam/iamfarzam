@@ -94,7 +94,11 @@ class Command(BaseCommand):
             field_suffix = lang.replace("-", "_")
             lang_file = fixture_dir / f"seed.{lang}.json"
             if not lang_file.exists():
-                continue
+                # Try short code: zh-hans -> zh
+                short = lang.split("-")[0]
+                lang_file = fixture_dir / f"seed.{short}.json"
+                if not lang_file.exists():
+                    continue
             lang_data = json.loads(lang_file.read_text(encoding="utf-8"))
             self._apply_translations(lang_data, field_suffix)
             loaded += 1
