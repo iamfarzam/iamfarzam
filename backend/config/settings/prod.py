@@ -1,4 +1,6 @@
 """Production settings."""
+from urllib.parse import urlparse
+
 import dj_database_url
 from decouple import config
 
@@ -56,8 +58,36 @@ else:
     }
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS",
-    default="http://localhost",
-    cast=lambda v: [s.strip() for s in v.split(",")],
-)
+
+
+def _csv(value: str) -> list[str]:
+    return [s.strip() for s in value.split(",") if s.strip()]
+
+
+def _derive_csrf_trusted_origins() -> list[str]:
+    origins = _csv(config("CSRF_TRUSTED_ORIGINS", default=""))
+    if origins:
+        return origins
+
+    derived: list[str] = []
+
+    site_url = config("NEXT_PUBLIC_SITE_URL", default="").strip()
+    if site_url:
+        parsed = urlparse(site_url)
+        if parsed.scheme and parsed.netloc:
+            derived.append(f"{parsed.scheme}://{parsed.netloc}")
+
+    for host in ALLOWED_HOSTS:  # noqa: F405
+        host = host.strip().lstrip(".")
+        if not host or host == "*":
+            continue
+        if host in {"localhost", "127.0.0.1"}:
+            derived.extend([f"http://{host}", f"https://{host}"])
+        else:
+            derived.append(f"https://{host}")
+
+    # Stable order + de-duplication.
+    return list(dict.fromkeys(derived))
+
+
+CSRF_TRUSTED_ORIGINS = _derive_csrf_trusted_origins()

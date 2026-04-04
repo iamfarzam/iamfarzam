@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 
@@ -68,10 +71,13 @@ class EducationListView(generics.ListAPIView):
     queryset = Education.objects.filter(is_active=True)
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class ContactCreateView(generics.CreateAPIView):
     serializer_class = ContactMessageSerializer
     queryset = ContactMessage.objects.all()
     throttle_scope = "contact"
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         instance = serializer.save()
