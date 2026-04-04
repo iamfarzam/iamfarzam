@@ -28,8 +28,8 @@ if _s3_bucket:
         "bucket_name": _s3_bucket,
         "endpoint_url": config("S3_ENDPOINT_URL"),
         "region_name": config("S3_REGION", default="default"),
-        "querystring_auth": config("S3_QUERYSTRING_AUTH", default=False, cast=bool),
-        "default_acl": config("S3_DEFAULT_ACL", default="public-read"),
+        "querystring_auth": config("S3_QUERYSTRING_AUTH", default=True, cast=bool),
+        "default_acl": config("S3_DEFAULT_ACL", default="private"),
     }
     _custom_domain = config("S3_CUSTOM_DOMAIN", default="")
     if _custom_domain:
