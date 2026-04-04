@@ -1,0 +1,143 @@
+{
+  "profile": {
+    "full_name": "Alex Morgan",
+    "headline": "Software Engineer | System Architect | Open Source Contributor",
+    "tagline": "I solve complex problems and build software that lasts.",
+    "bio": "I'm a software engineer with a passion for designing robust systems and writing clean, maintainable code. Over the years, I've worked across the full stack \u2014 from low-level infrastructure to user-facing applications \u2014 always focused on solving the right problems the right way.\n\nWhen I'm not coding, I contribute to open source projects and enjoy mentoring developers who are early in their careers. I believe that great software is built by curious people who never stop learning.",
+    "email": "hello@example.com",
+    "location": "San Francisco, CA",
+    "github_url": "https://github.com",
+    "linkedin_url": "https://linkedin.com",
+    "twitter_url": "https://twitter.com",
+    "website_url": "https://example.com",
+    "meta_title": "Alex Morgan \u2014 Software Engineer",
+    "meta_description": "Portfolio of Alex Morgan \u2014 a software engineer specializing in system architecture, distributed systems, and open source."
+  },
+
+  "skills": [
+    {
+      "category": "Languages",
+      "items": [
+        { "name": "Python",     "icon": "python",     "proficiency": 90 },
+        { "name": "JavaScript", "icon": "javascript",  "proficiency": 85 },
+        { "name": "TypeScript", "icon": "typescript",  "proficiency": 80 },
+        { "name": "Go",         "icon": "go",          "proficiency": 70 },
+        { "name": "SQL",        "icon": "sql",         "proficiency": 85 }
+      ]
+    },
+    {
+      "category": "Frameworks & Libraries",
+      "items": [
+        { "name": "Django",  "icon": "django",  "proficiency": 90 },
+        { "name": "React",   "icon": "react",   "proficiency": 80 },
+        { "name": "Next.js", "icon": "nextjs",  "proficiency": 75 },
+        { "name": "FastAPI", "icon": "fastapi",  "proficiency": 80 },
+        { "name": "Node.js", "icon": "nodejs",  "proficiency": 70 }
+      ]
+    },
+    {
+      "category": "Infrastructure & Tools",
+      "items": [
+        { "name": "Docker",     "icon": "docker",     "proficiency": 85 },
+        { "name": "PostgreSQL", "icon": "postgresql",  "proficiency": 85 },
+        { "name": "Redis",      "icon": "redis",      "proficiency": 75 },
+        { "name": "Git",        "icon": "git",        "proficiency": 90 },
+        { "name": "Linux",      "icon": "linux",      "proficiency": 80 },
+        { "name": "AWS",        "icon": "aws",        "proficiency": 70 },
+        { "name": "Nginx",      "icon": "nginx",      "proficiency": 75 }
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "title": "TaskFlow",
+      "slug": "taskflow",
+      "summary": "A real-time task management platform with team collaboration, Kanban boards, and automated workflow triggers.",
+      "description": "TaskFlow is a full-stack project management tool designed for small engineering teams. It features real-time updates via WebSockets, a drag-and-drop Kanban interface, and customizable workflow automations.\n\nThe backend is built with Django and Django REST Framework, using PostgreSQL for persistence and Redis for real-time pub/sub. The frontend is a React SPA with optimistic UI updates.\n\nKey challenges included designing the real-time sync layer to handle concurrent edits gracefully and building a flexible automation engine that lets users define custom triggers and actions.",
+      "github_url": "https://github.com",
+      "live_url": "https://example.com",
+      "is_featured": true,
+      "order": 0,
+      "technologies": ["Python", "Django", "React", "PostgreSQL", "Redis"]
+    },
+    {
+      "title": "CloudMetrics",
+      "slug": "cloudmetrics",
+      "summary": "Infrastructure monitoring dashboard that aggregates metrics from multiple cloud providers into a unified view.",
+      "description": "CloudMetrics provides a single pane of glass for monitoring cloud infrastructure across AWS, GCP, and Azure. It collects metrics via provider APIs, normalizes them into a common schema, and presents them through interactive dashboards.\n\nBuilt with a Go ingestion service for high-throughput metric collection, a Python analytics layer for anomaly detection, and a Next.js frontend with real-time charting.\n\nThe architecture uses a time-series database for efficient metric storage and supports custom alerting rules with configurable notification channels.",
+      "github_url": "https://github.com",
+      "live_url": "",
+      "is_featured": true,
+      "order": 1,
+      "technologies": ["Go", "Python", "Next.js", "PostgreSQL", "AWS"]
+    },
+    {
+      "title": "AuthGate",
+      "slug": "authgate",
+      "summary": "A lightweight, self-hosted authentication service supporting OAuth 2.0, SAML, and passwordless login flows.",
+      "description": "AuthGate is an open-source authentication and authorization service designed to be self-hosted. It supports multiple identity protocols including OAuth 2.0, SAML 2.0, and magic-link passwordless authentication.\n\nThe service is built with FastAPI for performance and uses PostgreSQL for user and session management. It includes a built-in admin dashboard for managing users, roles, and permissions.\n\nSecurity features include rate limiting, brute-force protection, audit logging, and support for hardware security keys via WebAuthn.",
+      "github_url": "https://github.com",
+      "live_url": "",
+      "is_featured": true,
+      "order": 2,
+      "technologies": ["Python", "FastAPI", "PostgreSQL", "Docker"]
+    },
+    {
+      "title": "DevBlog Engine",
+      "slug": "devblog-engine",
+      "summary": "A statically-generated blog platform with Markdown support, syntax highlighting, and built-in SEO optimization.",
+      "description": "DevBlog Engine is a developer-focused blogging platform that generates static HTML from Markdown files. It features automatic syntax highlighting, responsive images, RSS feed generation, and comprehensive SEO metadata.\n\nBuilt with Next.js and deployed on Vercel, it achieves perfect Lighthouse scores out of the box. Content is managed through a Git-based workflow \u2014 write Markdown, push, and the site rebuilds automatically.",
+      "github_url": "https://github.com",
+      "live_url": "https://example.com",
+      "is_featured": false,
+      "order": 3,
+      "technologies": ["TypeScript", "Next.js", "Node.js"]
+    }
+  ],
+
+  "experience": [
+    {
+      "company": "Nexus Technologies",
+      "role": "Senior Software Engineer",
+      "location": "San Francisco, CA",
+      "start_date": "2022-03-01",
+      "end_date": null,
+      "description": "Leading the architecture and development of the core platform services. Designed a microservices migration strategy that reduced deployment times by 60%. Mentoring a team of 4 engineers and driving adoption of engineering best practices across the org.",
+      "company_url": "https://example.com",
+      "order": 0
+    },
+    {
+      "company": "Arcline Systems",
+      "role": "Software Engineer",
+      "location": "Austin, TX",
+      "start_date": "2019-06-01",
+      "end_date": "2022-02-28",
+      "description": "Built and maintained internal tools and APIs serving 50k+ daily requests. Implemented a caching layer that reduced average API response times from 800ms to 120ms. Collaborated with product and design teams to ship user-facing features.",
+      "company_url": "https://example.com",
+      "order": 1
+    },
+    {
+      "company": "Greenfield Labs",
+      "role": "Junior Software Engineer",
+      "location": "Remote",
+      "start_date": "2017-09-01",
+      "end_date": "2019-05-31",
+      "description": "Contributed to a data processing pipeline handling 2M+ records daily. Wrote unit and integration tests that improved code coverage from 45% to 87%. Participated in code reviews and on-call rotations.",
+      "company_url": "",
+      "order": 2
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "degree": "Bachelor of Science",
+      "field_of_study": "Computer Science",
+      "start_date": "2013-08-01",
+      "end_date": "2017-05-31",
+      "description": "Graduated with honors. Coursework in distributed systems, algorithms, operating systems, and software engineering. Teaching assistant for Introduction to Database Systems.",
+      "order": 0
+    }
+  ]
+}
