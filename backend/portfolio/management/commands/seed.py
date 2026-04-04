@@ -1,9 +1,10 @@
-"""Seed the database with sample data loaded from a JSON fixture."""
+"""Seed the database with sample data loaded from JSON fixtures."""
 
 import json
 from datetime import date
 from pathlib import Path
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from portfolio.models import (
@@ -15,37 +16,39 @@ from portfolio.models import (
     SkillCategory,
 )
 
-FIXTURE_PATH = Path(__file__).resolve().parent.parent.parent / "fixtures" / "seed.json"
+FIXTURES_DIR = Path(__file__).resolve().parent.parent.parent / "fixtures"
 
 
 class Command(BaseCommand):
-    help = "Populate the database with sample portfolio data from fixtures/seed.json"
+    help = "Seed database from fixtures or flush existing data"
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--flush",
             action="store_true",
-            help="Delete all existing data before seeding",
+            help="Delete all portfolio data and exit",
         )
         parser.add_argument(
-            "--fixture",
+            "--fixture-dir",
             type=str,
-            default=str(FIXTURE_PATH),
-            help="Path to a custom seed fixture JSON file",
+            default=str(FIXTURES_DIR),
+            help="Directory containing seed.json and seed.{lang}.json files",
         )
 
     def handle(self, *args, **options):
-        fixture = Path(options["fixture"])
-        if not fixture.exists():
-            self.stderr.write(self.style.ERROR(f"Fixture not found: {fixture}"))
-            return
-
-        data = json.loads(fixture.read_text(encoding="utf-8"))
-
         if options["flush"]:
             for model in [Education, Experience, Project, Skill, SkillCategory, Profile]:
                 model.objects.all().delete()
             self.stdout.write(self.style.WARNING("Flushed all portfolio data."))
+            return
+
+        fixture_dir = Path(options["fixture_dir"])
+        base_file = fixture_dir / "seed.json"
+        if not base_file.exists():
+            self.stderr.write(self.style.ERROR(f"Base fixture not found: {base_file}"))
+            return
+
+        data = json.loads(base_file.read_text(encoding="utf-8"))
 
         self._create_profile(data.get("profile"))
         skill_map = self._create_skills(data.get("skills", []))
@@ -53,7 +56,64 @@ class Command(BaseCommand):
         self._create_experience(data.get("experience", []))
         self._create_education(data.get("education", []))
 
-        self.stdout.write(self.style.SUCCESS("Sample data seeded successfully."))
+        self.stdout.write(self.style.SUCCESS("Base data seeded."))
+
+        # Load per-language translations
+        lang_codes = [code for code, _ in settings.LANGUAGES if code != settings.MODELTRANSLATION_DEFAULT_LANGUAGE]
+        loaded = 0
+        for lang in lang_codes:
+            # Django uses "zh-hans" but modeltranslation fields use "zh_hans"
+            field_suffix = lang.replace("-", "_")
+            lang_file = fixture_dir / f"seed.{lang}.json"
+            if not lang_file.exists():
+                continue
+            lang_data = json.loads(lang_file.read_text(encoding="utf-8"))
+            self._apply_translations(lang_data, field_suffix)
+            loaded += 1
+            self.stdout.write(self.style.SUCCESS(f"  Loaded translations: {lang}"))
+
+        if loaded:
+            self.stdout.write(self.style.SUCCESS(f"Applied {loaded} language(s)."))
+        else:
+            self.stdout.write("No translation fixtures found, skipping.")
+
+    def _apply_translations(self, lang_data, suffix):
+        """Update existing objects with translated field values."""
+        profile_t = lang_data.get("profile")
+        if profile_t:
+            profile = Profile.objects.first()
+            if profile:
+                for field, value in profile_t.items():
+                    setattr(profile, f"{field}_{suffix}", value)
+                profile.save()
+
+        for group in lang_data.get("skills", []):
+            cat_name_en = group.get("category_key")
+            cat_translation = group.get("category")
+            if cat_name_en and cat_translation:
+                SkillCategory.objects.filter(name=cat_name_en).update(
+                    **{f"name_{suffix}": cat_translation}
+                )
+            for item in group.get("items", []):
+                key = item.get("key")
+                name = item.get("name")
+                if key and name:
+                    Skill.objects.filter(name=key).update(**{f"name_{suffix}": name})
+
+        for proj in lang_data.get("projects", []):
+            slug = proj.pop("slug", None)
+            if not slug:
+                continue
+            updates = {f"{k}_{suffix}": v for k, v in proj.items()}
+            Project.objects.filter(slug=slug).update(**updates)
+
+        for i, entry in enumerate(lang_data.get("experience", [])):
+            updates = {f"{k}_{suffix}": v for k, v in entry.items()}
+            Experience.objects.filter(order=i).update(**updates)
+
+        for i, entry in enumerate(lang_data.get("education", [])):
+            updates = {f"{k}_{suffix}": v for k, v in entry.items()}
+            Education.objects.filter(order=i).update(**updates)
 
     def _create_profile(self, profile_data):
         if not profile_data:
@@ -61,12 +121,10 @@ class Command(BaseCommand):
         if Profile.objects.exists():
             self.stdout.write("Profile already exists, skipping.")
             return
-
         Profile.objects.create(**profile_data)
         self.stdout.write(self.style.SUCCESS("  Created profile."))
 
     def _create_skills(self, skills_data):
-        """Return a name->Skill mapping for linking technologies to projects."""
         skill_map = {}
         if not skills_data:
             return skill_map
