@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import SocialLinks from "@/components/ui/SocialLinks";
@@ -56,10 +56,13 @@ function useTypewriter(words: string[], speed = 100, pause = 2000) {
 }
 
 export default function HeroSection({ profile }: HeroProps) {
-  const roles = profile.headline
-    ? profile.headline.split("|").map((r) => r.trim()).filter(Boolean)
-    : fallbackRoles;
-  const typedRole = useTypewriter(roles.length > 0 ? roles : fallbackRoles);
+  const roles = useMemo(() => {
+    const parsed = profile.headline
+      ? profile.headline.split("|").map((r) => r.trim()).filter(Boolean)
+      : [];
+    return parsed.length > 0 ? parsed : fallbackRoles;
+  }, [profile.headline]);
+  const typedRole = useTypewriter(roles);
   const fullName = profile.full_name?.trim() || "Developer";
   const firstName = fullName.split(" ")[0] || "Developer";
   const initials = fullName
