@@ -9,6 +9,9 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "http", hostname: "localhost", port: "8000" },
       { protocol: "http", hostname: "backend", port: "8000" },
+      { protocol: "https", hostname: "*.contabostorage.com" },
+      { protocol: "https", hostname: "*.s3.amazonaws.com" },
+      { protocol: "https", hostname: "*.s3.*.amazonaws.com" },
     ],
   },
 };
