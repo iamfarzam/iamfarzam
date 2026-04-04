@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "Rólam",
+    "skills": "Képességek",
+    "projects": "Projektek",
+    "experience": "Tapasztalat",
+    "contact": "Kapcsolat"
+  },
+  "hero": {
+    "kicker": "Tervezés · Fejlesztés · Szállítás",
+    "greeting": "Szia, <name>{firstName}</name> vagyok",
+    "fallback_tagline": "Összetett problémákat oldok meg és tartós szoftvereket építek.",
+    "cta_contact": "Kapcsolatfelvétel",
+    "cta_resume": "Önéletrajz letöltése"
+  },
+  "about": {
+    "title": "Rólam",
+    "subtitle": "A munka mögötti mérnök",
+    "fallback_bio": "Kíváncsiság és a nehéz problémák megoldása iránti szenvedély hajtja munkámat. Mélyen törődöm a tiszta, karbantartható kód írásával és az idő próbáját kiálló rendszerek építésével."
+  },
+  "skills": {
+    "title": "Képességek és Technológiák",
+    "subtitle": "Ami a munkámat hajtja"
+  },
+  "projects": {
+    "title": "Kiemelt Projektek",
+    "subtitle": "Az ötlettől a megvalósításig",
+    "view_all": "Összes Projekt",
+    "all_title": "Összes Projekt",
+    "all_subtitle": "Mérnöki munkáim bemutatója",
+    "all_meta_description": "Mérnöki munkáim bemutatója.",
+    "back": "Vissza a Projektekhez",
+    "view_github": "Megtekintés a GitHubon",
+    "live_demo": "Élő Demó",
+    "no_preview": "Előnézet hamarosan",
+    "no_description": "Részletes esettanulmány hamarosan.",
+    "no_filter_results": "Nincs a szűrőnek megfelelő projekt.",
+    "filter_all": "Összes"
+  },
+  "experience": {
+    "title": "Tapasztalat",
+    "subtitle": "Ahol hatást gyakoroltam",
+    "present": "Jelenleg"
+  },
+  "education": {
+    "title": "Tanulmányok",
+    "subtitle": "Ahol minden elkezdődött",
+    "present": "Jelenleg"
+  },
+  "contact": {
+    "title": "Kapcsolatfelvétel",
+    "subtitle": "Van egy projekted? Beszéljük meg.",
+    "meta_description": "Vedd fel velem a kapcsolatot egy projekt vagy lehetőség megbeszéléséhez.",
+    "name_label": "Név",
+    "name_placeholder": "Neved",
+    "email_label": "Email",
+    "email_placeholder": "email@cimed.com",
+    "subject_label": "Tárgy",
+    "subject_placeholder": "Miről van szó?",
+    "message_label": "Üzenet",
+    "message_placeholder": "Üzeneted...",
+    "send": "Üzenet küldése",
+    "sending": "Küldés...",
+    "success": "Üzenet sikeresen elküldve! Hamarosan válaszolok.",
+    "error_default": "Valami hiba történt"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Az oldal nem található",
+    "description": "A keresett oldal nem létezik vagy áthelyezték.",
+    "go_home": "Főoldal"
+  },
+  "footer": {
+    "rights": "Minden jog fenntartva."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Élő Demó"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "소개",
+    "skills": "기술",
+    "projects": "프로젝트",
+    "experience": "경력",
+    "contact": "연락처"
+  },
+  "hero": {
+    "kicker": "설계 · 구축 · 배포",
+    "greeting": "안녕하세요, <name>{firstName}</name>입니다",
+    "fallback_tagline": "복잡한 문제를 해결하고 오래 지속되는 소프트웨어를 만듭니다.",
+    "cta_contact": "연락하기",
+    "cta_resume": "이력서 다운로드"
+  },
+  "about": {
+    "title": "소개",
+    "subtitle": "작업 뒤의 엔지니어",
+    "fallback_bio": "저는 호기심과 어려운 문제 해결에 대한 열정으로 움직이는 소프트웨어 엔지니어입니다. 깔끔하고 유지보수 가능한 코드를 작성하고 시간의 시험을 견디는 시스템을 구축하는 데 깊은 관심을 가지고 있습니다."
+  },
+  "skills": {
+    "title": "기술 및 기술 스택",
+    "subtitle": "제 작업을 지원하는 것들"
+  },
+  "projects": {
+    "title": "주요 프로젝트",
+    "subtitle": "구상에서 프로덕션까지",
+    "view_all": "모든 프로젝트 보기",
+    "all_title": "모든 프로젝트",
+    "all_subtitle": "엔지니어링 작업 쇼케이스",
+    "all_meta_description": "엔지니어링 작업 쇼케이스.",
+    "back": "프로젝트로 돌아가기",
+    "view_github": "GitHub에서 보기",
+    "live_demo": "라이브 데모",
+    "no_preview": "미리보기 준비 중",
+    "no_description": "전체 사례 연구가 곧 제공됩니다.",
+    "no_filter_results": "선택한 필터와 일치하는 프로젝트가 없습니다.",
+    "filter_all": "전체"
+  },
+  "experience": {
+    "title": "경력",
+    "subtitle": "제가 영향을 준 곳",
+    "present": "현재"
+  },
+  "education": {
+    "title": "학력",
+    "subtitle": "모든 것이 시작된 곳",
+    "present": "현재"
+  },
+  "contact": {
+    "title": "연락하기",
+    "subtitle": "프로젝트가 있으신가요? 이야기해 봅시다.",
+    "meta_description": "프로젝트나 기회에 대해 논의하려면 연락하세요.",
+    "name_label": "이름",
+    "name_placeholder": "이름을 입력하세요",
+    "email_label": "이메일",
+    "email_placeholder": "your@email.com",
+    "subject_label": "제목",
+    "subject_placeholder": "무엇에 관한 것인가요?",
+    "message_label": "메시지",
+    "message_placeholder": "메시지를 입력하세요...",
+    "send": "메시지 보내기",
+    "sending": "전송 중...",
+    "success": "메시지가 성공적으로 전송되었습니다! 곧 답변 드리겠습니다.",
+    "error_default": "문제가 발생했습니다"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "찾고 계신 페이지가 존재하지 않거나 이동되었습니다.",
+    "go_home": "홈으로"
+  },
+  "footer": {
+    "rights": "모든 권리 보유."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "라이브 데모"
+  }
+}

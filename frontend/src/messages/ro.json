@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "Despre mine",
+    "skills": "Competențe",
+    "projects": "Proiecte",
+    "experience": "Experiență",
+    "contact": "Contact"
+  },
+  "hero": {
+    "kicker": "Design · Dezvoltare · Livrare",
+    "greeting": "Salut, sunt <name>{firstName}</name>",
+    "fallback_tagline": "Rezolv probleme complexe și construiesc software durabil.",
+    "cta_contact": "Contactează-mă",
+    "cta_resume": "Descarcă CV"
+  },
+  "about": {
+    "title": "Despre mine",
+    "subtitle": "Inginerul din spatele lucrărilor",
+    "fallback_bio": "Sunt un inginer software motivat de curiozitate și de pasiunea pentru rezolvarea problemelor dificile. Îmi pasă profund de scrierea unui cod curat, ușor de întreținut și de construirea sistemelor care rezistă testului timpului."
+  },
+  "skills": {
+    "title": "Competențe și Tehnologii",
+    "subtitle": "Ce susține munca mea"
+  },
+  "projects": {
+    "title": "Proiecte Evidențiate",
+    "subtitle": "De la concept la producție",
+    "view_all": "Vezi Toate Proiectele",
+    "all_title": "Toate Proiectele",
+    "all_subtitle": "O vitrină a lucrărilor mele de inginerie",
+    "all_meta_description": "O vitrină a lucrărilor mele de inginerie.",
+    "back": "Înapoi la Proiecte",
+    "view_github": "Vezi pe GitHub",
+    "live_demo": "Demo Live",
+    "no_preview": "Previzualizare în curând",
+    "no_description": "Studiu de caz complet în curând.",
+    "no_filter_results": "Niciun proiect nu corespunde filtrului selectat.",
+    "filter_all": "Toate"
+  },
+  "experience": {
+    "title": "Experiență",
+    "subtitle": "Unde am avut impact",
+    "present": "Prezent"
+  },
+  "education": {
+    "title": "Educație",
+    "subtitle": "Unde a început totul",
+    "present": "Prezent"
+  },
+  "contact": {
+    "title": "Contactează-mă",
+    "subtitle": "Ai un proiect în minte? Hai să discutăm.",
+    "meta_description": "Contactează-mă pentru a discuta un proiect sau o oportunitate.",
+    "name_label": "Nume",
+    "name_placeholder": "Numele tău",
+    "email_label": "Email",
+    "email_placeholder": "email@tau.com",
+    "subject_label": "Subiect",
+    "subject_placeholder": "Despre ce este vorba?",
+    "message_label": "Mesaj",
+    "message_placeholder": "Mesajul tău...",
+    "send": "Trimite Mesaj",
+    "sending": "Se trimite...",
+    "success": "Mesaj trimis cu succes! Vei primi un răspuns în curând.",
+    "error_default": "Ceva a mers prost"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Pagina nu a fost găsită",
+    "description": "Pagina pe care o cauți nu există sau a fost mutată.",
+    "go_home": "Acasă"
+  },
+  "footer": {
+    "rights": "Toate drepturile rezervate."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Demo Live"
+  }
+}

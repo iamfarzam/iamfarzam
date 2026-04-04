@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "Mōku",
+    "skills": "Pūkenga",
+    "projects": "Kaupapa",
+    "experience": "Wheako",
+    "contact": "Whakapā"
+  },
+  "hero": {
+    "kicker": "Hoahoa · Hanga · Tuku",
+    "greeting": "Kia ora, ko <name>{firstName}</name> ahau",
+    "fallback_tagline": "Ka whakatau au i ngā raru uaua, ka hanga pūmanawa e mau tonu ana.",
+    "cta_contact": "Whakapā Mai",
+    "cta_resume": "Tikiake CV"
+  },
+  "about": {
+    "title": "Mōku",
+    "subtitle": "Te kaipūkaha i muri i te mahi",
+    "fallback_bio": "He kaipūkaha pūmanawa ahau e akiakihia ana e te hiahia mōhio me te aroha ki te whakatau raruraru uaua. E tino aro ana ahau ki te tuhi waehere mā, ngāwari ki te tiaki, me te hanga pūnaha e mau ana ki te whakamātautau o te wā."
+  },
+  "skills": {
+    "title": "Pūkenga me ngā Hangarau",
+    "subtitle": "He aha te kaha o taku mahi"
+  },
+  "projects": {
+    "title": "Kaupapa Matua",
+    "subtitle": "Mai i te ariā ki te whakaputa",
+    "view_all": "Tirohia ngā Kaupapa Katoa",
+    "all_title": "Ngā Kaupapa Katoa",
+    "all_subtitle": "He whakaaturanga o aku mahi kaipūkaha",
+    "all_meta_description": "He whakaaturanga o aku mahi kaipūkaha.",
+    "back": "Hoki ki ngā Kaupapa",
+    "view_github": "Tirohia i GitHub",
+    "live_demo": "Demo Ora",
+    "no_preview": "Kei te haere mai te arokite",
+    "no_description": "Kei te haere mai te rangahau katoa.",
+    "no_filter_results": "Kāore he kaupapa e ōrite ana ki te tātari kua kōwhiria.",
+    "filter_all": "Katoa"
+  },
+  "experience": {
+    "title": "Wheako",
+    "subtitle": "I whea ahau i whai pānga ai",
+    "present": "Ināianei"
+  },
+  "education": {
+    "title": "Mātauranga",
+    "subtitle": "I tīmata katoa i konei",
+    "present": "Ināianei"
+  },
+  "contact": {
+    "title": "Whakapā Mai",
+    "subtitle": "He kaupapa tāu? Kōrero tātou.",
+    "meta_description": "Whakapā mai ki te kōrero mō tētahi kaupapa, tētahi āheinga rānei.",
+    "name_label": "Ingoa",
+    "name_placeholder": "Tō ingoa",
+    "email_label": "Īmēra",
+    "email_placeholder": "tou@imera.com",
+    "subject_label": "Kaupapa",
+    "subject_placeholder": "He aha tēnei?",
+    "message_label": "Karere",
+    "message_placeholder": "Tō karere...",
+    "send": "Tukuna te Karere",
+    "sending": "E tuku ana...",
+    "success": "Kua tukuna te karere! Ka whakahoki kōrero tere.",
+    "error_default": "I hē tētahi mea"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Kāore i Kitea te Whārangi",
+    "description": "Ko te whārangi e rapu ana koe kāore i te tū, kua nekehia rānei.",
+    "go_home": "Hoki ki te Kāinga"
+  },
+  "footer": {
+    "rights": "Ngā motika katoa kua rahuitia."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Demo Ora"
+  }
+}

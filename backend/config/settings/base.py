@@ -161,6 +161,17 @@ LANGUAGES = [
     ("ja", "Japanese"),
     ("ar", "Arabic"),
     ("pt", "Portuguese"),
+    ("ru", "Russian"),
+    ("bn", "Bengali"),
+    ("hi", "Hindi"),
+    ("ur", "Urdu"),
+    ("ko", "Korean"),
+    ("tr", "Turkish"),
+    ("ro", "Romanian"),
+    ("hu", "Hungarian"),
+    ("it", "Italian"),
+    ("sm", "Samoan"),
+    ("mi", "Maori"),
 ]
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = "en"

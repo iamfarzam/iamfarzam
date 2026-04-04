@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "Fa'amatalaga",
+    "skills": "Tomai",
+    "projects": "Galuega",
+    "experience": "Poto",
+    "contact": "Fa'afeso'ota'i"
+  },
+  "hero": {
+    "kicker": "Mamanu · Fausia · Tu'uina atu",
+    "greeting": "Talofa, o a'u o <name>{firstName}</name>",
+    "fallback_tagline": "Ou te fo'ia fa'afitauli lavelave ma fausia polokalama e tumau.",
+    "cta_contact": "Fa'afeso'ota'i",
+    "cta_resume": "La'u mai le CV"
+  },
+  "about": {
+    "title": "Fa'amatalaga",
+    "subtitle": "Le inisinia i tua o le galuega",
+    "fallback_bio": "O a'u o se inisinia polokalama e fa'aosofia e le finafinau ma le alofa i le fo'ia o fa'afitauli faigata. Ou te tausisi tele i le tusiaina o code mama, e faigofie ona tausia ma le fausiaina o faiga e tumau i le suiga o taimi."
+  },
+  "skills": {
+    "title": "Tomai ma Tekinolosi",
+    "subtitle": "O le a le fa'amalosi o la'u galuega"
+  },
+  "projects": {
+    "title": "Galuega Fa'apitoa",
+    "subtitle": "Mai le manatu i le gaosiga",
+    "view_all": "Va'ai Galuega Uma",
+    "all_title": "Galuega Uma",
+    "all_subtitle": "O se fa'aaliga o la'u galuega fa'ainisinia",
+    "all_meta_description": "O se fa'aaliga o la'u galuega fa'ainisinia.",
+    "back": "Toe fo'i i Galuega",
+    "view_github": "Va'ai i le GitHub",
+    "live_demo": "Demo Tuusao",
+    "no_preview": "Va'aiga muamua e sau loa",
+    "no_description": "Su'esu'ega atoatoa e sau loa.",
+    "no_filter_results": "Leai se galuega e fetaui ma le fili na filifilia.",
+    "filter_all": "Uma"
+  },
+  "experience": {
+    "title": "Poto",
+    "subtitle": "O fea na ou a'afia ai",
+    "present": "Taimi nei"
+  },
+  "education": {
+    "title": "A'oa'oga",
+    "subtitle": "O le mea na amata ai mea uma",
+    "present": "Taimi nei"
+  },
+  "contact": {
+    "title": "Fa'afeso'ota'i",
+    "subtitle": "E iai se galuega i lou mafaufau? Tatou talanoa.",
+    "meta_description": "Fa'afeso'ota'i mai e talanoaina se galuega po'o se avanoa.",
+    "name_label": "Igoa",
+    "name_placeholder": "Lou igoa",
+    "email_label": "Imeli",
+    "email_placeholder": "lou@imeli.com",
+    "subject_label": "Autu",
+    "subject_placeholder": "O le a le mea lea?",
+    "message_label": "Fe'au",
+    "message_placeholder": "Lau fe'au...",
+    "send": "Lafo le Fe'au",
+    "sending": "O lo'o lafoina...",
+    "success": "Ua lafo lelei le fe'au! E te maua se tali i se taimi vave.",
+    "error_default": "Sa tupu se mea sese"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "E Le'i Maua le Itulau",
+    "description": "O le itulau o lo'o e su'e e le o iai po'o ua si'itia.",
+    "go_home": "Toe fo'i i le Amataga"
+  },
+  "footer": {
+    "rights": "Aia tatau uma e puipuia."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Demo Tuusao"
+  }
+}

@@ -13,6 +13,17 @@ const labels: Record<Locale, string> = {
   ja: "日本語",
   ar: "العربية",
   pt: "Português",
+  ru: "Русский",
+  bn: "বাংলা",
+  hi: "हिन्दी",
+  ur: "اردو",
+  ko: "한국어",
+  tr: "Türkçe",
+  ro: "Română",
+  hu: "Magyar",
+  it: "Italiano",
+  sm: "Gagana Samoa",
+  mi: "Te Reo Māori",
 };
 
 const flags: Record<Locale, string> = {
@@ -24,6 +35,17 @@ const flags: Record<Locale, string> = {
   ja: "日",
   ar: "ع",
   pt: "PT",
+  ru: "RU",
+  bn: "বা",
+  hi: "हि",
+  ur: "ار",
+  ko: "한",
+  tr: "TR",
+  ro: "RO",
+  hu: "HU",
+  it: "IT",
+  sm: "SM",
+  mi: "MI",
 };
 
 export default function LanguageSwitcher() {
@@ -63,7 +85,7 @@ export default function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-40 overflow-hidden rounded-lg border border-border bg-bg shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1 max-h-80 w-40 overflow-y-auto rounded-lg border border-border bg-bg shadow-lg">
           {locales.map((l) => (
             <button
               key={l}

@@ -1,0 +1,80 @@
+{
+  "header": {
+    "about": "Hakkımda",
+    "skills": "Yetenekler",
+    "projects": "Projeler",
+    "experience": "Deneyim",
+    "contact": "İletişim"
+  },
+  "hero": {
+    "kicker": "Tasarla · Geliştir · Yayınla",
+    "greeting": "Merhaba, ben <name>{firstName}</name>",
+    "fallback_tagline": "Karmaşık sorunları çözüyor ve kalıcı yazılımlar geliştiriyorum.",
+    "cta_contact": "İletişime Geç",
+    "cta_resume": "Özgeçmiş İndir"
+  },
+  "about": {
+    "title": "Hakkımda",
+    "subtitle": "İşin arkasındaki mühendis",
+    "fallback_bio": "Merak ve zor problemleri çözme tutkusuyla hareket eden bir yazılım mühendisiyim. Temiz, sürdürülebilir kod yazmaya ve zamana dayanıklı sistemler kurmaya derinden önem veriyorum."
+  },
+  "skills": {
+    "title": "Yetenekler ve Teknolojiler",
+    "subtitle": "İşimi güçlendiren araçlar"
+  },
+  "projects": {
+    "title": "Öne Çıkan Projeler",
+    "subtitle": "Fikirden üretime",
+    "view_all": "Tüm Projeleri Gör",
+    "all_title": "Tüm Projeler",
+    "all_subtitle": "Mühendislik çalışmalarımın vitrini",
+    "all_meta_description": "Mühendislik çalışmalarımın vitrini.",
+    "back": "Projelere Dön",
+    "view_github": "GitHub'da Gör",
+    "live_demo": "Canlı Demo",
+    "no_preview": "Önizleme yakında",
+    "no_description": "Detaylı vaka çalışması yakında.",
+    "no_filter_results": "Seçilen filtreyle eşleşen proje yok.",
+    "filter_all": "Tümü"
+  },
+  "experience": {
+    "title": "Deneyim",
+    "subtitle": "Etki bıraktığım yerler",
+    "present": "Devam ediyor"
+  },
+  "education": {
+    "title": "Eğitim",
+    "subtitle": "Her şeyin başladığı yer",
+    "present": "Devam ediyor"
+  },
+  "contact": {
+    "title": "İletişime Geç",
+    "subtitle": "Bir projeniz mi var? Konuşalım.",
+    "meta_description": "Bir proje veya fırsat hakkında konuşmak için iletişime geçin.",
+    "name_label": "Ad",
+    "name_placeholder": "Adınız",
+    "email_label": "E-posta",
+    "email_placeholder": "email@adresiniz.com",
+    "subject_label": "Konu",
+    "subject_placeholder": "Ne hakkında?",
+    "message_label": "Mesaj",
+    "message_placeholder": "Mesajınız...",
+    "send": "Mesaj Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Mesaj başarıyla gönderildi! Yakında dönüş yapılacaktır.",
+    "error_default": "Bir şeyler ters gitti"
+  },
+  "not_found": {
+    "code": "404",
+    "title": "Sayfa Bulunamadı",
+    "description": "Aradığınız sayfa mevcut değil veya taşınmış.",
+    "go_home": "Ana Sayfaya Dön"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır."
+  },
+  "card": {
+    "github": "GitHub",
+    "live_demo": "Canlı Demo"
+  }
+}
