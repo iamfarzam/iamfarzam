@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import display
 
@@ -24,7 +25,7 @@ def unread_messages_count(request):
 
 
 @admin.register(Profile)
-class ProfileAdmin(ModelAdmin):
+class ProfileAdmin(TabbedTranslationAdmin, ModelAdmin):
     list_display = ["full_name", "headline", "email"]
     fieldsets = [
         (
@@ -64,7 +65,7 @@ class ProfileAdmin(ModelAdmin):
         return not Profile.objects.exists()
 
 
-class SkillInline(TabularInline):
+class SkillInline(TranslationTabularInline, TabularInline):
     model = Skill
     extra = 1
     fields = ["name", "icon", "proficiency", "order", "is_active"]
@@ -72,7 +73,7 @@ class SkillInline(TabularInline):
 
 
 @admin.register(SkillCategory)
-class SkillCategoryAdmin(ModelAdmin):
+class SkillCategoryAdmin(TabbedTranslationAdmin, ModelAdmin):
     list_display = ["name", "skill_count", "order", "show_status"]
     list_editable = ["order"]
     list_filter_submit = True
@@ -94,7 +95,7 @@ class SkillCategoryAdmin(ModelAdmin):
 
 
 @admin.register(Project)
-class ProjectAdmin(ModelAdmin):
+class ProjectAdmin(TabbedTranslationAdmin, ModelAdmin):
     list_display = [
         "title",
         "show_featured",
@@ -172,7 +173,7 @@ class ProjectAdmin(ModelAdmin):
 
 
 @admin.register(Experience)
-class ExperienceAdmin(ModelAdmin):
+class ExperienceAdmin(TabbedTranslationAdmin, ModelAdmin):
     list_display = [
         "role",
         "company",
@@ -229,7 +230,7 @@ class ExperienceAdmin(ModelAdmin):
 
 
 @admin.register(Education)
-class EducationAdmin(ModelAdmin):
+class EducationAdmin(TabbedTranslationAdmin, ModelAdmin):
     list_display = [
         "degree",
         "institution",
