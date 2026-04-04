@@ -14,7 +14,7 @@ interface HeroProps {
 
 const roles = [
   "Software Engineer",
-  "Full Stack Developer",
+  "System Architect",
   "Open Source Contributor",
   "Problem Solver",
 ];
@@ -22,29 +22,35 @@ const roles = [
 function useTypewriter(words: string[], speed = 100, pause = 2000) {
   const [text, setText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [phase, setPhase] = useState<"typing" | "pausing" | "deleting">("typing");
 
   useEffect(() => {
     const current = words[wordIndex];
+
     const timeout = setTimeout(
       () => {
-        if (!isDeleting) {
-          setText(current.slice(0, text.length + 1));
-          if (text.length + 1 === current.length) {
-            setTimeout(() => setIsDeleting(true), pause);
+        if (phase === "typing") {
+          if (text.length < current.length) {
+            setText(current.slice(0, text.length + 1));
+          } else {
+            setPhase("pausing");
           }
+        } else if (phase === "pausing") {
+          setPhase("deleting");
         } else {
-          setText(current.slice(0, text.length - 1));
-          if (text.length === 0) {
-            setIsDeleting(false);
+          if (text.length > 0) {
+            setText(text.slice(0, -1));
+          } else {
             setWordIndex((prev) => (prev + 1) % words.length);
+            setPhase("typing");
           }
         }
       },
-      isDeleting ? speed / 2 : speed
+      phase === "pausing" ? pause : phase === "deleting" ? speed / 2 : speed
     );
+
     return () => clearTimeout(timeout);
-  }, [text, wordIndex, isDeleting, words, speed, pause]);
+  }, [text, wordIndex, phase, words, speed, pause]);
 
   return text;
 }
@@ -58,7 +64,7 @@ export default function HeroSection({ profile }: HeroProps) {
     .filter(Boolean)
     .map((n) => n[0])
     .join("") || "D";
-  const headline = profile.headline?.trim() || "Software Engineer";
+  const headline = profile.headline?.trim() || "I solve complex problems and build software that lasts.";
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden">
@@ -77,7 +83,7 @@ export default function HeroSection({ profile }: HeroProps) {
           className="flex-1 text-center md:text-left"
         >
           <p className="text-sm font-medium uppercase tracking-widest text-accent">
-            Welcome to my portfolio
+            Design · Build · Ship
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-text sm:text-5xl lg:text-6xl">
             Hi, I&apos;m{" "}

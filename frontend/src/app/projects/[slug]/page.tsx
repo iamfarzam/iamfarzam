@@ -118,7 +118,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               <p key={i}>{paragraph}</p>
             ))
           ) : (
-            <p>Project details will be updated soon.</p>
+            <p>Full case study coming soon.</p>
           )}
         </div>
       </article>

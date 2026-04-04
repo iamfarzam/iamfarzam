@@ -19,7 +19,7 @@ function formatDate(date: string): string {
 
 export default function EducationSection({ education }: EducationProps) {
   return (
-    <Section id="education" title="Education" subtitle="Academic background">
+    <Section id="education" title="Education" subtitle="Where it all started">
       <div className="mx-auto max-w-3xl space-y-6">
         {education.map((edu, index) => (
           <motion.div
