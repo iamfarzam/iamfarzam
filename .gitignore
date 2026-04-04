@@ -214,6 +214,9 @@ __marimo__/
 backend/media/
 backend/staticfiles/
 
+# Seed fixtures (user-specific data)
+/fixtures/
+
 # Node / Next.js
 node_modules/
 frontend/.next/
