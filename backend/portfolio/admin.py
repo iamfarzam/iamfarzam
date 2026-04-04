@@ -25,7 +25,7 @@ def unread_messages_count(request):
 
 
 @admin.register(Profile)
-class ProfileAdmin(TabbedTranslationAdmin, ModelAdmin):
+class ProfileAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = ["full_name", "headline", "email"]
     fieldsets = [
         (
@@ -65,7 +65,7 @@ class ProfileAdmin(TabbedTranslationAdmin, ModelAdmin):
         return not Profile.objects.exists()
 
 
-class SkillInline(TranslationTabularInline, TabularInline):
+class SkillInline(TabularInline, TranslationTabularInline):
     model = Skill
     extra = 1
     fields = ["name", "icon", "proficiency", "order", "is_active"]
@@ -73,7 +73,7 @@ class SkillInline(TranslationTabularInline, TabularInline):
 
 
 @admin.register(SkillCategory)
-class SkillCategoryAdmin(TabbedTranslationAdmin, ModelAdmin):
+class SkillCategoryAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = ["name", "skill_count", "order", "show_status"]
     list_editable = ["order"]
     list_filter_submit = True
@@ -95,7 +95,7 @@ class SkillCategoryAdmin(TabbedTranslationAdmin, ModelAdmin):
 
 
 @admin.register(Project)
-class ProjectAdmin(TabbedTranslationAdmin, ModelAdmin):
+class ProjectAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = [
         "title",
         "show_featured",
@@ -173,7 +173,7 @@ class ProjectAdmin(TabbedTranslationAdmin, ModelAdmin):
 
 
 @admin.register(Experience)
-class ExperienceAdmin(TabbedTranslationAdmin, ModelAdmin):
+class ExperienceAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = [
         "role",
         "company",
@@ -230,7 +230,7 @@ class ExperienceAdmin(TabbedTranslationAdmin, ModelAdmin):
 
 
 @admin.register(Education)
-class EducationAdmin(TabbedTranslationAdmin, ModelAdmin):
+class EducationAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = [
         "degree",
         "institution",

@@ -50,6 +50,13 @@ export default async function HomePage() {
     fetchEducation(locale),
   ]);
 
+  const results = { profileResult, skillsResult, projectsResult, experienceResult, educationResult };
+  for (const [key, result] of Object.entries(results)) {
+    if (result.status === "rejected") {
+      console.error(`[HomePage] ${key} failed:`, result.reason);
+    }
+  }
+
   const profile =
     profileResult.status === "fulfilled" ? profileResult.value : fallbackProfile;
   const skills = skillsResult.status === "fulfilled" ? skillsResult.value : [];

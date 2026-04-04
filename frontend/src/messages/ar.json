@@ -44,7 +44,8 @@
   },
   "education": {
     "title": "التعليم",
-    "subtitle": "حيث بدأ كل شيء"
+    "subtitle": "حيث بدأ كل شيء",
+    "present": "الحاضر"
   },
   "contact": {
     "title": "تواصل معي",
