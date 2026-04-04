@@ -14,8 +14,8 @@ For local development without Docker:
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/iamfarzam/iamfarzam.git
-cd iamfarzam
+git clone https://github.com/iamfarzam/iamfarzam.git portfolio
+cd portfolio
 cp .env.example .env
 ```
 

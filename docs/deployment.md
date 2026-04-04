@@ -11,8 +11,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/iamfarzam/iamfarzam.git
-cd iamfarzam
+git clone https://github.com/iamfarzam/iamfarzam.git portfolio
+cd portfolio
 
 # Configure environment
 cp .env.example .env

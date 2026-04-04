@@ -32,8 +32,8 @@ A full-stack, dynamic portfolio website built with **Next.js** and **Django REST
 ## Quick Start
 
 ```bash
-git clone https://github.com/iamfarzam/iamfarzam.git
-cd iamfarzam
+git clone https://github.com/iamfarzam/iamfarzam.git portfolio
+cd portfolio
 cp .env.example .env        # configure your secrets
 docker compose up --build    # start the stack
 ```

@@ -14,19 +14,19 @@ Returns the singleton profile. Returns `{}` if no profile exists.
 
 ```json
 {
-  "full_name": "Farzam Mehdi",
-  "headline": "Backend Developer | ML Enthusiast",
-  "bio": "Backend developer focused on Python...",
+  "full_name": "Jane Doe",
+  "headline": "Software Engineer | Full Stack Developer",
+  "bio": "Software engineer focused on building reliable systems...",
   "avatar": "/media/profile/avatar.jpg",
   "resume": "/media/profile/resume.pdf",
   "email": "contact@example.com",
-  "location": "Earth",
-  "github_url": "https://github.com/iamfarzam",
-  "linkedin_url": "https://linkedin.com/in/example",
+  "location": "San Francisco, CA",
+  "github_url": "https://github.com/janedoe",
+  "linkedin_url": "https://linkedin.com/in/janedoe",
   "twitter_url": "",
   "website_url": "",
-  "meta_title": "Farzam Mehdi - Portfolio",
-  "meta_description": "Backend developer portfolio",
+  "meta_title": "Jane Doe - Portfolio",
+  "meta_description": "Software engineer portfolio",
   "og_image": "/media/profile/og.jpg"
 }
 ```
@@ -63,15 +63,15 @@ Returns all active projects.
 ```json
 [
   {
-    "title": "Sample CV Project",
-    "slug": "sample-cv-project",
-    "summary": "Real-time facial expression detection pipeline",
-    "thumbnail": "/media/projects/emotion.jpg",
+    "title": "Sample Project",
+    "slug": "sample-project",
+    "summary": "A sample project showcasing the portfolio",
+    "thumbnail": "/media/projects/sample.jpg",
     "technologies": [
       { "name": "Python", "icon": "python" },
       { "name": "OpenCV", "icon": "opencv" }
     ],
-    "github_url": "https://github.com/iamfarzam/sample-cv-project",
+    "github_url": "https://github.com/janedoe/sample-project",
     "live_url": "",
     "is_featured": true
   }
@@ -86,16 +86,16 @@ Returns a single project by slug with full description.
 
 ```json
 {
-  "title": "Sample CV Project",
-  "slug": "sample-cv-project",
-  "summary": "Real-time facial expression detection pipeline",
+  "title": "Sample Project",
+  "slug": "sample-project",
+  "summary": "A sample project showcasing the portfolio",
   "description": "Full markdown description of the project...",
-  "thumbnail": "/media/projects/emotion.jpg",
-  "image": "/media/projects/emotion-detail.jpg",
+  "thumbnail": "/media/projects/sample.jpg",
+  "image": "/media/projects/sample-detail.jpg",
   "technologies": [
     { "name": "Python", "icon": "python" }
   ],
-  "github_url": "https://github.com/iamfarzam/sample-cv-project",
+  "github_url": "https://github.com/janedoe/sample-project",
   "live_url": "",
   "is_featured": true,
   "created_at": "2026-01-15T10:30:00Z"
@@ -115,7 +115,7 @@ Returns work experience entries. `end_date` is `null` for current positions.
   {
     "id": 1,
     "company": "Example Corp",
-    "role": "Backend Developer",
+    "role": "Software Engineer",
     "location": "Remote",
     "start_date": "2023-01-01",
     "end_date": null,

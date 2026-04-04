@@ -3,8 +3,8 @@
 ## Project Structure
 
 ```
-iamfarzam/
-├── README.md                   # GitHub profile (displayed on github.com/iamfarzam)
+portfolio/
+├── README.md                   # Project overview and quick start
 ├── docs/                       # Project documentation
 ├── backend/                    # Django + DRF API
 │   ├── config/

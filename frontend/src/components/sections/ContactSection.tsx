@@ -116,7 +116,7 @@ export default function ContactSection() {
 
         {status === "sent" && (
           <p className="text-center text-sm text-green-600 dark:text-green-400">
-            Message sent successfully! I&apos;ll get back to you soon.
+            Message sent successfully! You&apos;ll hear back soon.
           </p>
         )}
         {status === "error" && (

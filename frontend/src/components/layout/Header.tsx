@@ -42,7 +42,7 @@ export default function Header() {
           href="/"
           className="text-xl font-bold tracking-tight text-text transition-colors hover:text-accent"
         >
-          FM<span className="text-accent">.</span>
+          Portfolio<span className="text-accent">.</span>
         </Link>
 
         {/* Desktop nav */}
