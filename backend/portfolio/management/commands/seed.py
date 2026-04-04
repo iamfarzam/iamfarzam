@@ -29,6 +29,16 @@ class Command(BaseCommand):
             help="Delete all portfolio data and exit",
         )
         parser.add_argument(
+            "--fixture",
+            type=str,
+            help="Path to a single fixture file (language auto-detected from filename, e.g. seed.es.json)",
+        )
+        parser.add_argument(
+            "--lang",
+            type=str,
+            help="Language code for --fixture (overrides auto-detection)",
+        )
+        parser.add_argument(
             "--fixture-dir",
             type=str,
             default=str(FIXTURES_DIR),
@@ -42,6 +52,11 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("Flushed all portfolio data."))
             return
 
+        # Single fixture mode
+        if options["fixture"]:
+            return self._handle_single_fixture(options["fixture"], options.get("lang"))
+
+        # Full seed mode: base + all languages
         fixture_dir = Path(options["fixture_dir"])
         base_file = fixture_dir / "seed.json"
         if not base_file.exists():
@@ -62,7 +77,6 @@ class Command(BaseCommand):
         lang_codes = [code for code, _ in settings.LANGUAGES if code != settings.MODELTRANSLATION_DEFAULT_LANGUAGE]
         loaded = 0
         for lang in lang_codes:
-            # Django uses "zh-hans" but modeltranslation fields use "zh_hans"
             field_suffix = lang.replace("-", "_")
             lang_file = fixture_dir / f"seed.{lang}.json"
             if not lang_file.exists():
@@ -76,6 +90,42 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Applied {loaded} language(s)."))
         else:
             self.stdout.write("No translation fixtures found, skipping.")
+
+    def _handle_single_fixture(self, fixture_path, explicit_lang):
+        """Load a single fixture file. Auto-detects language from filename."""
+        path = Path(fixture_path)
+        if not path.exists():
+            self.stderr.write(self.style.ERROR(f"Fixture not found: {path}"))
+            return
+
+        data = json.loads(path.read_text(encoding="utf-8"))
+
+        if explicit_lang:
+            lang = explicit_lang
+        else:
+            # Auto-detect from filename: seed.es.json -> es, seed.zh-hans.json -> zh-hans
+            parts = path.stem.split(".")
+            lang = parts[1] if len(parts) > 1 else None
+
+        default_lang = settings.MODELTRANSLATION_DEFAULT_LANGUAGE
+        valid_codes = [code for code, _ in settings.LANGUAGES]
+
+        if lang is None or lang == default_lang:
+            # Treat as base English fixture
+            self._create_profile(data.get("profile"))
+            skill_map = self._create_skills(data.get("skills", []))
+            self._create_projects(data.get("projects", []), skill_map)
+            self._create_experience(data.get("experience", []))
+            self._create_education(data.get("education", []))
+            self.stdout.write(self.style.SUCCESS(f"Seeded base data from {path.name}"))
+        elif lang in valid_codes:
+            field_suffix = lang.replace("-", "_")
+            self._apply_translations(data, field_suffix)
+            self.stdout.write(self.style.SUCCESS(f"Applied {lang} translations from {path.name}"))
+        else:
+            self.stderr.write(self.style.ERROR(
+                f"Unknown language '{lang}'. Valid: {', '.join(valid_codes)}"
+            ))
 
     def _apply_translations(self, lang_data, suffix):
         """Update existing objects with translated field values."""
