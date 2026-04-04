@@ -14,7 +14,7 @@ export default function SkillsSection({ categories }: SkillsProps) {
     <Section
       id="skills"
       title="Skills & Technologies"
-      subtitle="The tools behind the work"
+      subtitle="What powers my work"
       className="bg-bg-secondary"
     >
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

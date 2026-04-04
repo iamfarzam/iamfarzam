@@ -22,7 +22,7 @@ export default function ExperienceSection({ experience }: ExperienceProps) {
     <Section
       id="experience"
       title="Experience"
-      subtitle="Where I've been, what I've built"
+      subtitle="Where I've made an impact"
       className="bg-bg-secondary"
     >
       <div className="relative mx-auto max-w-3xl">

@@ -15,7 +15,7 @@ export default function ProjectsSection({ projects }: ProjectsProps) {
   const featured = projects.filter((p) => p.is_featured);
 
   return (
-    <Section id="projects" title="Featured Projects" subtitle="Selected work">
+    <Section id="projects" title="Featured Projects" subtitle="From concept to production">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {featured.map((project) => (
           <Card
