@@ -60,7 +60,7 @@ export default function AboutSection({ profile }: AboutProps) {
                 <p key={i}>{paragraph}</p>
               ))
             ) : (
-              <p>I build reliable backend systems and modern web applications.</p>
+              <p>I build reliable systems and modern web applications using industry best practices.</p>
             )}
           </div>
 

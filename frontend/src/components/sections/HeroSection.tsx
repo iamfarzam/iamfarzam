@@ -13,10 +13,10 @@ interface HeroProps {
 }
 
 const roles = [
-  "Backend Developer",
-  "API Architect",
-  "ML Engineer",
-  "Python Developer",
+  "Software Engineer",
+  "Full Stack Developer",
+  "Open Source Contributor",
+  "Problem Solver",
 ];
 
 function useTypewriter(words: string[], speed = 100, pause = 2000) {
@@ -58,7 +58,7 @@ export default function HeroSection({ profile }: HeroProps) {
     .filter(Boolean)
     .map((n) => n[0])
     .join("") || "D";
-  const headline = profile.headline?.trim() || "Backend Developer";
+  const headline = profile.headline?.trim() || "Software Engineer";
 
   return (
     <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden">

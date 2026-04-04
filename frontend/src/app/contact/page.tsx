@@ -4,7 +4,7 @@ import ContactSection from "@/components/sections/ContactSection";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch — I'd love to hear from you.",
+  description: "Get in touch to discuss a project or opportunity.",
 };
 
 export default function ContactPage() {

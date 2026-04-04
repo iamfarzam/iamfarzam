@@ -11,8 +11,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/portfolio-owner/portfolio-owner.git
-cd portfolio-owner
+git clone https://github.com/portfolio-owner/portfolio-owner.git portfolio
+cd portfolio
 
 # Configure environment
 cp .env.example .env
