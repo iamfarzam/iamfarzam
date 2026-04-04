@@ -5,7 +5,7 @@ import { fetchProjects } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Explore my portfolio of software engineering projects.",
+  description: "A showcase of my engineering work.",
 };
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
           All Projects
         </h1>
         <p className="mt-3 text-text-secondary">
-          A collection of my work across various domains
+          A showcase of my engineering work
         </p>
         <div className="mx-auto mt-4 h-1 w-12 rounded-full bg-accent" />
       </div>

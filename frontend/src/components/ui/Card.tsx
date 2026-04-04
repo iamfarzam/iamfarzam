@@ -46,7 +46,7 @@ export default function Card({
             />
           ) : (
             <div className="flex h-full items-center justify-center bg-bg-tertiary text-sm text-text-muted">
-              No preview image
+              Preview coming soon
             </div>
           )}
         </div>

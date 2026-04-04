@@ -38,7 +38,7 @@ export default function ContactSection() {
     <Section
       id="contact"
       title="Get In Touch"
-      subtitle="Have a question or want to work together?"
+      subtitle="Have a project in mind? Let's talk."
       className="bg-bg-secondary"
     >
       <motion.form

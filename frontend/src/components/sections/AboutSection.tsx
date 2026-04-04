@@ -23,7 +23,7 @@ export default function AboutSection({ profile }: AboutProps) {
     .filter(Boolean);
 
   return (
-    <Section id="about" title="About Me" subtitle="A bit about who I am and what I do">
+    <Section id="about" title="About Me" subtitle="The engineer behind the work">
       <div className="grid items-center gap-12 md:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -60,7 +60,7 @@ export default function AboutSection({ profile }: AboutProps) {
                 <p key={i}>{paragraph}</p>
               ))
             ) : (
-              <p>I build reliable systems and modern web applications using industry best practices.</p>
+              <p>I&apos;m a software engineer driven by curiosity and a love for solving hard problems. I care deeply about writing clean, maintainable code and building systems that stand the test of time.</p>
             )}
           </div>
 
