@@ -100,4 +100,3 @@ class ContactCreateView(generics.CreateAPIView):
             )
         except Exception:
             pass
-            )
