@@ -19,7 +19,8 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const fallbackProfile: Profile = {
     full_name: "Developer",
-    headline: "I solve complex problems and build software that lasts.",
+    headline: "",
+    tagline: "",
     bio: "",
     avatar: null,
     resume: null,
