@@ -20,6 +20,7 @@ services:
     volumes:
       - backend_static:/app/staticfiles
       - backend_media:/app/media
+      - ./fixtures:/app/fixtures:ro
     restart: unless-stopped
     depends_on:
       postgres:
