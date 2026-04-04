@@ -18,6 +18,14 @@ from portfolio.models import (
 
 FIXTURES_DIR = Path(__file__).resolve().parent.parent.parent / "fixtures"
 
+# Only these fields have translation columns — everything else must be skipped.
+TRANSLATABLE = {
+    "profile": {"headline", "tagline", "bio", "meta_title", "meta_description"},
+    "project": {"title", "summary", "description"},
+    "experience": {"role", "description"},
+    "education": {"degree", "field_of_study", "description"},
+}
+
 
 class Command(BaseCommand):
     help = "Seed database from fixtures or flush existing data"
@@ -139,8 +147,10 @@ class Command(BaseCommand):
         if profile_t:
             profile = Profile.objects.first()
             if profile:
+                allowed = TRANSLATABLE["profile"]
                 for field, value in profile_t.items():
-                    setattr(profile, f"{field}_{suffix}", value)
+                    if field in allowed:
+                        setattr(profile, f"{field}_{suffix}", value)
                 profile.save()
 
         for group in lang_data.get("skills", []):
@@ -156,20 +166,26 @@ class Command(BaseCommand):
                 if key and name:
                     Skill.objects.filter(name=key).update(**{f"name_{suffix}": name})
 
+        allowed_proj = TRANSLATABLE["project"]
         for proj in lang_data.get("projects", []):
-            slug = proj.pop("slug", None)
+            slug = proj.get("slug")
             if not slug:
                 continue
-            updates = {f"{k}_{suffix}": v for k, v in proj.items()}
-            Project.objects.filter(slug=slug).update(**updates)
+            updates = {f"{k}_{suffix}": v for k, v in proj.items() if k in allowed_proj}
+            if updates:
+                Project.objects.filter(slug=slug).update(**updates)
 
+        allowed_exp = TRANSLATABLE["experience"]
         for i, entry in enumerate(lang_data.get("experience", [])):
-            updates = {f"{k}_{suffix}": v for k, v in entry.items()}
-            Experience.objects.filter(order=i).update(**updates)
+            updates = {f"{k}_{suffix}": v for k, v in entry.items() if k in allowed_exp}
+            if updates:
+                Experience.objects.filter(order=i).update(**updates)
 
+        allowed_edu = TRANSLATABLE["education"]
         for i, entry in enumerate(lang_data.get("education", [])):
-            updates = {f"{k}_{suffix}": v for k, v in entry.items()}
-            Education.objects.filter(order=i).update(**updates)
+            updates = {f"{k}_{suffix}": v for k, v in entry.items() if k in allowed_edu}
+            if updates:
+                Education.objects.filter(order=i).update(**updates)
 
     def _create_profile(self, profile_data):
         if not profile_data:
