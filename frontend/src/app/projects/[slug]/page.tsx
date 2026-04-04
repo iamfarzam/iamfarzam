@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -39,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
+  const t = await getTranslations("projects");
   const { slug } = await params;
   const project = await fetchProject(slug);
   const title = project.title || "Project";
@@ -70,7 +72,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           href="/projects"
           className="mb-6 inline-flex items-center gap-1 text-sm text-text-muted transition-colors hover:text-accent"
         >
-          &larr; Back to Projects
+          &larr; {t("back")}
         </Link>
 
         <h1 className="text-4xl font-bold tracking-tight text-text">
@@ -89,12 +91,12 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className="mt-6 flex gap-3">
           {project.github_url && (
             <Button as="a" href={project.github_url} target="_blank" rel="noopener noreferrer" variant="outline">
-              View on GitHub
+              {t("view_github")}
             </Button>
           )}
           {project.live_url && (
             <Button as="a" href={project.live_url} target="_blank" rel="noopener noreferrer">
-              Live Demo
+              {t("live_demo")}
             </Button>
           )}
         </div>
@@ -118,7 +120,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               <p key={i}>{paragraph}</p>
             ))
           ) : (
-            <p>Full case study coming soon.</p>
+            <p>{t("no_description")}</p>
           )}
         </div>
       </article>

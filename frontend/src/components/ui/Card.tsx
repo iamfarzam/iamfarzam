@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import Badge from "./Badge";
 
@@ -25,6 +26,7 @@ export default function Card({
   githubUrl,
   liveUrl,
 }: CardProps) {
+  const t = useTranslations();
   return (
     <motion.article
       layout
@@ -46,7 +48,7 @@ export default function Card({
             />
           ) : (
             <div className="flex h-full items-center justify-center bg-bg-tertiary text-sm text-text-muted">
-              Preview coming soon
+              {t("projects.no_preview")}
             </div>
           )}
         </div>
@@ -75,7 +77,7 @@ export default function Card({
               rel="noopener noreferrer"
               className="text-sm text-text-muted transition-colors hover:text-accent"
             >
-              GitHub &rarr;
+              {t("card.github")} &rarr;
             </a>
           )}
           {liveUrl && (
@@ -85,7 +87,7 @@ export default function Card({
               rel="noopener noreferrer"
               className="text-sm text-text-muted transition-colors hover:text-accent"
             >
-              Live Demo &rarr;
+              {t("card.live_demo")} &rarr;
             </a>
           )}
         </div>

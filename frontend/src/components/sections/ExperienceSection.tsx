@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import Section from "@/components/ui/Section";
 import type { Experience } from "@/lib/types";
@@ -18,11 +19,12 @@ function formatDate(date: string): string {
 }
 
 export default function ExperienceSection({ experience }: ExperienceProps) {
+  const t = useTranslations("experience");
   return (
     <Section
       id="experience"
-      title="Experience"
-      subtitle="Where I've made an impact"
+      title={t("title")}
+      subtitle={t("subtitle")}
       className="bg-bg-secondary"
     >
       <div className="relative mx-auto max-w-3xl">
@@ -83,7 +85,7 @@ export default function ExperienceSection({ experience }: ExperienceProps) {
               </div>
 
               <p className="mt-2 text-xs text-text-muted">
-                {formatDate(exp.start_date)} — {exp.end_date ? formatDate(exp.end_date) : "Present"}
+                {formatDate(exp.start_date)} — {exp.end_date ? formatDate(exp.end_date) : t("present")}
                 {exp.location && ` · ${exp.location}`}
               </p>
 

@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+
 import AboutSection from "@/components/sections/AboutSection";
 import ContactSection from "@/components/sections/ContactSection";
 import EducationSection from "@/components/sections/EducationSection";
@@ -12,11 +14,16 @@ import {
   fetchProjects,
   fetchSkills,
 } from "@/lib/api";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import type { Profile } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value as Locale | undefined;
+  const locale = cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale;
+
   const fallbackProfile: Profile = {
     full_name: "Developer",
     headline: "",
@@ -36,11 +43,11 @@ export default async function HomePage() {
   };
 
   const [profileResult, skillsResult, projectsResult, experienceResult, educationResult] = await Promise.allSettled([
-    fetchProfile(),
-    fetchSkills(),
-    fetchProjects(),
-    fetchExperience(),
-    fetchEducation(),
+    fetchProfile(locale),
+    fetchSkills(locale),
+    fetchProjects(locale),
+    fetchExperience(locale),
+    fetchEducation(locale),
   ]);
 
   const profile =

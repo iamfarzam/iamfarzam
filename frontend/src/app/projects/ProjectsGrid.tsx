@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import Card from "@/components/ui/Card";
@@ -11,6 +12,7 @@ interface ProjectsGridProps {
 }
 
 export default function ProjectsGrid({ projects }: ProjectsGridProps) {
+  const t = useTranslations("projects");
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const allTags = useMemo(() => {
@@ -39,7 +41,7 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
               : "bg-bg-tertiary text-text-secondary hover:text-accent"
           }`}
         >
-          All
+          {t("filter_all")}
         </button>
         {allTags.map((tag) => (
           <button
@@ -76,7 +78,7 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
 
       {filtered.length === 0 && (
         <p className="mt-12 text-center text-text-muted">
-          No projects match the selected filter.
+          {t("no_filter_results")}
         </p>
       )}
     </>

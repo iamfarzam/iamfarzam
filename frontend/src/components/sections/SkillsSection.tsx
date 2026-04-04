@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import Section from "@/components/ui/Section";
 import type { SkillCategory } from "@/lib/types";
@@ -10,11 +11,12 @@ interface SkillsProps {
 }
 
 export default function SkillsSection({ categories }: SkillsProps) {
+  const t = useTranslations("skills");
   return (
     <Section
       id="skills"
-      title="Skills & Technologies"
-      subtitle="What powers my work"
+      title={t("title")}
+      subtitle={t("subtitle")}
       className="bg-bg-secondary"
     >
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
