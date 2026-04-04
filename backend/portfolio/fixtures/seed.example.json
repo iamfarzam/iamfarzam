@@ -1,0 +1,46 @@
+{
+  "_comment": "Copy this file to seed.{lang}.json (e.g. seed.es.json) and fill in translations. Only include fields you want to translate. Use category_key/key to match English records, slug for projects, order index for experience/education.",
+
+  "profile": {
+    "headline": "",
+    "tagline": "",
+    "bio": "",
+    "meta_title": "",
+    "meta_description": ""
+  },
+
+  "skills": [
+    {
+      "category_key": "Languages",
+      "category": "",
+      "items": [
+        { "key": "Python", "name": "" },
+        { "key": "JavaScript", "name": "" }
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "slug": "taskflow",
+      "title": "",
+      "summary": "",
+      "description": ""
+    }
+  ],
+
+  "experience": [
+    {
+      "role": "",
+      "description": ""
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "",
+      "field_of_study": "",
+      "description": ""
+    }
+  ]
+}
