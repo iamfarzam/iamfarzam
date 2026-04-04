@@ -152,6 +152,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en"
 
+# Register languages not in Django's built-in LANG_INFO
+import django.conf.locale
+django.conf.locale.LANG_INFO.update({
+    "sm": {"bidi": False, "code": "sm", "name": "Samoan", "name_local": "Gagana Samoa"},
+    "mi": {"bidi": False, "code": "mi", "name": "Maori", "name_local": "Te Reo Māori"},
+})
+
 LANGUAGES = [
     ("en", "English"),
     ("es", "Spanish"),
