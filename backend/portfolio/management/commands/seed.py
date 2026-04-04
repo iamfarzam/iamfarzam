@@ -58,9 +58,15 @@ class Command(BaseCommand):
 
         # Full seed mode: base + all languages
         fixture_dir = Path(options["fixture_dir"])
+        if not fixture_dir.is_dir():
+            self.stdout.write(self.style.WARNING(f"Fixtures directory not found: {fixture_dir} — skipping."))
+            return
         base_file = fixture_dir / "seed.json"
         if not base_file.exists():
-            self.stderr.write(self.style.ERROR(f"Base fixture not found: {base_file}"))
+            # Try seed.en.json as fallback
+            base_file = fixture_dir / "seed.en.json"
+        if not base_file.exists():
+            self.stderr.write(self.style.ERROR(f"No base fixture (seed.json or seed.en.json) found in {fixture_dir}"))
             return
 
         data = json.loads(base_file.read_text(encoding="utf-8"))
