@@ -7,6 +7,8 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { fetchProject, fetchProjects } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
