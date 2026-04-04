@@ -23,6 +23,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_SITE_TITLE
+ARG NEXT_PUBLIC_REVALIDATE
 RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 # --- Production ---
