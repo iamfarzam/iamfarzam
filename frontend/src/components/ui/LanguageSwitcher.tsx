@@ -24,6 +24,7 @@ const labels: Record<Locale, string> = {
   it: "Italiano",
   sm: "Gagana Samoa",
   mi: "Te Reo Māori",
+  fa: "فارسی",
 };
 
 const flags: Record<Locale, string> = {
@@ -46,6 +47,7 @@ const flags: Record<Locale, string> = {
   it: "IT",
   sm: "SM",
   mi: "MI",
+  fa: "فا",
 };
 
 export default function LanguageSwitcher() {
