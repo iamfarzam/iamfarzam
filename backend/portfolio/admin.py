@@ -509,16 +509,20 @@ class EmailTemplateAdmin(ModelAdmin):
         return obj.is_active
 
     def placeholder_help(self, obj):
-        placeholders = {
+        specific = {
             "contact_notification": "{{ name }}, {{ email }}, {{ subject }}, {{ message }}",
             "admin_reply": "{{ subject }}, {{ reply_body }}, {{ original_message }}, {{ name }}",
             "admin_new_email": "{{ subject }}, {{ body }}, {{ name }}",
         }
-        text = placeholders.get(obj.name, "No placeholders defined for this template.")
+        branding = "{{ brand_name }}, {{ brand_email }}, {{ brand_website }}, {{ brand_github }}, {{ brand_linkedin }}"
+        specific_text = specific.get(obj.name, "No specific placeholders for this template.")
         return format_html(
-            '<div style="padding:12px;background:#f0f9ff;border-radius:6px;border:1px solid #bae6fd;">'
-            '<strong>Available placeholders:</strong> {}</div>',
-            text,
+            '<div style="padding:14px;background:#f0f9ff;border-radius:6px;border:1px solid #bae6fd;font-size:13px;line-height:1.6;">'
+            '<strong>Template-specific:</strong> {}<br>'
+            '<strong>Branding (auto-injected from Profile):</strong> {}'
+            '</div>',
+            specific_text,
+            branding,
         )
     placeholder_help.short_description = "Available Placeholders"
 
