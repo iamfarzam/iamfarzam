@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -18,6 +20,8 @@ from .models import (
     SkillCategory,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def unread_messages_count(request):
     """Badge callback for sidebar unread message count."""
@@ -25,6 +29,7 @@ def unread_messages_count(request):
         count = ContactMessage.objects.filter(is_read=False).count()
         return count if count > 0 else None
     except Exception:
+        logger.exception("Failed to query unread message count")
         return None
 
 
@@ -413,19 +418,22 @@ class ContactMessageAdmin(ModelAdmin):
                 messages.error(request, "Reply body cannot be empty.")
                 return HttpResponseRedirect(request.get_full_path())
 
-            from .tasks import send_admin_reply
-            send_admin_reply.delay(
-                contact_message_id=obj.pk,
-                reply_subject=reply_subject,
-                reply_body=reply_body,
-                sent_by_id=request.user.pk,
-            )
+            try:
+                from .tasks import send_admin_reply
+                send_admin_reply.delay(
+                    contact_message_id=obj.pk,
+                    reply_subject=reply_subject,
+                    reply_body=reply_body,
+                    sent_by_id=request.user.pk,
+                )
+                messages.success(request, f"Reply queued for delivery to {obj.email}")
+            except Exception:
+                logger.exception("Failed to queue reply for message %s", obj.pk)
+                messages.error(request, "Failed to queue reply — check Celery/Redis connection.")
 
             if not obj.is_read:
                 obj.is_read = True
                 obj.save(update_fields=["is_read"])
-
-            messages.success(request, f"Reply queued for delivery to {obj.email}")
             return HttpResponseRedirect(
                 reverse("admin:portfolio_contactmessage_change", args=[obj.pk])
             )

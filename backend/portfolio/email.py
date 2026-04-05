@@ -1,5 +1,6 @@
 """Email rendering utilities and sender identity helpers."""
 
+import logging
 import re
 from html.parser import HTMLParser
 from io import StringIO
@@ -7,6 +8,8 @@ from io import StringIO
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context, Template
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -69,6 +72,7 @@ def _get_branding():
     try:
         profile = Profile.objects.first()
     except Exception:
+        logger.exception("Failed to load Profile for email branding")
         profile = None
 
     if profile:

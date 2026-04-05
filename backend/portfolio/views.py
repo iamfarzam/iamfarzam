@@ -1,7 +1,9 @@
+import logging
+
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.permissions import AllowAny
 from rest_framework import generics, viewsets
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import (
@@ -21,6 +23,8 @@ from .serializers import (
     ProjectListSerializer,
     SkillCategorySerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ProfileView(generics.RetrieveAPIView):
@@ -45,7 +49,7 @@ class SkillCategoryListView(generics.ListAPIView):
         try:
             return super().list(request, *args, **kwargs)
         except Exception:
-            # Keep homepage functional even when malformed skill data exists.
+            logger.exception("Failed to serialize skills — returning empty list")
             return Response([])
 
 
@@ -81,6 +85,13 @@ class ContactCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        from .tasks import send_contact_notification
+        try:
+            from .tasks import send_contact_notification
 
-        send_contact_notification.delay(instance.pk)
+            send_contact_notification.delay(instance.pk)
+        except Exception:
+            logger.exception(
+                "Failed to queue contact notification for message %s — "
+                "message saved, notification skipped",
+                instance.pk,
+            )
