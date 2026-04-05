@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 
 from .models import (
@@ -10,12 +12,16 @@ from .models import (
     SkillCategory,
 )
 
+logger = logging.getLogger(__name__)
+
+
 def safe_file_url(field_file, request=None):
     if not field_file:
         return None
     try:
         url = field_file.url
     except Exception:
+        logger.warning("Failed to resolve URL for file field %r", field_file.name, exc_info=True)
         return None
     if request is not None:
         return request.build_absolute_uri(url)
