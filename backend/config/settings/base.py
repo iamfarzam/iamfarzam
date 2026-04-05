@@ -93,6 +93,16 @@ UNFOLD = {
                         "link": "/admin/portfolio/contactmessage/",
                         "badge": "portfolio.admin.unread_messages_count",
                     },
+                    {
+                        "title": "Email Templates",
+                        "icon": "draft",
+                        "link": "/admin/portfolio/emailtemplate/",
+                    },
+                    {
+                        "title": "Sent Emails",
+                        "icon": "send",
+                        "link": "/admin/portfolio/sentemail/",
+                    },
                 ],
             },
             {
@@ -197,6 +207,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Celery
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+
 # Email (optional — only sends contact notifications if CONTACT_NOTIFY_EMAIL is set)
 CONTACT_NOTIFY_EMAIL = config("CONTACT_NOTIFY_EMAIL", default="")
 EMAIL_BACKEND = config(
@@ -208,7 +224,14 @@ EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+
+# System email identity (noreply, for automated notifications)
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@example.com")
+SYSTEM_EMAIL_NAME = config("SYSTEM_EMAIL_NAME", default="Portfolio")
+
+# Admin email identity (reply-capable, for admin-sent emails)
+ADMIN_FROM_EMAIL = config("ADMIN_FROM_EMAIL", default="")
+ADMIN_EMAIL_NAME = config("ADMIN_EMAIL_NAME", default="Portfolio Admin")
 
 # DRF
 REST_FRAMEWORK = {
