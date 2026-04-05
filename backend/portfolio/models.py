@@ -149,3 +149,67 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.subject} — {self.name}"
+
+
+class EmailTemplate(models.Model):
+    """Configurable HTML email template stored in the database."""
+
+    TEMPLATE_CHOICES = [
+        ("contact_notification", "Contact Notification"),
+        ("admin_reply", "Admin Reply"),
+        ("admin_new_email", "Admin New Email"),
+    ]
+
+    name = models.CharField(max_length=50, unique=True, choices=TEMPLATE_CHOICES)
+    subject = models.CharField(
+        max_length=200,
+        help_text="Use {{ placeholders }} for dynamic content, e.g. {{ subject }}, {{ name }}",
+    )
+    html_body = models.TextField(
+        help_text="HTML email body. Use {{ placeholders }} for dynamic content.",
+    )
+    text_body = models.TextField(
+        blank=True,
+        help_text="Plain text fallback. Auto-stripped from HTML if left blank.",
+    )
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Email Template"
+        verbose_name_plural = "Email Templates"
+
+    def __str__(self):
+        return self.get_name_display()
+
+
+class SentEmail(models.Model):
+    """Audit log for emails sent from the admin panel."""
+
+    recipient_email = models.EmailField()
+    recipient_name = models.CharField(max_length=100, blank=True)
+    subject = models.CharField(max_length=200)
+    body_preview = models.TextField()
+    from_identity = models.CharField(max_length=200, help_text="Display name and email")
+    contact_message = models.ForeignKey(
+        ContactMessage,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="replies",
+    )
+    sent_at = models.DateTimeField(auto_now_add=True)
+    sent_by = models.ForeignKey(
+        "auth.User",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        ordering = ["-sent_at"]
+        verbose_name = "Sent Email"
+        verbose_name_plural = "Sent Emails"
+
+    def __str__(self):
+        return f"{self.subject} → {self.recipient_email}"
