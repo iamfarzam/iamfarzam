@@ -70,6 +70,12 @@
     "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
     "go_home": "Zur Startseite"
   },
+  "error": {
+    "title": "Etwas ist schiefgelaufen",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "go_home": "Zur Startseite"
+  },
   "footer": {
     "rights": "Alle Rechte vorbehalten."
   },
