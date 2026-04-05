@@ -70,6 +70,12 @@
     "description": "Pagina pe care o cauți nu există sau a fost mutată.",
     "go_home": "Acasă"
   },
+  "error": {
+    "title": "Ceva a mers prost",
+    "description": "A apărut o eroare neașteptată. Te rugăm să încerci din nou.",
+    "retry": "Încearcă din nou",
+    "go_home": "Acasă"
+  },
   "footer": {
     "rights": "Toate drepturile rezervate."
   },

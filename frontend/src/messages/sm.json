@@ -70,6 +70,12 @@
     "description": "O le itulau o lo'o e su'e e le o iai po'o ua si'itia.",
     "go_home": "Toe fo'i i le Amataga"
   },
+  "error": {
+    "title": "Sa Tupu se Mea Sese",
+    "description": "Sa tupu se mea sese e le'i fa'amoemoeina. Fa'amolemole toe taumafai.",
+    "retry": "Toe Taumafai",
+    "go_home": "Toe fo'i i le Amataga"
+  },
   "footer": {
     "rights": "Aia tatau uma e puipuia."
   },

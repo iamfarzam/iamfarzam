@@ -70,6 +70,12 @@
     "description": "La pagina che stai cercando non esiste o è stata spostata.",
     "go_home": "Vai alla Home"
   },
+  "error": {
+    "title": "Qualcosa è andato storto",
+    "description": "Si è verificato un errore imprevisto. Per favore riprova.",
+    "retry": "Riprova",
+    "go_home": "Vai alla Home"
+  },
   "footer": {
     "rights": "Tutti i diritti riservati."
   },

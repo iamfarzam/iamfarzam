@@ -70,6 +70,12 @@
     "description": "A página que você procura não existe ou foi movida.",
     "go_home": "Ir para o início"
   },
+  "error": {
+    "title": "Algo deu errado",
+    "description": "Ocorreu um erro inesperado. Por favor, tente novamente.",
+    "retry": "Tentar novamente",
+    "go_home": "Ir para o início"
+  },
   "footer": {
     "rights": "Todos os direitos reservados."
   },

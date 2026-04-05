@@ -70,6 +70,12 @@
     "description": "Ko te whārangi e rapu ana koe kāore i te tū, kua nekehia rānei.",
     "go_home": "Hoki ki te Kāinga"
   },
+  "error": {
+    "title": "I Hē Tētahi Mea",
+    "description": "I puta he hapa ohorere. Tēnā whakamātauria anō.",
+    "retry": "Whakamātauria Anō",
+    "go_home": "Hoki ki te Kāinga"
+  },
   "footer": {
     "rights": "Ngā motika katoa kua rahuitia."
   },

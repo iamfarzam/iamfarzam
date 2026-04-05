@@ -70,6 +70,12 @@
     "description": "The page you're looking for doesn't exist or has been moved.",
     "go_home": "Go Home"
   },
+  "error": {
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try Again",
+    "go_home": "Go Home"
+  },
   "footer": {
     "rights": "All rights reserved."
   },

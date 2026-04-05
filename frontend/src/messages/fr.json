@@ -70,6 +70,12 @@
     "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "go_home": "Retour à l'accueil"
   },
+  "error": {
+    "title": "Une erreur est survenue",
+    "description": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "go_home": "Retour à l'accueil"
+  },
   "footer": {
     "rights": "Tous droits réservés."
   },
