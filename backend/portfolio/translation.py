@@ -5,7 +5,7 @@ from .models import Education, Experience, Profile, Project, Skill, SkillCategor
 
 @register(Profile)
 class ProfileTranslation(TranslationOptions):
-    fields = ("headline", "tagline", "bio", "meta_title", "meta_description")
+    fields = ("full_name", "headline", "tagline", "bio", "meta_title", "meta_description")
 
 
 @register(SkillCategory)
