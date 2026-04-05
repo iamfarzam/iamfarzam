@@ -32,6 +32,7 @@ services:
     volumes:
       - backend_static:/app/staticfiles
       - backend_media:/app/media
+      - backend_logs:/app/logs
       - ./fixtures:/app/fixtures:ro
     restart: unless-stopped
     depends_on:
@@ -48,6 +49,8 @@ services:
     env_file: .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.prod
+    volumes:
+      - backend_logs:/app/logs
     restart: unless-stopped
     depends_on:
       redis:
@@ -88,3 +91,4 @@ volumes:
   postgres_data:
   backend_static:
   backend_media:
+  backend_logs:

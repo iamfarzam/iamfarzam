@@ -6,6 +6,10 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Logging directory — inside the container at /app/logs, persisted via Docker volume.
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 INSTALLED_APPS = [
@@ -261,3 +265,87 @@ CSRF_TRUSTED_ORIGINS = config(
     default="http://localhost:3000,http://127.0.0.1:3000",
     cast=lambda v: [s.strip() for s in v.split(",")],
 )
+
+# ---------------------------------------------------------------------------
+# Logging — daily rotating file + console
+# ---------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {message}",
+            "style": "{",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "simple": {
+            "format": "{levelname} {name}: {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file_django": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": str(LOG_DIR / "django.log"),
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 30,
+            "formatter": "verbose",
+            "encoding": "utf-8",
+        },
+        "file_portfolio": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": str(LOG_DIR / "portfolio.log"),
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 30,
+            "formatter": "verbose",
+            "encoding": "utf-8",
+        },
+        "file_errors": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": str(LOG_DIR / "errors.log"),
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 90,
+            "formatter": "verbose",
+            "encoding": "utf-8",
+            "level": "ERROR",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file_django"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console", "file_django", "file_errors"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["console", "file_django", "file_errors"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "portfolio": {
+            "handlers": ["console", "file_portfolio", "file_errors"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["console", "file_portfolio"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+    "root": {
+        "handlers": ["console", "file_django"],
+        "level": "WARNING",
+    },
+}

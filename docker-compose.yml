@@ -54,6 +54,7 @@ services:
       - DJANGO_SETTINGS_MODULE=config.settings.dev
     volumes:
       - ./backend:/app
+      - backend_media:/app/media
     depends_on:
       redis:
         condition: service_healthy
