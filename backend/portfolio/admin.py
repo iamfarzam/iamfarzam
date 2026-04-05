@@ -427,9 +427,9 @@ class ContactMessageAdmin(ModelAdmin):
                     sent_by_id=request.user.pk,
                 )
                 messages.success(request, f"Reply queued for delivery to {obj.email}")
-            except Exception:
+            except Exception as exc:
                 logger.exception("Failed to queue reply for message %s", obj.pk)
-                messages.error(request, "Failed to queue reply — check Celery/Redis connection.")
+                messages.error(request, f"Failed to queue reply: {exc}")
 
             if not obj.is_read:
                 obj.is_read = True
