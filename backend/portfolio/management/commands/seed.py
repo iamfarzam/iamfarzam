@@ -157,18 +157,22 @@ class Command(BaseCommand):
                         setattr(profile, f"{field}_{suffix}", value)
                 profile.save()
 
-        for group in lang_data.get("skills", []):
-            cat_name_en = group.get("category_key")
+        # Load English base skills for matching by order
+        base_categories = list(SkillCategory.objects.order_by("order"))
+        for i, group in enumerate(lang_data.get("skills", [])):
             cat_translation = group.get("category")
-            if cat_name_en and cat_translation:
-                SkillCategory.objects.filter(name=cat_name_en).update(
-                    **{f"name_{suffix}": cat_translation}
-                )
-            for item in group.get("items", []):
-                key = item.get("key")
-                name = item.get("name")
-                if key and name:
-                    Skill.objects.filter(name=key).update(**{f"name_{suffix}": name})
+            if cat_translation and i < len(base_categories):
+                base_categories[i].__class__.objects.filter(
+                    pk=base_categories[i].pk
+                ).update(**{f"name_{suffix}": cat_translation})
+
+                base_skills = list(base_categories[i].skills.order_by("order"))
+                for j, item in enumerate(group.get("items", [])):
+                    translated_name = item.get("name")
+                    if translated_name and j < len(base_skills):
+                        Skill.objects.filter(pk=base_skills[j].pk).update(
+                            **{f"name_{suffix}": translated_name}
+                        )
 
         allowed_proj = TRANSLATABLE["project"]
         for proj in lang_data.get("projects", []):
