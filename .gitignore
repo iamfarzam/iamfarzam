@@ -213,6 +213,7 @@ __marimo__/
 # Django project
 backend/media/
 backend/staticfiles/
+backend/logs/
 
 # Seed fixtures (user-specific data)
 /fixtures/
