@@ -383,15 +383,22 @@ class ContactMessageAdmin(ModelAdmin):
         for r in replies:
             sent_by = r.sent_by.get_full_name() or r.sent_by.username if r.sent_by else "System"
             rows.append(
-                f'<div style="margin-bottom:12px;padding:12px;background:#f8fafc;border-radius:6px;border-left:3px solid #3b82f6;">'
-                f'<div style="font-size:12px;color:#666;margin-bottom:4px;">'
-                f'{r.sent_at.strftime("%b %d, %Y %H:%M")} &mdash; by {sent_by} &mdash; via {r.from_identity}'
-                f'</div>'
-                f'<div style="font-weight:600;margin-bottom:4px;">{r.subject}</div>'
-                f'<div style="color:#333;">{r.body_preview}</div>'
-                f'</div>'
+                format_html(
+                    '<div style="margin-bottom:12px;padding:12px;background:#f8fafc;border-radius:6px;border-left:3px solid #3b82f6;">'
+                    '<div style="font-size:12px;color:#666;margin-bottom:4px;">'
+                    '{} &mdash; by {} &mdash; via {}'
+                    '</div>'
+                    '<div style="font-weight:600;margin-bottom:4px;">{}</div>'
+                    '<div style="color:#333;">{}</div>'
+                    '</div>',
+                    r.sent_at.strftime("%b %d, %Y %H:%M"),
+                    sent_by,
+                    r.from_identity,
+                    r.subject,
+                    r.body_preview,
+                )
             )
-        return format_html("".join(rows))
+        return format_html("{}" * len(rows), *rows)
     reply_history.short_description = "Reply History"
 
     @action(description="Reply to this message", url_path="reply")
