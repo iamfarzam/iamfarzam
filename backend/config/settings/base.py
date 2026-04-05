@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "storages",
     "rest_framework",
     "corsheaders",
+    "django_celery_results",
     # Local
     "portfolio",
 ]
@@ -110,9 +111,14 @@ UNFOLD = {
                 ],
             },
             {
-                "title": "Administration",
+                "title": "System",
                 "separator": True,
                 "items": [
+                    {
+                        "title": "Task Results",
+                        "icon": "task_alt",
+                        "link": "/admin/django_celery_results/taskresult/",
+                    },
                     {
                         "title": "Users",
                         "icon": "group",
@@ -213,9 +219,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery
 CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_RESULT_EXTENDED = True
 
 # Email (optional — only sends contact notifications if CONTACT_NOTIFY_EMAIL is set)
 CONTACT_NOTIFY_EMAIL = config("CONTACT_NOTIFY_EMAIL", default="")
