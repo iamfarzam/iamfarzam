@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Reply to: {{ object.subject }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+
+  {# Original message card #}
+  <div style="background: #f8fafc; border-radius: 8px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0;">
+    <h3 style="margin-top: 0; color: #1e3a5f;">Original Message</h3>
+    <div style="font-size: 13px; color: #666; margin-bottom: 12px;">
+      <strong>From:</strong> {{ object.name }} &lt;{{ object.email }}&gt;<br>
+      <strong>Date:</strong> {{ object.created_at|date:"N j, Y H:i" }}<br>
+      <strong>Subject:</strong> {{ object.subject }}
+    </div>
+    <div style="padding: 16px; background: #ffffff; border-radius: 6px; border: 1px solid #e2e8f0; white-space: pre-wrap;">{{ object.message }}</div>
+  </div>
+
+  {# Reply form #}
+  <div style="background: #ffffff; border-radius: 8px; padding: 24px; border: 1px solid #e2e8f0;">
+    <h3 style="margin-top: 0; color: #1e3a5f;">Send Reply</h3>
+    <form method="post">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 16px;">
+        <label for="reply_subject" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px;">Subject</label>
+        <input
+          type="text"
+          id="reply_subject"
+          name="reply_subject"
+          value="Re: {{ object.subject }}"
+          style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; box-sizing: border-box;"
+        >
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label for="reply_body" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px;">Reply Body <span style="color: red;">*</span></label>
+        <textarea
+          id="reply_body"
+          name="reply_body"
+          rows="10"
+          required
+          placeholder="Type your reply here..."
+          style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-family: inherit; resize: vertical; box-sizing: border-box;"
+        ></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <button type="submit" style="background: #1e3a5f; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
+          Send Reply
+        </button>
+        <a href="{% url 'admin:portfolio_contactmessage_change' object.pk %}" style="color: #666; text-decoration: none; font-size: 14px;">
+          Cancel
+        </a>
+      </div>
+
+      <p style="margin-top: 12px; font-size: 12px; color: #999;">
+        This reply will be sent from the admin email identity and logged in Sent Emails.
+      </p>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

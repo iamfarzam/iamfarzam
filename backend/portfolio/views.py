@@ -81,28 +81,6 @@ class ContactCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        self._notify(instance)
+        from .tasks import send_contact_notification
 
-    @staticmethod
-    def _notify(msg):
-        """Send email notification if CONTACT_NOTIFY_EMAIL is configured."""
-        from django.conf import settings
-        from django.core.mail import send_mail
-
-        recipient = getattr(settings, "CONTACT_NOTIFY_EMAIL", None)
-        if not recipient:
-            return
-        try:
-            send_mail(
-                subject=f"New contact message: {msg.subject}",
-                message=(
-                    f"From: {msg.name} <{msg.email}>\n"
-                    f"Subject: {msg.subject}\n\n"
-                    f"{msg.message}"
-                ),
-                from_email=None,  # uses DEFAULT_FROM_EMAIL
-                recipient_list=[recipient],
-                fail_silently=True,
-            )
-        except Exception:
-            pass
+        send_contact_notification.delay(instance.pk)
