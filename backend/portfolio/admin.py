@@ -612,3 +612,51 @@ class SentEmailAdmin(ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+# ---------------------------------------------------------------------------
+# Celery Task Results (read-only audit log)
+# ---------------------------------------------------------------------------
+
+from django_celery_results.admin import TaskResultAdmin as BaseTaskResultAdmin
+from django_celery_results.models import GroupResult, TaskResult
+
+admin.site.unregister(TaskResult)
+admin.site.unregister(GroupResult)
+
+
+@admin.register(TaskResult)
+class TaskResultAdmin(ModelAdmin, BaseTaskResultAdmin):
+    list_display = ["task_id", "task_name", "status", "worker", "date_done"]
+    list_filter = ["status", "task_name", "worker", "date_done"]
+    list_filter_submit = True
+    search_fields = ["task_id", "task_name"]
+    readonly_fields = [
+        "task_id", "periodic_task_name", "task_name", "task_args",
+        "task_kwargs", "status", "worker", "content_type",
+        "content_encoding", "result", "date_created", "date_started",
+        "date_done", "traceback", "meta",
+    ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(GroupResult)
+class GroupResultAdmin(ModelAdmin):
+    list_display = ["group_id", "date_created", "date_done"]
+    list_filter = ["date_done"]
+    list_filter_submit = True
+    readonly_fields = [
+        "group_id", "date_created", "date_done",
+        "content_type", "content_encoding", "result",
+    ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
