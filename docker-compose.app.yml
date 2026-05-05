@@ -1,0 +1,86 @@
+# Application stack — deployed twice, once per colour, for blue-green.
+#
+# The COMPOSE_PROJECT_NAME determines which colour this is (portfolio-blue
+# or portfolio-green). Container names embed the project so nginx can
+# address them by DNS as portfolio-${COLOR}-backend / -frontend.
+#
+# Postgres, redis, and nginx live in docker-compose.infra.yml and are
+# shared. The shared `portfolio_net` network lets both colours reach them.
+#
+# Run via deploy.sh — direct invocation:
+#   docker compose -f docker-compose.app.yml -p portfolio-blue up -d --wait
+services:
+  backend:
+    container_name: ${COMPOSE_PROJECT_NAME}-backend
+    build:
+      context: ./backend
+    env_file: .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
+    volumes:
+      - backend_static:/app/staticfiles
+      - backend_media:/app/media
+      - backend_logs:/app/logs
+      - ./fixtures:/app/fixtures:ro
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/v1/profile/', timeout=3).status==200 else 1)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+
+  celery:
+    container_name: ${COMPOSE_PROJECT_NAME}-celery
+    build:
+      context: ./backend
+    command: celery -A config worker --loglevel=info
+    env_file: .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
+    volumes:
+      - backend_logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+
+  frontend:
+    container_name: ${COMPOSE_PROJECT_NAME}-frontend
+    build:
+      context: ./frontend
+      target: prod
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_SITE_TITLE: ${NEXT_PUBLIC_SITE_TITLE:-Portfolio}
+        NEXT_PUBLIC_REVALIDATE: ${NEXT_PUBLIC_REVALIDATE:-0}
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  backend_static:
+    name: portfolio_backend_static
+    external: true
+  backend_media:
+    name: portfolio_backend_media
+    external: true
+  backend_logs:
+    name: portfolio_backend_logs
+
+networks:
+  portfolio_net:
+    name: portfolio_net
+    external: true

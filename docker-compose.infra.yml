@@ -1,0 +1,67 @@
+# Infrastructure stack — always running, never restarted on app deploys.
+#
+# Holds postgres, redis, and nginx. Both blue and green app stacks talk
+# to these services via the external `portfolio_net` network. The nginx
+# upstream points to the colour set in ACTIVE_COLOR (defaults to blue).
+#
+# Run with:
+#   docker compose -f docker-compose.infra.yml -p portfolio-infra up -d
+services:
+  postgres:
+    container_name: portfolio-postgres
+    image: postgres:16-alpine
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portfolio}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    container_name: portfolio-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    container_name: portfolio-nginx
+    image: nginx:alpine
+    env_file: .env
+    environment:
+      ACTIVE_COLOR: ${ACTIVE_COLOR:-blue}
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
+      - backend_static:/static:ro
+      - backend_media:/media:ro
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  backend_static:
+    name: portfolio_backend_static
+  backend_media:
+    name: portfolio_backend_media
+
+networks:
+  portfolio_net:
+    name: portfolio_net
