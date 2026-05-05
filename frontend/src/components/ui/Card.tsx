@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 
 import Badge from "./Badge";
 
+const MAX_TECH_BADGES = 5;
+
 interface CardProps {
   title: string;
   summary: string;
@@ -27,6 +29,10 @@ export default function Card({
   liveUrl,
 }: CardProps) {
   const t = useTranslations();
+  const visibleTechs = technologies.slice(0, MAX_TECH_BADGES);
+  const hiddenCount = technologies.length - visibleTechs.length;
+  const hasLinks = Boolean(githubUrl || liveUrl);
+
   return (
     <motion.article
       layout
@@ -34,7 +40,7 @@ export default function Card({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="group overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
     >
       <Link href={href} className="block">
         <div className="relative aspect-video overflow-hidden">
@@ -53,44 +59,57 @@ export default function Card({
           )}
         </div>
       </Link>
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <Link href={href}>
-          <h3 className="text-lg font-semibold text-text transition-colors group-hover:text-accent">
+          <h3 className="line-clamp-2 text-lg font-semibold text-text transition-colors group-hover:text-accent">
             {title}
           </h3>
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm text-text-secondary">
-          {summary}
-        </p>
-        {technologies.length > 0 && (
+        {summary ? (
+          <p className="mt-2 line-clamp-3 text-sm text-text-secondary">
+            {summary}
+          </p>
+        ) : (
+          <p className="mt-2 line-clamp-3 text-sm italic text-text-muted">
+            {t("projects.no_summary")}
+          </p>
+        )}
+        {visibleTechs.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {technologies.map((tech) => (
+            {visibleTechs.map((tech) => (
               <Badge key={tech.name}>{tech.name}</Badge>
             ))}
+            {hiddenCount > 0 && (
+              <Badge>+{hiddenCount}</Badge>
+            )}
           </div>
         )}
-        <div className="mt-4 flex gap-3">
-          {githubUrl && (
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-text-muted transition-colors hover:text-accent"
-            >
-              {t("card.github")} &rarr;
-            </a>
-          )}
-          {liveUrl && (
-            <a
-              href={liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-text-muted transition-colors hover:text-accent"
-            >
-              {t("card.live_demo")} &rarr;
-            </a>
-          )}
-        </div>
+        {/* Spacer pushes the link row to the bottom regardless of summary length */}
+        <div className="flex-1" />
+        {hasLinks && (
+          <div className="mt-4 flex flex-wrap gap-3 border-t border-border/50 pt-3">
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-text-muted transition-colors hover:text-accent"
+              >
+                {t("card.github")} &rarr;
+              </a>
+            )}
+            {liveUrl && (
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-text-muted transition-colors hover:text-accent"
+              >
+                {t("card.live_demo")} &rarr;
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </motion.article>
   );
