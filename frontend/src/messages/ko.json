@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "기술 및 기술 스택",
-    "subtitle": "제 작업을 지원하는 것들"
+    "subtitle": "제 작업을 지원하는 것들",
+    "no_skills": "기술 정보가 곧 제공됩니다.",
+    "no_skills_in_category": "이 카테고리에 아직 등록된 기술이 없습니다."
   },
   "projects": {
     "title": "주요 프로젝트",
@@ -35,7 +37,13 @@
     "no_preview": "미리보기 준비 중",
     "no_description": "전체 사례 연구가 곧 제공됩니다.",
     "no_filter_results": "선택한 필터와 일치하는 프로젝트가 없습니다.",
-    "filter_all": "전체"
+    "filter_all": "전체",
+    "overview": "프로젝트 개요",
+    "links": "프로젝트 링크",
+    "built": "제작",
+    "tech_count": "기술",
+    "no_featured": "주요 프로젝트가 곧 공개됩니다.",
+    "no_summary": "요약이 곧 제공됩니다."
   },
   "experience": {
     "title": "경력",

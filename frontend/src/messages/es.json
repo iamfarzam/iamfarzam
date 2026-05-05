@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Habilidades y tecnologías",
-    "subtitle": "Lo que impulsa mi trabajo"
+    "subtitle": "Lo que impulsa mi trabajo",
+    "no_skills": "Próximamente habilidades.",
+    "no_skills_in_category": "Aún no hay habilidades en esta categoría."
   },
   "projects": {
     "title": "Proyectos destacados",
@@ -35,7 +37,13 @@
     "no_preview": "Vista previa próximamente",
     "no_description": "Caso de estudio próximamente.",
     "no_filter_results": "Ningún proyecto coincide con el filtro seleccionado.",
-    "filter_all": "Todos"
+    "filter_all": "Todos",
+    "overview": "Resumen del proyecto",
+    "links": "Enlaces del proyecto",
+    "built": "Creado",
+    "tech_count": "Tecnologías",
+    "no_featured": "Próximamente proyectos destacados.",
+    "no_summary": "Resumen próximamente."
   },
   "experience": {
     "title": "Experiencia",

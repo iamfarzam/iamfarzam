@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Tomai ma Tekinolosi",
-    "subtitle": "O le a le fa'amalosi o la'u galuega"
+    "subtitle": "O le a le fa'amalosi o la'u galuega",
+    "no_skills": "O loo o mai tomai.",
+    "no_skills_in_category": "E leai ni tomai i lenei vaega."
   },
   "projects": {
     "title": "Galuega Fa'apitoa",
@@ -35,7 +37,13 @@
     "no_preview": "Va'aiga muamua e sau loa",
     "no_description": "Su'esu'ega atoatoa e sau loa.",
     "no_filter_results": "Leai se galuega e fetaui ma le fili na filifilia.",
-    "filter_all": "Uma"
+    "filter_all": "Uma",
+    "overview": "Vaaiga aoao o le poloketi",
+    "links": "Sootaga o le poloketi",
+    "built": "Faia",
+    "tech_count": "Tekonolosi",
+    "no_featured": "O loo o mai poloketi faapitoa.",
+    "no_summary": "O loo o mai le otootoga."
   },
   "experience": {
     "title": "Poto",

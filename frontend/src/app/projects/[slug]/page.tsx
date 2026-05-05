@@ -127,7 +127,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
             <section className="mt-10 rounded-3xl border border-border bg-card p-6 sm:p-8">
               <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-text-muted">
-                Project Overview
+                {t("overview")}
               </h2>
               {descriptionParagraphs.length > 0 ? (
                 <div className="mt-5 space-y-5">
@@ -146,7 +146,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           <aside className="lg:col-span-4">
             <div className="rounded-3xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-24">
               <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-text-muted">
-                Project Links
+                {t("links")}
               </h2>
               <div className="mt-5 space-y-3">
                 {project.live_url && (
@@ -177,12 +177,12 @@ export default async function ProjectDetailPage({ params }: Props) {
               <dl className="mt-8 space-y-4 border-t border-border pt-6">
                 {createdDate && (
                   <div className="flex items-center justify-between gap-4 text-sm">
-                    <dt className="font-medium text-text-muted">Built</dt>
+                    <dt className="font-medium text-text-muted">{t("built")}</dt>
                     <dd className="text-right text-text">{createdDate}</dd>
                   </div>
                 )}
                 <div className="flex items-center justify-between gap-4 text-sm">
-                  <dt className="font-medium text-text-muted">Tech</dt>
+                  <dt className="font-medium text-text-muted">{t("tech_count")}</dt>
                   <dd className="text-right text-text">{technologies.length || 0}</dd>
                 </div>
               </dl>

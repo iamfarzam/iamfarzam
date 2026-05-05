@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Skills & Technologies",
-    "subtitle": "What powers my work"
+    "subtitle": "What powers my work",
+    "no_skills": "Skills coming soon.",
+    "no_skills_in_category": "No skills in this category yet."
   },
   "projects": {
     "title": "Featured Projects",
@@ -35,7 +37,13 @@
     "no_preview": "Preview coming soon",
     "no_description": "Full case study coming soon.",
     "no_filter_results": "No projects match the selected filter.",
-    "filter_all": "All"
+    "filter_all": "All",
+    "overview": "Project Overview",
+    "links": "Project Links",
+    "built": "Built",
+    "tech_count": "Tech",
+    "no_featured": "Featured projects coming soon.",
+    "no_summary": "Summary coming soon."
   },
   "experience": {
     "title": "Experience",

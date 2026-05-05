@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Habilidades e tecnologias",
-    "subtitle": "O que impulsiona meu trabalho"
+    "subtitle": "O que impulsiona meu trabalho",
+    "no_skills": "Competências em breve.",
+    "no_skills_in_category": "Ainda não há competências nesta categoria."
   },
   "projects": {
     "title": "Projetos em destaque",
@@ -35,7 +37,13 @@
     "no_preview": "Pré-visualização em breve",
     "no_description": "Estudo de caso em breve.",
     "no_filter_results": "Nenhum projeto corresponde ao filtro selecionado.",
-    "filter_all": "Todos"
+    "filter_all": "Todos",
+    "overview": "Visão geral do projeto",
+    "links": "Ligações do projeto",
+    "built": "Criado",
+    "tech_count": "Tecnologias",
+    "no_featured": "Projetos em destaque em breve.",
+    "no_summary": "Resumo em breve."
   },
   "experience": {
     "title": "Experiência",

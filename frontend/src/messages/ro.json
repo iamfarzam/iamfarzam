@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Competențe și Tehnologii",
-    "subtitle": "Ce susține munca mea"
+    "subtitle": "Ce susține munca mea",
+    "no_skills": "Competențe în curând.",
+    "no_skills_in_category": "Încă nu există competențe în această categorie."
   },
   "projects": {
     "title": "Proiecte Evidențiate",
@@ -35,7 +37,13 @@
     "no_preview": "Previzualizare în curând",
     "no_description": "Studiu de caz complet în curând.",
     "no_filter_results": "Niciun proiect nu corespunde filtrului selectat.",
-    "filter_all": "Toate"
+    "filter_all": "Toate",
+    "overview": "Prezentare generală a proiectului",
+    "links": "Linkuri ale proiectului",
+    "built": "Realizat",
+    "tech_count": "Tehnologii",
+    "no_featured": "Proiecte recomandate în curând.",
+    "no_summary": "Rezumat în curând."
   },
   "experience": {
     "title": "Experiență",

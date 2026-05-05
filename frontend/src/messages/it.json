@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Competenze e Tecnologie",
-    "subtitle": "Cosa alimenta il mio lavoro"
+    "subtitle": "Cosa alimenta il mio lavoro",
+    "no_skills": "Competenze in arrivo.",
+    "no_skills_in_category": "Nessuna competenza in questa categoria al momento."
   },
   "projects": {
     "title": "Progetti in Evidenza",
@@ -35,7 +37,13 @@
     "no_preview": "Anteprima in arrivo",
     "no_description": "Case study completo in arrivo.",
     "no_filter_results": "Nessun progetto corrisponde al filtro selezionato.",
-    "filter_all": "Tutti"
+    "filter_all": "Tutti",
+    "overview": "Panoramica del progetto",
+    "links": "Link del progetto",
+    "built": "Creato",
+    "tech_count": "Tecnologie",
+    "no_featured": "Progetti in evidenza in arrivo.",
+    "no_summary": "Riepilogo in arrivo."
   },
   "experience": {
     "title": "Esperienza",

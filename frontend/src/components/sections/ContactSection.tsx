@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import Button from "@/components/ui/Button";
@@ -10,6 +10,7 @@ import { submitContact } from "@/lib/api";
 
 export default function ContactSection() {
   const t = useTranslations("contact");
+  const locale = useLocale();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,7 +25,7 @@ export default function ContactSection() {
     setStatus("sending");
     setErrorMsg("");
     try {
-      await submitContact(form);
+      await submitContact({ ...form, language: locale });
       setStatus("sent");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err) {

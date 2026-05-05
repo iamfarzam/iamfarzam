@@ -63,6 +63,7 @@ export async function submitContact(data: {
   email: string;
   subject: string;
   message: string;
+  language?: string;
 }): Promise<void> {
   const apiUrl =
     process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
