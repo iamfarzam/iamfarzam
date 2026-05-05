@@ -12,6 +12,16 @@ LOG_DIR.mkdir(exist_ok=True)
 
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
+# Project SemVer — read from the VERSION file. In Docker the file is bind-mounted
+# at /app/VERSION; outside Docker it sits at the repo root one level above BASE_DIR.
+PROJECT_VERSION = "0.0.0"
+for candidate in (BASE_DIR / "VERSION", BASE_DIR.parent / "VERSION"):
+    try:
+        PROJECT_VERSION = candidate.read_text(encoding="utf-8").strip() or PROJECT_VERSION
+        break
+    except OSError:
+        continue
+
 INSTALLED_APPS = [
     "modeltranslation",
     "unfold",
@@ -36,6 +46,7 @@ UNFOLD = {
     "SITE_TITLE": "Portfolio Admin",
     "SITE_HEADER": "Portfolio",
     "SITE_SYMBOL": "deployed_code",
+    "ENVIRONMENT": "portfolio.admin.project_version_environment",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": False,
     "COLORS": {
