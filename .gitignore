@@ -232,3 +232,8 @@ frontend/out/
 Thumbs.db
 *.swp
 *.swo
+
+# Deploy state (per-host, not source)
+.deployed
+.deployed.state
+.deployed.previous
