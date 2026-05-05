@@ -26,7 +26,9 @@ services:
     networks:
       - portfolio_net
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/v1/profile/', timeout=3).status==200 else 1)\""]
+      # Hits gunicorn directly via loopback. Sends the first NGINX_SERVER_NAMES
+      # entry as the Host header so Django's ALLOWED_HOSTS check passes.
+      test: ["CMD-SHELL", "python -c \"import os,urllib.request; h=(os.environ.get('NGINX_SERVER_NAMES') or 'localhost').split()[0]; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/api/v1/profile/', headers={'Host':h}), timeout=3)\""]
       interval: 10s
       timeout: 5s
       retries: 6

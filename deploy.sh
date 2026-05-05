@@ -150,8 +150,8 @@ app_compose()   {
 
 ensure_infra_up() {
     log "Bringing up infrastructure (postgres, redis, nginx)"
-    # Make sure the shared network exists; --remove-orphans=false to be safe
-    docker network inspect portfolio_net >/dev/null 2>&1 || docker network create portfolio_net >/dev/null
+    # Compose owns the portfolio_net network on first up; the app stack
+    # declares it as external so it just attaches.
     infra_compose up -d --wait
     ok "Infra healthy"
 }
@@ -181,13 +181,22 @@ reload_nginx() {
     ok "nginx now points at ${1:-?} colour"
 }
 
+primary_host() {
+    # First entry from NGINX_SERVER_NAMES — used as the Host: header so
+    # Django ALLOWED_HOSTS and nginx server_name checks both pass.
+    grep -E '^NGINX_SERVER_NAMES=' "$ENV_FILE" 2>/dev/null \
+        | head -1 | cut -d= -f2- | awk '{print $1}' || echo localhost
+}
+
 smoke_test_internal() {
     local colour="$1"
-    log "Smoke-testing ${colour} backend on internal network"
+    local host
+    host="$(primary_host)"
+    log "Smoke-testing ${colour} backend (Host: ${host})"
     local container="portfolio-${colour}-backend"
     for _ in $(seq 1 20); do
-        if docker exec "$container" python -c \
-            "import urllib.request; urllib.request.urlopen('http://localhost:8000${PUBLIC_HEALTH_PATH}', timeout=3)" \
+        if docker exec -e PRIMARY_HOST="$host" "$container" python -c \
+            "import os,urllib.request; req=urllib.request.Request('http://127.0.0.1:8000${PUBLIC_HEALTH_PATH}', headers={'Host':os.environ['PRIMARY_HOST']}); urllib.request.urlopen(req, timeout=3)" \
             >/dev/null 2>&1; then
             ok "${colour} backend responds"
             return 0
@@ -198,9 +207,12 @@ smoke_test_internal() {
 }
 
 smoke_test_public() {
-    log "Smoke-testing public endpoint via nginx"
+    local host
+    host="$(primary_host)"
+    log "Smoke-testing public endpoint via nginx (Host: ${host})"
     for _ in $(seq 1 15); do
-        if docker exec portfolio-nginx wget -qO- "http://localhost${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1; then
+        if docker exec portfolio-nginx wget -qO- --header="Host: ${host}" \
+            "http://localhost${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1; then
             ok "Public endpoint responds"
             return 0
         fi
