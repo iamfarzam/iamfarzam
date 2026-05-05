@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "技能与技术",
-    "subtitle": "驱动我工作的技术栈"
+    "subtitle": "驱动我工作的技术栈",
+    "no_skills": "技能即将上线。",
+    "no_skills_in_category": "此分类暂无技能。"
   },
   "projects": {
     "title": "精选项目",
@@ -35,7 +37,13 @@
     "no_preview": "预览即将推出",
     "no_description": "完整案例研究即将推出。",
     "no_filter_results": "没有项目符合所选筛选条件。",
-    "filter_all": "全部"
+    "filter_all": "全部",
+    "overview": "项目概览",
+    "links": "项目链接",
+    "built": "创建于",
+    "tech_count": "技术栈",
+    "no_featured": "精选项目即将上线。",
+    "no_summary": "项目摘要即将上线。"
   },
   "experience": {
     "title": "工作经历",

@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Yetenekler ve Teknolojiler",
-    "subtitle": "İşimi güçlendiren araçlar"
+    "subtitle": "İşimi güçlendiren araçlar",
+    "no_skills": "Yetenekler çok yakında.",
+    "no_skills_in_category": "Bu kategoride henüz yetenek yok."
   },
   "projects": {
     "title": "Öne Çıkan Projeler",
@@ -35,7 +37,13 @@
     "no_preview": "Önizleme yakında",
     "no_description": "Detaylı vaka çalışması yakında.",
     "no_filter_results": "Seçilen filtreyle eşleşen proje yok.",
-    "filter_all": "Tümü"
+    "filter_all": "Tümü",
+    "overview": "Proje genel bakış",
+    "links": "Proje bağlantıları",
+    "built": "Oluşturuldu",
+    "tech_count": "Teknolojiler",
+    "no_featured": "Öne çıkan projeler çok yakında.",
+    "no_summary": "Özet çok yakında."
   },
   "experience": {
     "title": "Deneyim",

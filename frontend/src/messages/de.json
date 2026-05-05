@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Fähigkeiten und Technologien",
-    "subtitle": "Was meine Arbeit antreibt"
+    "subtitle": "Was meine Arbeit antreibt",
+    "no_skills": "Fähigkeiten folgen in Kürze.",
+    "no_skills_in_category": "In dieser Kategorie sind noch keine Fähigkeiten vorhanden."
   },
   "projects": {
     "title": "Ausgewählte Projekte",
@@ -35,7 +37,13 @@
     "no_preview": "Vorschau demnächst verfügbar",
     "no_description": "Fallstudie demnächst verfügbar.",
     "no_filter_results": "Keine Projekte entsprechen dem ausgewählten Filter.",
-    "filter_all": "Alle"
+    "filter_all": "Alle",
+    "overview": "Projektübersicht",
+    "links": "Projektlinks",
+    "built": "Erstellt",
+    "tech_count": "Technologien",
+    "no_featured": "Empfohlene Projekte folgen in Kürze.",
+    "no_summary": "Zusammenfassung folgt in Kürze."
   },
   "experience": {
     "title": "Erfahrung",

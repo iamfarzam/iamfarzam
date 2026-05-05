@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Pūkenga me ngā Hangarau",
-    "subtitle": "He aha te kaha o taku mahi"
+    "subtitle": "He aha te kaha o taku mahi",
+    "no_skills": "Ka tae mai ngā pūkenga ākuanei.",
+    "no_skills_in_category": "Kāore anō kia tāpirihia he pūkenga ki tēnei kāwai."
   },
   "projects": {
     "title": "Kaupapa Matua",
@@ -35,7 +37,13 @@
     "no_preview": "Kei te haere mai te arokite",
     "no_description": "Kei te haere mai te rangahau katoa.",
     "no_filter_results": "Kāore he kaupapa e ōrite ana ki te tātari kua kōwhiria.",
-    "filter_all": "Katoa"
+    "filter_all": "Katoa",
+    "overview": "Tirohanga whānui o te kaupapa",
+    "links": "Hononga kaupapa",
+    "built": "Hangaia",
+    "tech_count": "Hangarau",
+    "no_featured": "Ka tae mai ngā kaupapa whakaata ākuanei.",
+    "no_summary": "Ka tae mai te whakarāpopototanga ākuanei."
   },
   "experience": {
     "title": "Wheako",

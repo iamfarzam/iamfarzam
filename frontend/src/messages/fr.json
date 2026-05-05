@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Compétences et technologies",
-    "subtitle": "Ce qui alimente mon travail"
+    "subtitle": "Ce qui alimente mon travail",
+    "no_skills": "Compétences bientôt disponibles.",
+    "no_skills_in_category": "Aucune compétence dans cette catégorie pour le moment."
   },
   "projects": {
     "title": "Projets phares",
@@ -35,7 +37,13 @@
     "no_preview": "Aperçu à venir",
     "no_description": "Étude de cas à venir.",
     "no_filter_results": "Aucun projet ne correspond au filtre sélectionné.",
-    "filter_all": "Tous"
+    "filter_all": "Tous",
+    "overview": "Aperçu du projet",
+    "links": "Liens du projet",
+    "built": "Créé",
+    "tech_count": "Technologies",
+    "no_featured": "Projets en vedette bientôt disponibles.",
+    "no_summary": "Résumé bientôt disponible."
   },
   "experience": {
     "title": "Expérience",

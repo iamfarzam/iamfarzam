@@ -20,7 +20,9 @@
   },
   "skills": {
     "title": "Képességek és Technológiák",
-    "subtitle": "Ami a munkámat hajtja"
+    "subtitle": "Ami a munkámat hajtja",
+    "no_skills": "Készségek hamarosan.",
+    "no_skills_in_category": "Ebben a kategóriában még nincsenek készségek."
   },
   "projects": {
     "title": "Kiemelt Projektek",
@@ -35,7 +37,13 @@
     "no_preview": "Előnézet hamarosan",
     "no_description": "Részletes esettanulmány hamarosan.",
     "no_filter_results": "Nincs a szűrőnek megfelelő projekt.",
-    "filter_all": "Összes"
+    "filter_all": "Összes",
+    "overview": "Projekt áttekintés",
+    "links": "Projekt linkek",
+    "built": "Készült",
+    "tech_count": "Technológiák",
+    "no_featured": "Kiemelt projektek hamarosan.",
+    "no_summary": "Összefoglaló hamarosan."
   },
   "experience": {
     "title": "Tapasztalat",
