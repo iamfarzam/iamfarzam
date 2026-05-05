@@ -1,62 +1,38 @@
-# Portfolio
+<h1 align="center">Hi, I'm Farzam Mehdi</h1>
 
-A full-stack, open-source portfolio website built with **Next.js** and **Django REST Framework**. All content is managed through a themed Django admin panel and served via a RESTful API — no hardcoded data, fully customizable.
+<p align="center">
+  Backend developer who likes building reliable systems and shipping them carefully.<br/>
+  Python first, but I'm comfortable across the stack when a project needs it.
+</p>
 
-## Tech Stack
+---
 
-**Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS v4, Framer Motion
-**Backend:** Django 5, Django REST Framework, Unfold Admin
-**Database:** PostgreSQL 16
-**Deployment:** Docker Compose, Nginx, Gunicorn
+### What I work on
 
-## Features
+- Backend services in **Django**, **Flask**, and **FastAPI** — clean APIs, sensible auth, predictable performance.
+- **Computer Vision** and ML pipelines — image classification, detection, preprocessing, model evaluation.
+- Databases, infra, and the unglamorous bits that keep things running in production.
 
-- **Dynamic Content** — Manage everything from the admin panel (profile, skills, projects, experience, education)
-- **Dark/Light Mode** — System-aware theme toggle with smooth transitions
-- **Interactive UI** — Scroll animations, typewriter hero, animated skill bars, project filtering
-- **SEO Optimized** — Server-side rendering, JSON-LD structured data, dynamic sitemap, OpenGraph meta tags
-- **Mobile Responsive** — Fully responsive across all breakpoints
-- **Contact Form** — Rate-limited form submissions stored in the database
-- **Modern Admin Panel** — Themed Django admin (Unfold) with sidebar navigation, status badges, unread message counts
-- **Dockerized** — One command to run the entire stack
+### Tech I reach for
 
-## Quick Start
+| Domain | Stack |
+|---|---|
+| **Backend** | Python · Django · DRF · Flask · FastAPI |
+| **ML / CV** | OpenCV · scikit-learn · PyTorch · TensorFlow |
+| **Frontend** | Next.js · TypeScript · Tailwind CSS |
+| **Data** | PostgreSQL · MySQL · SQLite · Redis |
+| **Infra** | Docker · Nginx · Gunicorn · Celery · Git |
 
-```bash
-git clone https://github.com/iamfarzam/iamfarzam.git portfolio
-cd portfolio
-cp .env.example .env        # configure your secrets
-docker compose up --build    # start the stack
-```
+### Featured projects
 
-Then run migrations and create your admin user:
+- **[Portfolio Website](docs/README.md)** — this repo. A full-stack, content-managed portfolio in Next.js + Django + DRF, deployed with Docker.
+- More on my [GitHub](https://github.com/iamfarzam).
 
-```bash
-docker compose exec backend python manage.py migrate
-docker compose exec backend python manage.py createsuperuser
-```
+### Find me
 
-- **Frontend**: http://localhost:3000
-- **Admin Panel**: http://localhost:8000/admin/
-- **API**: http://localhost:8000/api/v1/
+[![GitHub](https://img.shields.io/badge/GitHub-iamfarzam-181717?style=flat&logo=github)](https://github.com/iamfarzam)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/iamfarzam)
 
-## Documentation
+---
 
-| Document | Description |
-|----------|-------------|
-| [Getting Started](docs/getting-started.md) | Setup, installation, and first run |
-| [Architecture](docs/architecture.md) | Project structure, tech decisions, data flow |
-| [API Reference](docs/api.md) | All REST API endpoints with request/response examples |
-| [Deployment](docs/deployment.md) | Docker, production, and Vercel deployment guides |
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
-
-## Author
-
-Created and maintained by [Farzam Mehdi](https://github.com/iamfarzam).
-
-## License
-
-[MIT](LICENSE)
+<p align="center"><sub>This repo also powers <a href="docs/README.md">my portfolio site</a> — open-source, MIT-licensed, and ready to fork.</sub></p>
