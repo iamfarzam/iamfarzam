@@ -1,16 +1,27 @@
 import logging
 
+from django import forms
 from django.contrib import admin, messages
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import Group, User
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationTabularInline
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import action, display
+from unfold.forms import (
+    AdminPasswordChangeForm,
+    UserChangeForm,
+    UserCreationForm,
+)
 
 from .models import (
     ContactMessage,
     Education,
+    EmailConfiguration,
     EmailTemplate,
     Experience,
     Profile,
@@ -21,6 +32,12 @@ from .models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def project_version_environment(request):
+    """Unfold ENVIRONMENT callback — renders a chip with the SemVer version."""
+    from django.conf import settings
+    return [f"v{settings.PROJECT_VERSION}", "info"]
 
 
 def unread_messages_count(request):
@@ -335,12 +352,12 @@ class ContactMessageAdmin(ModelAdmin):
     ]
     list_filter = ["is_read"]
     list_filter_submit = True
-    readonly_fields = ["name", "email", "subject", "message", "created_at", "reply_history"]
+    readonly_fields = ["name", "email", "subject", "message", "language", "created_at", "reply_history"]
     fieldsets = [
         (
             "Sender",
             {
-                "fields": ("name", "email"),
+                "fields": ("name", "email", "language"),
             },
         ),
         (
@@ -470,17 +487,44 @@ class ContactMessageAdmin(ModelAdmin):
 # Email Templates
 # ---------------------------------------------------------------------------
 
+SAMPLE_CONTEXTS = {
+    "contact_notification": {
+        "name": "Jane Doe",
+        "email": "jane@example.com",
+        "subject": "Inquiry about a new project",
+        "message": "Hi, I'd love to discuss a potential collaboration.\n\nLooking forward to hearing back.",
+    },
+    "admin_reply": {
+        "name": "Jane Doe",
+        "subject": "Inquiry about a new project",
+        "reply_body": "Thanks for reaching out — I'd be happy to discuss this in more detail.\n\nLet's set up a call next week.",
+        "original_message": "Hi, I'd love to discuss a potential collaboration.\n\nLooking forward to hearing back.",
+    },
+    "admin_new_email": {
+        "name": "Jane Doe",
+        "subject": "Quick update",
+        "body": "Just wanted to share a quick update on what we've been working on.\n\nMore soon.",
+    },
+}
+
+
 @admin.register(EmailTemplate)
-class EmailTemplateAdmin(ModelAdmin):
-    list_display = ["name", "subject", "show_status", "updated_at"]
-    list_filter = ["is_active"]
+class EmailTemplateAdmin(ModelAdmin, TabbedTranslationAdmin):
+    list_display = ["name", "label", "subject", "show_status", "updated_at"]
+    list_filter = ["name", "is_active"]
     list_filter_submit = True
+    actions_detail = ["preview_template"]
     readonly_fields = ["updated_at", "placeholder_help"]
     fieldsets = [
         (
             "Template Identity",
             {
-                "fields": ("name", "subject"),
+                "fields": ("name", "label", "subject"),
+                "description": (
+                    "Multiple templates per category are allowed, but only one "
+                    "can be active at a time. The 'label' field helps you tell "
+                    "drafts apart in the list view."
+                ),
             },
         ),
         (
@@ -523,6 +567,51 @@ class EmailTemplateAdmin(ModelAdmin):
     def show_status(self, obj):
         return obj.is_active
 
+    @action(description="Preview rendered email", url_path="preview")
+    def preview_template(self, request, object_id):
+        from django.conf import settings
+        from django.template.response import TemplateResponse
+
+        from .email import EmailService
+
+        tpl = self.model.objects.get(pk=object_id)
+        active_language = request.GET.get("lang") or "en"
+        valid_codes = {code for code, _ in settings.LANGUAGES}
+        if active_language not in valid_codes:
+            active_language = "en"
+
+        sample_context = SAMPLE_CONTEXTS.get(tpl.name, {})
+        try:
+            subject, html, text = EmailService.render_template(
+                tpl.name, sample_context, language=active_language
+            )
+        except Exception as exc:
+            logger.exception("Failed to render preview for template %s", tpl.pk)
+            messages.error(request, f"Preview failed: {exc}")
+            return HttpResponseRedirect(
+                reverse("admin:portfolio_emailtemplate_change", args=[tpl.pk])
+            )
+
+        import json
+        context = self.admin_site.each_context(request)
+        context.update({
+            "title": f"Preview: {tpl.get_name_display()}",
+            "template": tpl,
+            "opts": self.model._meta,
+            "original": tpl,
+            "active_language": active_language,
+            "language_choices": settings.LANGUAGES,
+            "rendered_subject": subject,
+            "rendered_html": html,
+            "rendered_text": text,
+            "sample_context_pretty": json.dumps(sample_context, indent=2, ensure_ascii=False),
+        })
+        return TemplateResponse(
+            request,
+            "admin/portfolio/emailtemplate/preview.html",
+            context,
+        )
+
     def placeholder_help(self, obj):
         specific = {
             "contact_notification": "{{ name }}, {{ email }}, {{ subject }}, {{ message }}",
@@ -540,6 +629,132 @@ class EmailTemplateAdmin(ModelAdmin):
             branding,
         )
     placeholder_help.short_description = "Available Placeholders"
+
+
+# ---------------------------------------------------------------------------
+# Email Configurations (SMTP credentials + sender identity)
+# ---------------------------------------------------------------------------
+
+class EmailConfigurationForm(forms.ModelForm):
+    """Form that masks the SMTP password and never renders the stored value.
+
+    Leaving the password field blank on edit keeps the existing value; typing a
+    new value replaces it.
+    """
+
+    smtp_password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(render_value=False),
+        help_text="Leave blank to keep the existing password.",
+    )
+
+    class Meta:
+        model = EmailConfiguration
+        fields = "__all__"
+
+    def clean_smtp_password(self):
+        new_value = self.cleaned_data.get("smtp_password", "")
+        if not new_value and self.instance.pk:
+            return self.instance.smtp_password
+        return new_value
+
+
+@admin.register(EmailConfiguration)
+class EmailConfigurationAdmin(ModelAdmin):
+    form = EmailConfigurationForm
+    list_display = ["label", "from_email", "smtp_host", "show_active"]
+    list_filter = ["is_active"]
+    list_filter_submit = True
+    search_fields = ["label", "from_email", "smtp_host"]
+    actions_detail = ["send_test_email_action"]
+    fieldsets = [
+        (
+            "Identity",
+            {
+                "fields": ("label", "from_name", "from_email"),
+                "description": (
+                    "What recipients see in the From: header. The from_email "
+                    "usually has to match the SMTP user — most providers reject "
+                    "messages otherwise."
+                ),
+            },
+        ),
+        (
+            "Reply-To (optional)",
+            {
+                "fields": ("reply_to_name", "reply_to_email"),
+                "description": (
+                    "If set, replies from recipients land here instead of the "
+                    "from_email. Useful when the SMTP account is a noreply "
+                    "address but you want replies to reach a real inbox."
+                ),
+            },
+        ),
+        (
+            "SMTP transport",
+            {
+                "fields": (
+                    "smtp_host",
+                    "smtp_port",
+                    "smtp_user",
+                    "smtp_password",
+                    "use_tls",
+                    "use_ssl",
+                ),
+            },
+        ),
+        (
+            "Status",
+            {
+                "fields": ("is_active",),
+                "description": "Only one configuration can be active at a time.",
+            },
+        ),
+    ]
+
+    @display(
+        description="Active",
+        label={
+            True: "success",
+            False: "",
+        },
+    )
+    def show_active(self, obj):
+        return obj.is_active
+
+    @action(description="Send a test email to your account email", url_path="send-test")
+    def send_test_email_action(self, request, object_id):
+        from .email import EmailService
+
+        config = self.model.objects.get(pk=object_id)
+        recipient = request.user.email
+        if not recipient:
+            messages.error(
+                request,
+                "Your admin user has no email address set — cannot send a test.",
+            )
+            return HttpResponseRedirect(request.get_full_path())
+
+        try:
+            connection = EmailService.build_connection(config)
+            msg = EmailMultiAlternatives(
+                subject=f"Test from {config.label}",
+                body=(
+                    "This is a test email sent from the admin panel to verify "
+                    "the SMTP configuration is working."
+                ),
+                from_email=config.from_identity,
+                to=[recipient],
+                reply_to=[config.reply_to_identity] if config.reply_to_identity else None,
+                connection=connection,
+            )
+            msg.send(fail_silently=False)
+            messages.success(request, f"Test email sent to {recipient}.")
+        except Exception as exc:
+            logger.exception("Test email failed for EmailConfiguration %s", config.pk)
+            messages.error(request, f"Test email failed: {exc}")
+
+        return HttpResponseRedirect(request.get_full_path())
 
 
 # ---------------------------------------------------------------------------
@@ -660,3 +875,23 @@ class GroupResultAdmin(ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+# ---------------------------------------------------------------------------
+# Auth (User, Group) — re-registered with Unfold for consistent styling
+# ---------------------------------------------------------------------------
+
+admin.site.unregister(User)
+admin.site.unregister(Group)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass

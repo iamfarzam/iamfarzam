@@ -144,4 +144,10 @@ class EducationSerializer(serializers.ModelSerializer):
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
-        fields = ["name", "email", "subject", "message"]
+        fields = ["name", "email", "subject", "message", "language"]
+        extra_kwargs = {
+            "language": {"required": False, "allow_blank": True},
+        }
+
+    def validate_language(self, value):
+        return value or "en"
