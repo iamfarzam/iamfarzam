@@ -1,6 +1,14 @@
 from modeltranslation.translator import register, TranslationOptions
 
-from .models import Education, Experience, Profile, Project, Skill, SkillCategory
+from .models import (
+    Education,
+    EmailTemplate,
+    Experience,
+    Profile,
+    Project,
+    Skill,
+    SkillCategory,
+)
 
 
 @register(Profile)
@@ -31,3 +39,8 @@ class ExperienceTranslation(TranslationOptions):
 @register(Education)
 class EducationTranslation(TranslationOptions):
     fields = ("degree", "field_of_study", "description")
+
+
+@register(EmailTemplate)
+class EmailTemplateTranslation(TranslationOptions):
+    fields = ("subject", "html_body", "text_body")

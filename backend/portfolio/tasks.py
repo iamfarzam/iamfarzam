@@ -12,7 +12,7 @@ def send_contact_notification(self, contact_message_id):
     """Send an HTML notification email when a new contact message arrives."""
     from django.conf import settings
 
-    from .email import get_system_identity, render_template, send_html_email
+    from .email import EmailService
     from .models import ContactMessage
 
     recipient = getattr(settings, "CONTACT_NOTIFY_EMAIL", None)
@@ -33,12 +33,14 @@ def send_contact_notification(self, contact_message_id):
     }
 
     try:
-        subject, html_body, text_body = render_template("contact_notification", context)
-        send_html_email(
+        subject, html_body, text_body = EmailService.render_template(
+            "contact_notification", context
+        )
+        EmailService.send(
             subject=subject,
             html_body=html_body,
             text_body=text_body,
-            from_identity=get_system_identity(),
+            from_identity=EmailService.get_system_identity(),
             to_email=recipient,
         )
     except Exception as exc:
@@ -53,7 +55,7 @@ def send_admin_reply(self, contact_message_id, reply_subject, reply_body, sent_b
     """Send an admin reply to a contact message sender and log it."""
     from django.contrib.auth.models import User
 
-    from .email import get_admin_identity, render_template, send_html_email
+    from .email import EmailService
     from .models import ContactMessage, SentEmail
 
     try:
@@ -69,19 +71,22 @@ def send_admin_reply(self, contact_message_id, reply_subject, reply_body, sent_b
         "name": msg.name,
     }
 
-    from_identity = get_admin_identity()
+    from_identity = EmailService.get_admin_identity()
 
     try:
-        subject, html_body, text_body = render_template("admin_reply", context)
+        subject, html_body, text_body = EmailService.render_template(
+            "admin_reply", context, language=msg.language or None
+        )
         # Allow overriding the default "Re: {subject}" if admin provided a custom subject
         if reply_subject:
             subject = reply_subject
-        send_html_email(
+        EmailService.send(
             subject=subject,
             html_body=html_body,
             text_body=text_body,
             from_identity=from_identity,
             to_email=msg.email,
+            use_active_config=True,
         )
     except Exception as exc:
         logger.exception("Failed to send admin reply for message %s", contact_message_id)
@@ -105,11 +110,11 @@ def send_admin_reply(self, contact_message_id, reply_subject, reply_body, sent_b
 
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def send_admin_email(self, to_email, to_name, subject, body, sent_by_id=None):
+def send_admin_email(self, to_email, to_name, subject, body, sent_by_id=None, language=None):
     """Send a new email from admin (not a reply) and log it."""
     from django.contrib.auth.models import User
 
-    from .email import get_admin_identity, render_template, send_html_email
+    from .email import EmailService
     from .models import SentEmail
 
     context = {
@@ -118,16 +123,19 @@ def send_admin_email(self, to_email, to_name, subject, body, sent_by_id=None):
         "name": to_name,
     }
 
-    from_identity = get_admin_identity()
+    from_identity = EmailService.get_admin_identity()
 
     try:
-        rendered_subject, html_body, text_body = render_template("admin_new_email", context)
-        send_html_email(
+        rendered_subject, html_body, text_body = EmailService.render_template(
+            "admin_new_email", context, language=language or None
+        )
+        EmailService.send(
             subject=rendered_subject,
             html_body=html_body,
             text_body=text_body,
             from_identity=from_identity,
             to_email=to_email,
+            use_active_config=True,
         )
     except Exception as exc:
         logger.exception("Failed to send admin email to %s", to_email)
