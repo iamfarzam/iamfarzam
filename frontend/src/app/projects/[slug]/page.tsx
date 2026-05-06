@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { fetchProject, fetchProjects } from "@/lib/api";
+import { serializeJsonLd } from "@/lib/jsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +75,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <article className="relative isolate mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div
