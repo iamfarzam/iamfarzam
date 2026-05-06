@@ -196,7 +196,7 @@ smoke_test_internal() {
     local container="portfolio-${colour}-backend"
     for _ in $(seq 1 20); do
         if docker exec -e PRIMARY_HOST="$host" "$container" python -c \
-            "import os,urllib.request; req=urllib.request.Request('http://127.0.0.1:8000${PUBLIC_HEALTH_PATH}', headers={'Host':os.environ['PRIMARY_HOST']}); urllib.request.urlopen(req, timeout=3)" \
+            "import os,urllib.request; req=urllib.request.Request('http://127.0.0.1:8000${PUBLIC_HEALTH_PATH}', headers={'Host':os.environ['PRIMARY_HOST'],'X-Forwarded-Proto':'https'}); urllib.request.urlopen(req, timeout=3)" \
             >/dev/null 2>&1; then
             ok "${colour} backend responds"
             return 0
