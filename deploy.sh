@@ -210,9 +210,11 @@ smoke_test_public() {
     local host
     host="$(primary_host)"
     log "Smoke-testing public endpoint via nginx (Host: ${host})"
+    # Use 127.0.0.1 explicitly: 'localhost' often resolves to IPv6 ::1 first
+    # in alpine /etc/hosts, and nginx in this image listens on IPv4 only.
     for _ in $(seq 1 15); do
         if docker exec portfolio-nginx wget -qO- --header="Host: ${host}" \
-            "http://localhost${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1; then
+            "http://127.0.0.1${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1; then
             ok "Public endpoint responds"
             return 0
         fi

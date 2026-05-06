@@ -59,13 +59,22 @@ services:
         NEXT_PUBLIC_SITE_TITLE: ${NEXT_PUBLIC_SITE_TITLE:-Portfolio}
         NEXT_PUBLIC_REVALIDATE: ${NEXT_PUBLIC_REVALIDATE:-0}
     env_file: .env
+    environment:
+      # Next.js standalone server defaults to binding only to the container's
+      # auto-generated hostname (e.g. 172.20.0.7), so loopback healthchecks
+      # get connection-refused. Force it to listen on all interfaces.
+      HOSTNAME: 0.0.0.0
     restart: unless-stopped
     networks:
       - portfolio_net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ >/dev/null 2>&1 || exit 1"]
+      # "Server responded with any HTTP status" is the right liveness signal:
+      # we don't want broken SSR (e.g. unreachable API) to falsely fail the
+      # healthcheck, but we DO want to catch a hung process or unbound port.
+      # `wget -S` prints the HTTP/ status line to stderr regardless of code.
+      test: ["CMD-SHELL", "wget -q -t1 -T5 -S -O /dev/null http://127.0.0.1:3000/ 2>&1 | grep -q 'HTTP/' || exit 1"]
       interval: 10s
-      timeout: 5s
+      timeout: 8s
       retries: 6
       start_period: 30s
     depends_on:
