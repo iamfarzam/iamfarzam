@@ -115,6 +115,11 @@ UNFOLD = {
                         "link": "/admin/portfolio/emailtemplate/",
                     },
                     {
+                        "title": "Email Configurations",
+                        "icon": "settings",
+                        "link": "/admin/portfolio/emailconfiguration/",
+                    },
+                    {
                         "title": "Sent Emails",
                         "icon": "send",
                         "link": "/admin/portfolio/sentemail/",
