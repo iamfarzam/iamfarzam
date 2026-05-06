@@ -108,7 +108,7 @@ class EmailService:
     @staticmethod
     def render_string(template_string, context):
         """Render a Django template string with the given context."""
-        return Template(template_string).render(Context(context, autoescape=False))
+        return Template(template_string).render(Context(context))
 
     @staticmethod
     def get_branding():

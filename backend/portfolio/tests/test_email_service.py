@@ -165,6 +165,15 @@ class EmailServiceTemplateRenderingTests(TestCase):
         # brand_name comes from Profile (none in test DB) → settings.SYSTEM_EMAIL_NAME
         self.assertIn("&copy;", h)
 
+    def test_render_string_escapes_public_context_values(self):
+        rendered = EmailService.render_string(
+            "<p>{{ name }}</p>",
+            {"name": '<a href="https://evil.test">click</a>'},
+        )
+
+        self.assertIn("&lt;a href=&quot;https://evil.test&quot;&gt;click&lt;/a&gt;", rendered)
+        self.assertNotIn('<a href="https://evil.test">', rendered)
+
 
 class HTMLStripperTests(TestCase):
     def test_strips_tags(self):
