@@ -15,6 +15,7 @@ import {
   fetchSkills,
 } from "@/lib/api";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { serializeJsonLd } from "@/lib/jsonLd";
 import type { Profile } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -86,7 +87,7 @@ export default async function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <HeroSection profile={profile} />
       <AboutSection profile={profile} />
