@@ -24,9 +24,24 @@ class TemplateStringsCoverageTests(TestCase):
                 missing = en_keys - set(strings.keys())
                 self.assertFalse(missing, f"missing keys: {missing}")
 
+    # Keys that are intentionally optional: a language may leave them blank
+    # to drop the corresponding chrome (intro lines, redundant inner headings,
+    # footer hints) from the rendered email.
+    OPTIONAL_KEYS = {
+        "contact_body_intro",
+        "contact_action_html",
+        "text_contact_reply_hint",
+        "reply_intro",
+        "reply_heading",
+        "new_email_intro",
+        "new_email_footer",
+    }
+
     def test_no_empty_translations(self):
         for lang, strings in TEMPLATE_STRINGS.items():
             for key, value in strings.items():
+                if key in self.OPTIONAL_KEYS:
+                    continue
                 with self.subTest(language=lang, key=key):
                     self.assertTrue(
                         value.strip(),

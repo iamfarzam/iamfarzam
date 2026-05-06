@@ -140,7 +140,7 @@ class EmailServiceTemplateRenderingTests(TestCase):
     def test_renders_english_by_default(self):
         s, h, _ = EmailService.render_template("admin_reply", self._ctx(), language="en")
         self.assertEqual(s, "Re: X")
-        self.assertIn("Hello Ali", h)
+        self.assertIn("Hi Ali", h)
 
     def test_renders_persian_when_requested(self):
         s, h, _ = EmailService.render_template("admin_reply", self._ctx(), language="fa")
@@ -163,7 +163,7 @@ class EmailServiceTemplateRenderingTests(TestCase):
             "admin_reply", self._ctx(), language="en"
         )
         # brand_name comes from Profile (none in test DB) → settings.SYSTEM_EMAIL_NAME
-        self.assertIn("&copy;", h)
+        self.assertIn("Portfolio", h)
 
     def test_render_string_escapes_public_context_values(self):
         rendered = EmailService.render_string(

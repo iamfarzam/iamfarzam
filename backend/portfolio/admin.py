@@ -491,19 +491,19 @@ SAMPLE_CONTEXTS = {
     "contact_notification": {
         "name": "Jane Doe",
         "email": "jane@example.com",
-        "subject": "Inquiry about a new project",
-        "message": "Hi, I'd love to discuss a potential collaboration.\n\nLooking forward to hearing back.",
+        "subject": "Project inquiry",
+        "message": "Hi Farzam,\n\nWe're scoping a small back-end project and I'd like to talk to you about it. Do you have time next week for a short call?\n\nJane",
     },
     "admin_reply": {
-        "name": "Jane Doe",
-        "subject": "Inquiry about a new project",
-        "reply_body": "Thanks for reaching out — I'd be happy to discuss this in more detail.\n\nLet's set up a call next week.",
-        "original_message": "Hi, I'd love to discuss a potential collaboration.\n\nLooking forward to hearing back.",
+        "name": "Jane",
+        "subject": "Project inquiry",
+        "reply_body": "Thanks for the note. Next Tuesday afternoon works for me. I'll send a calendar invite shortly.\n\nA quick question before we talk: what's the rough timeline you have in mind?",
+        "original_message": "Hi Farzam,\n\nWe're scoping a small back-end project and I'd like to talk to you about it. Do you have time next week for a short call?\n\nJane",
     },
     "admin_new_email": {
-        "name": "Jane Doe",
-        "subject": "Quick update",
-        "body": "Just wanted to share a quick update on what we've been working on.\n\nMore soon.",
+        "name": "Jane",
+        "subject": "Following up",
+        "body": "Following up on our conversation last week. The contract draft is attached, and I've added comments where I had questions. Happy to discuss any of it whenever you have time.",
     },
 }
 
