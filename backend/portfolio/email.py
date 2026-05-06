@@ -111,6 +111,12 @@ class EmailService:
         return Template(template_string).render(Context(context))
 
     @staticmethod
+    def render_text_string(template_string, context):
+        """Render a plain-text template (HTML auto-escape disabled)."""
+        wrapped = "{% autoescape off %}" + template_string + "{% endautoescape %}"
+        return Template(wrapped).render(Context(context))
+
+    @staticmethod
     def get_branding():
         """Pull branding variables from the Profile singleton."""
         from .models import Profile
@@ -171,7 +177,7 @@ class EmailService:
             subject = cls.render_string(subject_tpl, full_context)
             html_body = cls.render_string(html_tpl, full_context)
             text_body = (
-                cls.render_string(text_tpl, full_context)
+                cls.render_text_string(text_tpl, full_context)
                 if text_tpl
                 else HTMLStripper.to_text(html_body)
             )
@@ -245,94 +251,57 @@ class EmailService:
 # Uses %%(variable)s for Django template placeholders and %(variable)s
 # for Python string interpolation of structural parts.
 BASE_HTML_WRAPPER = """\
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="supported-color-schemes" content="light dark" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
   <title>%(title)s</title>
-  <!--[if mso]>
-  <noscript>
-    <xml>
-      <o:OfficeDocumentSettings>
-        <o:PixelsPerInch>96</o:PixelsPerInch>
-      </o:OfficeDocumentSettings>
-    </xml>
-  </noscript>
-  <![endif]-->
+  <!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
   <style type="text/css">
-    /* Reset */
-    body, table, td, p, a, li, blockquote { -webkit-text-size-adjust: 100%%; -ms-text-size-adjust: 100%%; }
-    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-    body { margin: 0 !important; padding: 0 !important; width: 100%% !important; }
-    /* Dark mode support */
-    @media (prefers-color-scheme: dark) {
-      .email-bg { background-color: #1a1a2e !important; }
-      .email-card { background-color: #16213e !important; }
-      .email-body-text { color: #e0e0e0 !important; }
-      .email-heading { color: #90caf9 !important; }
-      .email-meta { color: #b0b0b0 !important; }
-      .email-content-block { background-color: #1a1a2e !important; }
-      .email-footer-text { color: #777777 !important; }
-      .email-divider { border-color: #2a2a4a !important; }
-    }
-    /* Responsive */
-    @media only screen and (max-width: 620px) {
-      .email-container { width: 100%% !important; max-width: 100%% !important; }
-      .email-padding { padding: 24px 20px !important; }
-      .email-header-padding { padding: 20px !important; }
+    body, table, td, p, a, li { -webkit-text-size-adjust:100%%; -ms-text-size-adjust:100%%; }
+    table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; border-collapse:collapse; }
+    img { -ms-interpolation-mode:bicubic; border:0; outline:none; text-decoration:none; max-width:100%%; height:auto; }
+    body { margin:0 !important; padding:0 !important; width:100%% !important; }
+    a { color:#0a66c2; }
+    @media only screen and (max-width:620px) {
+      .container { width:100%% !important; }
+      .pad-x { padding-left:24px !important; padding-right:24px !important; }
     }
   </style>
 </head>
-<body style="margin:0;padding:0;word-spacing:normal;background-color:#f0f2f5;">
-  <!-- Preheader (hidden preview text) -->
-  <div style="display:none;font-size:1px;color:#f0f2f5;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
-    %(preheader)s
-  </div>
-
-  <!-- Email wrapper table -->
-  <table role="presentation" class="email-bg" style="width:100%%;border:none;border-spacing:0;background-color:#f0f2f5;" cellpadding="0" cellspacing="0">
+<body style="margin:0;padding:0;background-color:#f5f6f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+  <div style="display:none;max-height:0;max-width:0;overflow:hidden;opacity:0;color:#f5f6f8;font-size:1px;line-height:1px;">%(preheader)s</div>
+  <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f6f8;">
     <tr>
-      <td align="center" style="padding:40px 10px;">
-
-        <!-- Main container -->
-        <table role="presentation" class="email-container" style="width:600px;max-width:600px;border:none;border-spacing:0;text-align:left;" cellpadding="0" cellspacing="0">
-
-          <!-- Header -->
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#ffffff;border:1px solid #e5e7eb;border-radius:8px;">
           <tr>
-            <td class="email-header-padding" style="padding:32px 40px;background-color:#1e3a5f;text-align:center;border-radius:8px 8px 0 0;">
-              <h1 style="margin:0;font-size:22px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#ffffff;letter-spacing:0.3px;">
-                %(header_title)s
-              </h1>
+            <td class="pad-x" style="padding:32px 40px 0;">
+              <p style="margin:0;font-size:13px;font-weight:600;letter-spacing:-0.01em;color:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">%(header_title)s</p>
             </td>
           </tr>
-
-          <!-- Body -->
           <tr>
-            <td class="email-card email-padding" style="padding:36px 40px;background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#333333;">
+            <td class="pad-x" style="padding:24px 40px 40px;font-size:16px;line-height:1.6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
               %(body_content)s
             </td>
           </tr>
-
-          <!-- Footer -->
           <tr>
-            <td class="email-card email-padding" style="padding:20px 40px;background-color:#ffffff;border-top:1px solid #e8e8e8;text-align:center;border-radius:0 0 8px 8px;">
-              <p class="email-footer-text" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.5;color:#999999;">
-                %(footer_text)s
-              </p>
+            <td class="pad-x" style="padding:0 40px;">
+              <div style="border-top:1px solid #e5e7eb;height:1px;font-size:0;line-height:0;">&nbsp;</div>
             </td>
           </tr>
-
+          <tr>
+            <td class="pad-x" style="padding:20px 40px 28px;font-size:12px;line-height:1.6;color:#6b7280;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              %(footer_text)s
+            </td>
+          </tr>
         </table>
-        <!-- /Main container -->
-
       </td>
     </tr>
   </table>
-  <!-- /Email wrapper -->
 </body>
 </html>"""
 
@@ -347,33 +316,33 @@ BASE_HTML_WRAPPER = """\
 
 TEMPLATE_STRINGS = {
     "en": {
-        "contact_subject": "[{{ brand_name }}] New inquiry: {{ subject }}",
-        "contact_title": "New contact message: {{ subject }}",
-        "contact_preheader": "New message from {{ name }} regarding &quot;{{ subject }}&quot;",
-        "contact_body_intro": "You have received a new inquiry through your portfolio contact form.",
-        "contact_action_html": 'You can reply to this message directly from the <a href="#" style="color:#3b82f6;text-decoration:none;font-weight:600;">admin panel</a>.',
-        "contact_footer": "This is an automated notification. Please do not reply directly to this email.",
-        "text_contact_header": "New Contact Inquiry",
+        "contact_subject": "New message from {{ name }}: {{ subject }}",
+        "contact_title": "New contact message",
+        "contact_preheader": "{{ name }} sent a message about {{ subject }}.",
+        "contact_body_intro": "",
+        "contact_action_html": "",
+        "contact_footer": "Sent automatically when someone uses your contact form.",
+        "text_contact_header": "New contact message",
         "text_contact_from": "From",
         "text_contact_subject_label": "Subject",
         "text_contact_message_label": "Message",
-        "text_contact_reply_hint": "Reply via the admin panel.",
+        "text_contact_reply_hint": "",
         "reply_subject": "Re: {{ subject }}",
         "reply_title": "Re: {{ subject }}",
-        "reply_preheader": "{{ brand_name }} has responded to your inquiry",
-        "reply_greeting": "Hello {{ name }},",
-        "reply_intro": "Thank you for reaching out. Please find our response below.",
-        "reply_heading": "Re: {{ subject }}",
-        "reply_original_label": "Your Original Message",
-        "reply_signoff": "Best regards,",
-        "reply_footer": "You are receiving this email because you submitted an inquiry through our website.",
+        "reply_preheader": "{{ brand_name }} replied to your message.",
+        "reply_greeting": "Hi {{ name }},",
+        "reply_intro": "",
+        "reply_heading": "",
+        "reply_original_label": "On your original message",
+        "reply_signoff": "Best,",
+        "reply_footer": "Replying to a message you sent via the contact form.",
         "new_email_subject": "{{ subject }}",
         "new_email_title": "{{ subject }}",
-        "new_email_preheader": "A message from {{ brand_name }}",
-        "new_email_greeting": "Hello{% if name %} {{ name }}{% endif %},",
-        "new_email_intro": "We hope this message finds you well.",
-        "new_email_signoff": "Best regards,",
-        "new_email_footer": "This email was sent by {{ brand_name }}.",
+        "new_email_preheader": "A note from {{ brand_name }}.",
+        "new_email_greeting": "Hi{% if name %} {{ name }}{% endif %},",
+        "new_email_intro": "",
+        "new_email_signoff": "Best,",
+        "new_email_footer": "",
     },
     "es": {
         "contact_subject": "[{{ brand_name }}] Nueva consulta: {{ subject }}",
@@ -946,49 +915,69 @@ def _get_defaults(language="en"):
     """
     s = _get_strings(language)
 
+    # Common style constants for the minimalist letter layout.
+    LABEL = (
+        'font-size:11px;font-weight:600;color:#6b7280;'
+        'letter-spacing:0.06em;text-transform:uppercase;'
+    )
+    TEXT = 'font-size:16px;line-height:1.6;color:#111827;'
+    META = 'font-size:13px;line-height:1.6;color:#6b7280;'
+    QUOTE = 'border-left:2px solid #e5e7eb;padding:2px 0 2px 16px;white-space:pre-wrap;'
+
+    def _para(text, style=TEXT, mt=0, mb=16):
+        if not text:
+            return ""
+        return (
+            f'<p style="margin:{mt}px 0 {mb}px;{style}">'
+            f'{text}'
+            f'</p>'
+        )
+
+    def _meta_row(label, value):
+        return (
+            '<tr>'
+            f'<td style="padding:0 12px 8px 0;{LABEL}vertical-align:top;width:84px;white-space:nowrap;">'
+            f'{label}'
+            '</td>'
+            f'<td style="padding:0 0 8px;{TEXT}vertical-align:top;">'
+            f'{value}'
+            '</td>'
+            '</tr>'
+        )
+
+    def _footer_text(extra):
+        link = (
+            '{% if brand_website %}'
+            ' &middot; <a href="{{ brand_website }}" '
+            'style="color:#6b7280;text-decoration:underline;">'
+            '{{ brand_website }}</a>'
+            '{% endif %}'
+        )
+        brand_line = '{{ brand_name }}' + link
+        if not extra:
+            return brand_line
+        return brand_line + '<br/>' + extra
+
     contact_html = BASE_HTML_WRAPPER % {
         "title": s["contact_title"],
         "preheader": s["contact_preheader"],
         "header_title": "{{ brand_name }}",
         "body_content": (
-            '<p class="email-body-text" style="margin:0 0 8px;font-size:15px;line-height:1.7;color:#333333;">'
-            + s["contact_body_intro"] +
-            '</p>'
-
-            '<h2 class="email-heading" style="margin:20px 0 16px;font-size:20px;font-weight:700;color:#1e3a5f;">'
-            '{{ subject }}'
-            '</h2>'
-
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:24px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td style="padding:14px 18px;background-color:#f8fafc;border-left:4px solid #3b82f6;border-radius:0 6px 6px 0;">'
-            '<p class="email-meta" style="margin:0 0 4px;font-size:14px;line-height:1.5;color:#333333;font-weight:600;">{{ name }}</p>'
-            '<p class="email-meta" style="margin:0;font-size:13px;line-height:1.5;color:#666666;">'
-            '<a href="mailto:{{ email }}" style="color:#3b82f6;text-decoration:none;">{{ email }}</a>'
-            '</p>'
-            '</td>'
-            '</tr>'
-            '</table>'
-
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:24px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td class="email-content-block" style="padding:22px 24px;background-color:#f8fafc;border-radius:8px;border:1px solid #e8ecf0;">'
-            '<p class="email-body-text" style="margin:0;font-size:15px;line-height:1.7;color:#333333;white-space:pre-wrap;">{{ message }}</p>'
-            '</td>'
-            '</tr>'
-            '</table>'
-
-            '<p class="email-meta" style="margin:0;font-size:13px;line-height:1.5;color:#888888;">'
-            + s["contact_action_html"] +
-            '</p>'
+            _para(s["contact_body_intro"], style=META, mb=20)
+            + '<table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0" '
+              'style="margin:0 0 24px;border-collapse:collapse;">'
+            + _meta_row(s["text_contact_from"], "{{ name }}")
+            + _meta_row(
+                "Email",
+                '<a href="mailto:{{ email }}" '
+                'style="color:#0a66c2;text-decoration:none;">{{ email }}</a>',
+            )
+            + _meta_row(s["text_contact_subject_label"], "{{ subject }}")
+            + '</table>'
+            + f'<div style="{QUOTE}{TEXT}">{{{{ message }}}}</div>'
+            + _para(s["contact_action_html"], style=META, mt=24)
         ),
-        "footer_text": (
-            '&copy; {{ brand_name }}'
-            '{% if brand_website %}'
-            ' &middot; <a href="{{ brand_website }}" style="color:#999999;text-decoration:underline;">{{ brand_website }}</a>'
-            '{% endif %}'
-            '<br/>' + s["contact_footer"]
-        ),
+        "footer_text": _footer_text(s["contact_footer"]),
     }
 
     reply_html = BASE_HTML_WRAPPER % {
@@ -996,56 +985,19 @@ def _get_defaults(language="en"):
         "preheader": s["reply_preheader"],
         "header_title": "{{ brand_name }}",
         "body_content": (
-            '<p class="email-body-text" style="margin:0 0 4px;font-size:15px;line-height:1.7;color:#333333;">'
-            + s["reply_greeting"] +
-            '</p>'
-            '<p class="email-body-text" style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#666666;">'
-            + s["reply_intro"] +
-            '</p>'
-
-            '<h2 class="email-heading" style="margin:0 0 16px;font-size:20px;font-weight:700;color:#1e3a5f;">'
-            + s["reply_heading"] +
-            '</h2>'
-
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:28px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td class="email-content-block" style="padding:22px 24px;background-color:#f8fafc;border-radius:8px;border:1px solid #e8ecf0;">'
-            '<p class="email-body-text" style="margin:0;font-size:15px;line-height:1.7;color:#333333;white-space:pre-wrap;">{{ reply_body }}</p>'
-            '</td>'
-            '</tr>'
-            '</table>'
-
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:20px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td class="email-divider" style="border-top:1px solid #e8e8e8;font-size:0;line-height:0;">&nbsp;</td>'
-            '</tr>'
-            '</table>'
-
-            '<p class="email-meta" style="margin:0 0 10px;font-size:11px;font-weight:700;color:#999999;text-transform:uppercase;letter-spacing:0.8px;">'
-            + s["reply_original_label"] +
-            '</p>'
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:20px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td style="padding:16px 20px;background-color:#fafafa;border-left:3px solid #d1d5db;border-radius:0 6px 6px 0;">'
-            '<p style="margin:0;font-size:13px;line-height:1.6;color:#888888;white-space:pre-wrap;">{{ original_message }}</p>'
-            '</td>'
-            '</tr>'
-            '</table>'
-
-            '<p class="email-body-text" style="margin:0 0 4px;font-size:15px;line-height:1.7;color:#333333;">'
-            + s["reply_signoff"] +
-            '</p>'
-            '<p class="email-body-text" style="margin:0;font-size:15px;line-height:1.7;color:#333333;font-weight:600;">'
-            '{{ brand_name }}'
-            '</p>'
+            _para(s["reply_greeting"])
+            + _para(s["reply_intro"], style=META, mb=16)
+            + (f'<h2 style="margin:0 0 16px;font-size:18px;font-weight:600;color:#111827;">'
+               f'{s["reply_heading"]}</h2>' if s["reply_heading"] else "")
+            + f'<div style="margin:0 0 24px;{TEXT}white-space:pre-wrap;">{{{{ reply_body }}}}</div>'
+            + f'<p style="margin:0;{TEXT}">{s["reply_signoff"]}<br/>'
+              '<span style="font-weight:600;">{{ brand_name }}</span></p>'
+            + '<div style="margin:32px 0 0;padding:20px 0 0;border-top:1px solid #e5e7eb;">'
+            + f'<p style="margin:0 0 10px;{LABEL}">{s["reply_original_label"]}</p>'
+            + f'<div style="{QUOTE}{META}">{{{{ original_message }}}}</div>'
+            + '</div>'
         ),
-        "footer_text": (
-            '&copy; {{ brand_name }}'
-            '{% if brand_website %}'
-            ' &middot; <a href="{{ brand_website }}" style="color:#999999;text-decoration:underline;">{{ brand_website }}</a>'
-            '{% endif %}'
-            '<br/>' + s["reply_footer"]
-        ),
+        "footer_text": _footer_text(s["reply_footer"]),
     }
 
     new_email_html = BASE_HTML_WRAPPER % {
@@ -1053,83 +1005,79 @@ def _get_defaults(language="en"):
         "preheader": s["new_email_preheader"],
         "header_title": "{{ brand_name }}",
         "body_content": (
-            '<p class="email-body-text" style="margin:0 0 4px;font-size:15px;line-height:1.7;color:#333333;">'
-            + s["new_email_greeting"] +
-            '</p>'
-            '<p class="email-body-text" style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#666666;">'
-            + s["new_email_intro"] +
-            '</p>'
-
-            '<h2 class="email-heading" style="margin:0 0 16px;font-size:20px;font-weight:700;color:#1e3a5f;">'
-            '{{ subject }}'
-            '</h2>'
-
-            '<table role="presentation" style="width:100%%;border:none;border-spacing:0;margin-bottom:24px;" cellpadding="0" cellspacing="0">'
-            '<tr>'
-            '<td class="email-content-block" style="padding:22px 24px;background-color:#f8fafc;border-radius:8px;border:1px solid #e8ecf0;">'
-            '<p class="email-body-text" style="margin:0;font-size:15px;line-height:1.7;color:#333333;white-space:pre-wrap;">{{ body }}</p>'
-            '</td>'
-            '</tr>'
-            '</table>'
-
-            '<p class="email-body-text" style="margin:0 0 4px;font-size:15px;line-height:1.7;color:#333333;">'
-            + s["new_email_signoff"] +
-            '</p>'
-            '<p class="email-body-text" style="margin:0;font-size:15px;line-height:1.7;color:#333333;font-weight:600;">'
-            '{{ brand_name }}'
-            '</p>'
+            _para(s["new_email_greeting"])
+            + _para(s["new_email_intro"], style=META, mb=16)
+            + f'<div style="margin:0 0 24px;{TEXT}white-space:pre-wrap;">{{{{ body }}}}</div>'
+            + f'<p style="margin:0;{TEXT}">{s["new_email_signoff"]}<br/>'
+              '<span style="font-weight:600;">{{ brand_name }}</span></p>'
         ),
-        "footer_text": (
-            '&copy; {{ brand_name }}'
-            '{% if brand_website %}'
-            ' &middot; <a href="{{ brand_website }}" style="color:#999999;text-decoration:underline;">{{ brand_website }}</a>'
-            '{% endif %}'
-            '<br/>' + s["new_email_footer"]
-        ),
+        "footer_text": _footer_text(s["new_email_footer"]),
     }
+
+    def _join(*lines):
+        """Join non-empty lines with single newlines, then collapse runs of 3+
+        newlines into exactly two so empty phrases don't leave visible gaps."""
+        import re as _re
+
+        out = "\n".join(line for line in lines if line is not None)
+        return _re.sub(r"\n{3,}", "\n\n", out).strip() + "\n"
+
+    contact_text = _join(
+        s["text_contact_header"],
+        "=" * len(s["text_contact_header"]),
+        "",
+        f"{s['text_contact_from']}: {{{{ name }}}} <{{{{ email }}}}>",
+        f"{s['text_contact_subject_label']}: {{{{ subject }}}}",
+        "",
+        f"{s['text_contact_message_label']}:",
+        "{{ message }}",
+        "",
+        "---" if s["text_contact_reply_hint"] else "",
+        s["text_contact_reply_hint"] or None,
+        "{{ brand_name }}",
+    )
+
+    reply_text = _join(
+        s["reply_greeting"],
+        "",
+        s["reply_intro"] or None,
+        "",
+        "{{ reply_body }}",
+        "",
+        f"{s['reply_signoff']}",
+        "{{ brand_name }}",
+        "",
+        "---",
+        f"{s['reply_original_label']}:",
+        "",
+        "{{ original_message }}",
+    )
+
+    new_email_text = _join(
+        s["new_email_greeting"],
+        "",
+        s["new_email_intro"] or None,
+        "",
+        "{{ body }}",
+        "",
+        f"{s['new_email_signoff']}",
+        "{{ brand_name }}",
+    )
 
     return {
         "contact_notification": {
             "subject": s["contact_subject"],
             "html_body": contact_html,
-            "text_body": (
-                f"{s['text_contact_header']}\n"
-                "========================\n\n"
-                f"{s['text_contact_from']}: {{{{ name }}}} <{{{{ email }}}}>\n"
-                f"{s['text_contact_subject_label']}: {{{{ subject }}}}\n\n"
-                f"{s['text_contact_message_label']}:\n"
-                "{{ message }}\n\n"
-                "---\n"
-                f"{s['text_contact_reply_hint']}\n"
-                "{{ brand_name }}"
-            ),
+            "text_body": contact_text,
         },
         "admin_reply": {
             "subject": s["reply_subject"],
             "html_body": reply_html,
-            "text_body": (
-                f"{s['reply_greeting']}\n\n"
-                f"{s['reply_intro']}\n\n"
-                f"{s['reply_heading']}\n"
-                "---\n\n"
-                "{{ reply_body }}\n\n"
-                "---\n"
-                f"{s['reply_original_label']}:\n\n"
-                "{{ original_message }}\n\n"
-                f"{s['reply_signoff']}\n"
-                "{{ brand_name }}"
-            ),
+            "text_body": reply_text,
         },
         "admin_new_email": {
             "subject": s["new_email_subject"],
             "html_body": new_email_html,
-            "text_body": (
-                f"{s['new_email_greeting']}\n\n"
-                "{{ subject }}\n"
-                "---\n\n"
-                "{{ body }}\n\n"
-                f"{s['new_email_signoff']}\n"
-                "{{ brand_name }}"
-            ),
+            "text_body": new_email_text,
         },
     }
