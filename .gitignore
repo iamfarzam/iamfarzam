@@ -237,3 +237,6 @@ Thumbs.db
 .deployed
 .deployed.state
 .deployed.previous
+
+# One-off helper scripts containing personal translation tables
+/_fixture_update.py
