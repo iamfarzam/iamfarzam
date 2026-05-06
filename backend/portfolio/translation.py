@@ -13,7 +13,7 @@ from .models import (
 
 @register(Profile)
 class ProfileTranslation(TranslationOptions):
-    fields = ("full_name", "headline", "tagline", "bio", "meta_title", "meta_description")
+    fields = ("full_name", "headline", "tagline", "bio", "location", "meta_title", "meta_description")
 
 
 @register(SkillCategory)
@@ -33,7 +33,7 @@ class ProjectTranslation(TranslationOptions):
 
 @register(Experience)
 class ExperienceTranslation(TranslationOptions):
-    fields = ("role", "description")
+    fields = ("role", "description", "location")
 
 
 @register(Education)

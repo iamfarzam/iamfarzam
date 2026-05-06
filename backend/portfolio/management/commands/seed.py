@@ -20,9 +20,9 @@ FIXTURES_DIR = Path(__file__).resolve().parent.parent.parent / "fixtures"
 
 # Only these fields have translation columns — everything else must be skipped.
 TRANSLATABLE = {
-    "profile": {"full_name", "headline", "tagline", "bio", "meta_title", "meta_description"},
+    "profile": {"full_name", "headline", "tagline", "bio", "location", "meta_title", "meta_description"},
     "project": {"title", "summary", "description"},
-    "experience": {"role", "description"},
+    "experience": {"role", "description", "location"},
     "education": {"degree", "field_of_study", "description"},
 }
 
