@@ -17,9 +17,13 @@ const cacheOption: RequestInit =
     ? { cache: "no-store" }
     : { next: { revalidate: Number(REVALIDATE_RAW) } };
 
-async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> {
+export function normalizeApiLocale(locale: string) {
   const langMap: Record<string, string> = { zh: "zh-hans" };
-  const acceptLang = langMap[locale] || locale;
+  return langMap[locale] || locale;
+}
+
+async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> {
+  const acceptLang = normalizeApiLocale(locale);
   const res = await fetch(`${API_BASE}${endpoint}`, {
     headers: { "Accept-Language": acceptLang },
     ...cacheOption,
@@ -70,7 +74,10 @@ export async function submitContact(data: {
   const res = await fetch(`${apiUrl}/contact/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      ...data,
+      language: data.language ? normalizeApiLocale(data.language) : data.language,
+    }),
   });
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Section from "@/components/ui/Section";
-import { submitContact } from "@/lib/api";
+import { normalizeApiLocale, submitContact } from "@/lib/api";
 
 export default function ContactSection() {
   const t = useTranslations("contact");
@@ -25,7 +25,7 @@ export default function ContactSection() {
     setStatus("sending");
     setErrorMsg("");
     try {
-      await submitContact({ ...form, language: locale });
+      await submitContact({ ...form, language: normalizeApiLocale(locale) });
       setStatus("sent");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err) {

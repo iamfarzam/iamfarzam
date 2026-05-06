@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { fetchProject, fetchProjects } from "@/lib/api";
 import { serializeJsonLd } from "@/lib/jsonLd";
 
@@ -12,6 +14,12 @@ export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+async function getActiveLocale() {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value as Locale | undefined;
+  return cookieLocale && locales.includes(cookieLocale) ? cookieLocale : defaultLocale;
 }
 
 export async function generateStaticParams() {
@@ -25,8 +33,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getActiveLocale();
   try {
-    const project = await fetchProject(slug);
+    const project = await fetchProject(slug, locale);
     return {
       title: project.title,
       description: project.summary,
@@ -45,7 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectDetailPage({ params }: Props) {
   const t = await getTranslations("projects");
   const { slug } = await params;
-  const project = await fetchProject(slug);
+  const locale = await getActiveLocale();
+  const project = await fetchProject(slug, locale);
   const title = project.title || "Project";
   const summary = project.summary || "";
   const technologies = project.technologies || [];
