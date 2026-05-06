@@ -513,7 +513,7 @@ class EmailTemplateAdmin(ModelAdmin, TabbedTranslationAdmin):
     list_display = ["name", "label", "subject", "show_status", "updated_at"]
     list_filter = ["name", "is_active"]
     list_filter_submit = True
-    actions_detail = ["preview_template"]
+    actions_detail = ["preview_template", "reset_to_defaults"]
     readonly_fields = ["updated_at", "placeholder_help"]
     fieldsets = [
         (
@@ -610,6 +610,45 @@ class EmailTemplateAdmin(ModelAdmin, TabbedTranslationAdmin):
             request,
             "admin/portfolio/emailtemplate/preview.html",
             context,
+        )
+
+    @action(description="Reset to defaults", url_path="reset-defaults")
+    def reset_to_defaults(self, request, object_id):
+        """Overwrite this row's subject/html/text in every language column
+        with the values from `email._get_defaults`. Wipes admin edits for
+        this row only — other templates are untouched."""
+        from django.conf import settings
+
+        from .email import _get_defaults
+
+        tpl = self.model.objects.get(pk=object_id)
+        en_data = _get_defaults("en").get(tpl.name)
+        if not en_data:
+            messages.error(request, f"No defaults defined for {tpl.name!r}.")
+            return HttpResponseRedirect(
+                reverse("admin:portfolio_emailtemplate_change", args=[tpl.pk])
+            )
+
+        updates = {
+            "subject": en_data["subject"],
+            "html_body": en_data["html_body"],
+            "text_body": en_data["text_body"],
+        }
+        for lang_code, _label in settings.LANGUAGES:
+            suffix = lang_code.replace("-", "_")
+            data = _get_defaults(lang_code).get(tpl.name, {})
+            for field in ("subject", "html_body", "text_body"):
+                col = f"{field}_{suffix}"
+                if hasattr(tpl, col):
+                    updates[col] = data.get(field, "")
+
+        self.model.objects.filter(pk=tpl.pk).update(**updates)
+        messages.success(
+            request,
+            f"Reset {tpl.get_name_display()!r} to defaults across all languages.",
+        )
+        return HttpResponseRedirect(
+            reverse("admin:portfolio_emailtemplate_change", args=[tpl.pk])
         )
 
     def placeholder_help(self, obj):
