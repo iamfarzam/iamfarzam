@@ -31,7 +31,7 @@
 ### Find me
 
 [![GitHub](https://img.shields.io/badge/GitHub-iamfarzam-181717?style=flat&logo=github)](https://github.com/iamfarzam)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/iamfarzam)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/farzam-mehdi)
 
 ---
 
