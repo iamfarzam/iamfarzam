@@ -31,7 +31,7 @@
 ### Find me
 
 [![GitHub](https://img.shields.io/badge/GitHub-portfolio-owner-181717?style=flat&logo=github)](https://github.com/portfolio-owner)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/portfolio-owner)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/portfolio-owner-portfolio-owner)
 
 ---
 
