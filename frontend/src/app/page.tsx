@@ -18,8 +18,6 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { serializeJsonLd } from "@/lib/jsonLd";
 import type { Profile } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
-
 export default async function HomePage() {
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value as Locale | undefined;
@@ -67,27 +65,46 @@ export default async function HomePage() {
   const education =
     educationResult.status === "fulfilled" ? educationResult.value : [];
 
-  const jsonLd = {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  const personLd = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": `${siteUrl}/#person`,
     name: profile.full_name,
     jobTitle: profile.headline,
     description: profile.bio,
-    url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+    url: siteUrl,
     image: profile.avatar,
-    email: profile.email,
+    email: profile.email || undefined,
     sameAs: [
       profile.github_url,
       profile.linkedin_url,
       profile.twitter_url,
+      profile.website_url,
     ].filter(Boolean),
+  };
+
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: siteUrl,
+    name: profile.full_name,
+    description: profile.meta_description || profile.headline,
+    inLanguage: "en",
+    publisher: { "@id": `${siteUrl}/#person` },
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(personLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteLd) }}
       />
       <HeroSection profile={profile} />
       <AboutSection profile={profile} />

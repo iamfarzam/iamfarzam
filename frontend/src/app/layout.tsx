@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
@@ -30,40 +30,80 @@ async function getLocale(): Promise<Locale> {
   return cookie && locales.includes(cookie) ? cookie : defaultLocale;
 }
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
+  const baseDefaults: Metadata = {
+    metadataBase: new URL(SITE_URL),
+    alternates: { canonical: "/" },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1,
+      },
+    },
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+  };
+
   try {
     const profile = await fetchProfile(locale);
+    const fallbackTitle = `${profile.full_name} | Portfolio`;
+    const title = profile.meta_title || fallbackTitle;
+    const description = profile.meta_description || profile.headline;
+    const ogImage = profile.og_image || undefined;
+
     return {
+      ...baseDefaults,
       title: {
-        default: profile.meta_title || `${profile.full_name} — Portfolio`,
+        default: title,
         template: `%s | ${profile.full_name}`,
       },
-      description: profile.meta_description || profile.headline,
-      metadataBase: new URL(
-        process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-      ),
-      alternates: {
-        canonical: "/",
-      },
+      description,
+      applicationName: profile.full_name,
+      authors: [{ name: profile.full_name, url: SITE_URL }],
+      creator: profile.full_name,
+      publisher: profile.full_name,
       openGraph: {
-        title: profile.meta_title || `${profile.full_name} — Portfolio`,
-        description: profile.meta_description || profile.headline,
+        title,
+        description,
         url: "/",
-        images: profile.og_image ? [{ url: profile.og_image }] : [],
+        siteName: profile.full_name,
+        locale: "en_US",
+        images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: title }] : [],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: profile.meta_title || `${profile.full_name} — Portfolio`,
-        description: profile.meta_description || profile.headline,
-        images: profile.og_image ? [profile.og_image] : [],
+        title,
+        description,
+        images: ogImage ? [ogImage] : [],
       },
     };
   } catch {
     return {
+      ...baseDefaults,
       title: "Portfolio",
-      description: "Software Engineer Portfolio",
+      description: "Software engineer portfolio.",
     };
   }
 }
