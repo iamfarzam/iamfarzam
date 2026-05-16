@@ -36,18 +36,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await getActiveLocale();
   try {
     const project = await fetchProject(slug, locale);
+    const canonicalPath = `/projects/${project.slug}`;
     return {
       title: project.title,
       description: project.summary,
+      alternates: {
+        canonical: canonicalPath,
+      },
       openGraph: {
         title: project.title,
         description: project.summary,
+        url: canonicalPath,
         images: [{ url: project.thumbnail }],
         type: "article",
       },
     };
   } catch {
-    return { title: "Project" };
+    return {
+      title: "Project",
+      alternates: { canonical: `/projects/${slug}` },
+    };
   }
 }
 
