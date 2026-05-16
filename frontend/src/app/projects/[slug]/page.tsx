@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
-import { fetchProject, fetchProjects } from "@/lib/api";
+import { ApiNotFoundError, fetchProject, fetchProjects } from "@/lib/api";
 import { serializeJsonLd } from "@/lib/jsonLd";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +52,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         type: "article",
       },
     };
-  } catch {
+  } catch (err) {
+    if (err instanceof ApiNotFoundError) {
+      return {
+        title: "Not Found",
+        robots: { index: false, follow: false },
+      };
+    }
     return {
       title: "Project",
       alternates: { canonical: `/projects/${slug}` },
@@ -63,7 +70,15 @@ export default async function ProjectDetailPage({ params }: Props) {
   const t = await getTranslations("projects");
   const { slug } = await params;
   const locale = await getActiveLocale();
-  const project = await fetchProject(slug, locale);
+  let project;
+  try {
+    project = await fetchProject(slug, locale);
+  } catch (err) {
+    if (err instanceof ApiNotFoundError) {
+      notFound();
+    }
+    throw err;
+  }
   const title = project.title || "Project";
   const summary = project.summary || "";
   const technologies = project.technologies || [];
