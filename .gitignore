@@ -218,6 +218,11 @@ backend/logs/
 # Seed fixtures (user-specific data)
 /fixtures/
 
+# Version file is a deploy-time build artifact written by deploy.sh.
+# Tracking it would mean every deploy dirties the working tree, which
+# git describe --dirty=.dirty then bakes into the next deployed version.
+backend/VERSION
+
 # Node / Next.js
 node_modules/
 frontend/.next/
