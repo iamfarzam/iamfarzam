@@ -43,12 +43,12 @@ export interface ProjectSummary {
   github_url: string;
   live_url: string;
   is_featured: boolean;
+  created_at: string;
 }
 
 export interface ProjectDetail extends ProjectSummary {
   description: string;
   image: string | null;
-  created_at: string;
 }
 
 export interface Experience {

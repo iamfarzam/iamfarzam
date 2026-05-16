@@ -231,6 +231,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Public base used by serializers to build absolute URLs for uploaded files.
+# Required when SSR fetches go through an internal hostname (e.g. http://backend:8000)
+# but image URLs must be reachable from external clients and OG scrapers.
+PUBLIC_MEDIA_BASE_URL = config("PUBLIC_MEDIA_BASE_URL", default="")
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery
