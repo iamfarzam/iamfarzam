@@ -43,9 +43,13 @@ export async function generateMetadata(): Promise<Metadata> {
       metadataBase: new URL(
         process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
       ),
+      alternates: {
+        canonical: "/",
+      },
       openGraph: {
         title: profile.meta_title || `${profile.full_name} — Portfolio`,
         description: profile.meta_description || profile.headline,
+        url: "/",
         images: profile.og_image ? [{ url: profile.og_image }] : [],
         type: "website",
       },

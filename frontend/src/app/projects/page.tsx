@@ -9,6 +9,15 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 export const metadata: Metadata = {
   title: "Projects",
   description: "A showcase of my engineering work.",
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: "Projects",
+    description: "A showcase of my engineering work.",
+    url: "/projects",
+    type: "website",
+  },
 };
 
 export const dynamic = "force-dynamic";

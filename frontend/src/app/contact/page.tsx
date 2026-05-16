@@ -5,6 +5,15 @@ import ContactSection from "@/components/sections/ContactSection";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch to discuss a project or opportunity.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact",
+    description: "Get in touch to discuss a project or opportunity.",
+    url: "/contact",
+    type: "website",
+  },
 };
 
 export default function ContactPage() {
