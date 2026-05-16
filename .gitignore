@@ -222,6 +222,8 @@ backend/logs/
 node_modules/
 frontend/.next/
 frontend/out/
+frontend/tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # Additional environment files
 .env.local
