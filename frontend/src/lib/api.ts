@@ -22,12 +22,22 @@ export function normalizeApiLocale(locale: string) {
   return langMap[locale] || locale;
 }
 
+export class ApiNotFoundError extends Error {
+  constructor(endpoint: string) {
+    super(`API 404: ${endpoint}`);
+    this.name = "ApiNotFoundError";
+  }
+}
+
 async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> {
   const acceptLang = normalizeApiLocale(locale);
   const res = await fetch(`${API_BASE}${endpoint}`, {
     headers: { "Accept-Language": acceptLang },
     ...cacheOption,
   });
+  if (res.status === 404) {
+    throw new ApiNotFoundError(endpoint);
+  }
   if (!res.ok) {
     throw new Error(`API error: ${res.status} ${res.statusText}`);
   }
