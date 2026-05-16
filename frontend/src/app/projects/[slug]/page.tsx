@@ -11,8 +11,6 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { ApiNotFoundError, fetchProject, fetchProjects } from "@/lib/api";
 import { serializeJsonLd } from "@/lib/jsonLd";
 
-export const dynamic = "force-dynamic";
-
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -94,21 +92,47 @@ export default async function ProjectDetailPage({ params }: Props) {
       })
     : null;
 
-  const jsonLd = {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const projectUrl = `${siteUrl}/projects/${project.slug}`;
+  const hasCode = Boolean(project.github_url);
+
+  const projectLd = {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    "@type": hasCode ? "SoftwareSourceCode" : "CreativeWork",
     name: title,
+    headline: title,
     description: summary,
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/projects/${project.slug}`,
+    url: projectUrl,
     dateCreated: project.created_at,
-    image: project.thumbnail,
+    datePublished: project.created_at,
+    image: project.image || project.thumbnail,
+    inLanguage: "en",
+    author: { "@id": `${siteUrl}/#person` },
+    ...(hasCode ? { codeRepository: project.github_url } : {}),
+    ...(technologies.length > 0
+      ? { keywords: technologies.map((t) => t.name).join(", ") }
+      : {}),
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Projects", item: `${siteUrl}/projects` },
+      { "@type": "ListItem", position: 3, name: title, item: projectUrl },
+    ],
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(projectLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbLd) }}
       />
       <article className="relative isolate mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div
