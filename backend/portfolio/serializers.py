@@ -95,7 +95,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
         fields = [
             "title", "slug", "summary", "thumbnail",
             "technologies", "github_url", "live_url", "is_featured",
-            "created_at",
+            "created_at", "updated_at",
         ]
 
     def get_thumbnail(self, obj):
@@ -111,7 +111,8 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
         model = Project
         fields = [
             "title", "slug", "summary", "description", "thumbnail", "image",
-            "technologies", "github_url", "live_url", "is_featured", "created_at",
+            "technologies", "github_url", "live_url", "is_featured",
+            "created_at", "updated_at",
         ]
 
     def get_thumbnail(self, obj):

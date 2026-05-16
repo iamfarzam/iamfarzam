@@ -44,6 +44,7 @@ export interface ProjectSummary {
   live_url: string;
   is_featured: boolean;
   created_at: string;
+  updated_at: string;
 }
 
 export interface ProjectDetail extends ProjectSummary {

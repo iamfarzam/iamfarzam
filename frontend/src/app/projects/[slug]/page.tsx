@@ -105,6 +105,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     url: projectUrl,
     dateCreated: project.created_at,
     datePublished: project.created_at,
+    dateModified: project.updated_at || project.created_at,
     image: project.image || project.thumbnail,
     inLanguage: "en",
     author: { "@id": `${siteUrl}/#person` },
