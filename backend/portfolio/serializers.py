@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from rest_framework import serializers
 
 from .models import (
@@ -23,6 +24,12 @@ def safe_file_url(field_file, request=None):
     except Exception:
         logger.warning("Failed to resolve URL for file field %r", field_file.name, exc_info=True)
         return None
+    # Prefer the explicit public base when set — SSR fetches hit the internal
+    # backend host, and request.build_absolute_uri would emit URLs that are
+    # not reachable from external clients (OG scrapers, browsers).
+    public_base = getattr(settings, "PUBLIC_MEDIA_BASE_URL", "") or ""
+    if public_base and url.startswith("/"):
+        return f"{public_base.rstrip('/')}{url}"
     if request is not None:
         return request.build_absolute_uri(url)
     return url
@@ -88,6 +95,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
         fields = [
             "title", "slug", "summary", "thumbnail",
             "technologies", "github_url", "live_url", "is_featured",
+            "created_at",
         ]
 
     def get_thumbnail(self, obj):
