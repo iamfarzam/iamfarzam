@@ -4,23 +4,24 @@ import { fetchProjects } from "@/lib/api";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const now = new Date();
 
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${siteUrl}/projects`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${siteUrl}/contact`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "yearly",
       priority: 0.5,
     },
@@ -30,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await fetchProjects();
     const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
       url: `${siteUrl}/projects/${project.slug}`,
-      lastModified: new Date(),
+      lastModified: project.created_at ? new Date(project.created_at) : now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     }));
