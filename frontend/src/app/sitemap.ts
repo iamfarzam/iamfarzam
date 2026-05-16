@@ -29,12 +29,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const projects = await fetchProjects();
-    const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
-      url: `${siteUrl}/projects/${project.slug}`,
-      lastModified: project.created_at ? new Date(project.created_at) : now,
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    }));
+    const projectPages: MetadataRoute.Sitemap = projects.map((project) => {
+      const stamp = project.updated_at || project.created_at;
+      return {
+        url: `${siteUrl}/projects/${project.slug}`,
+        lastModified: stamp ? new Date(stamp) : now,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      };
+    });
     return [...staticPages, ...projectPages];
   } catch {
     return staticPages;
