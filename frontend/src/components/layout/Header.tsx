@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -8,8 +9,13 @@ import { useEffect, useState } from "react";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
-export default function Header() {
+interface HeaderProps {
+  logo?: string | null;
+}
+
+export default function Header({ logo }: HeaderProps) {
   const t = useTranslations("header");
+  const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || "Portfolio";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -43,9 +49,23 @@ export default function Header() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight text-text transition-colors hover:text-accent"
+          className="flex items-center text-xl font-bold tracking-tight text-text transition-colors hover:text-accent"
+          aria-label={siteTitle}
         >
-          {process.env.NEXT_PUBLIC_SITE_TITLE || "Portfolio"}<span className="text-accent">.</span>
+          {logo ? (
+            <Image
+              src={logo}
+              alt={siteTitle}
+              width={140}
+              height={32}
+              priority
+              className="h-8 w-auto"
+            />
+          ) : (
+            <>
+              {siteTitle}<span className="text-accent">.</span>
+            </>
+          )}
         </Link>
 
         {/* Desktop nav */}

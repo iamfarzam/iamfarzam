@@ -14,6 +14,8 @@ export interface Profile {
   meta_title: string;
   meta_description: string;
   og_image: string | null;
+  logo: string | null;
+  favicon: string | null;
 }
 
 export interface Skill {
