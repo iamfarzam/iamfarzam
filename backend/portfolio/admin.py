@@ -50,19 +50,24 @@ def unread_messages_count(request):
         return None
 
 
-def site_favicon_url(request):
-    """Unfold SITE_ICON callback — serve the admin tab icon from Profile.favicon.
+def site_favicons(request):
+    """Unfold SITE_FAVICONS callback — render <link rel="icon"> in admin <head>.
 
-    Falls back to None (Unfold's default favicon) when no favicon is uploaded
-    or the Profile row does not exist yet.
+    Returns a single-entry list pointing at Profile.favicon when uploaded.
+    Returns an empty list otherwise, so Unfold emits no favicon link and the
+    browser falls back to its own default behavior.
     """
     try:
         profile = Profile.objects.only("favicon").first()
         if profile and profile.favicon:
-            return profile.favicon.url
+            return [{
+                "rel": "icon",
+                "type": "image/png",
+                "href": profile.favicon.url,
+            }]
     except Exception:
         logger.exception("Failed to resolve site favicon")
-    return None
+    return []
 
 
 # ---------------------------------------------------------------------------
