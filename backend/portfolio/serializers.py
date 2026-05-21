@@ -39,6 +39,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     resume = serializers.SerializerMethodField()
     og_image = serializers.SerializerMethodField()
+    logo = serializers.SerializerMethodField()
+    favicon = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -46,6 +48,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "full_name", "headline", "tagline", "bio", "avatar", "resume", "email",
             "location", "github_url", "linkedin_url", "twitter_url",
             "website_url", "meta_title", "meta_description", "og_image",
+            "logo", "favicon",
         ]
 
     def get_avatar(self, obj):
@@ -56,6 +59,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_og_image(self, obj):
         return safe_file_url(obj.og_image, self.context.get("request"))
+
+    def get_logo(self, obj):
+        return safe_file_url(obj.logo, self.context.get("request"))
+
+    def get_favicon(self, obj):
+        return safe_file_url(obj.favicon, self.context.get("request"))
 
 
 class SkillSerializer(serializers.ModelSerializer):

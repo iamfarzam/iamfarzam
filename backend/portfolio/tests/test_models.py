@@ -1,9 +1,20 @@
 """Tests for model invariants: single-active rules, defaults, choices."""
 
+from io import BytesIO
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError, transaction
 from django.test import TestCase
+from PIL import Image
 
-from portfolio.models import ContactMessage, EmailConfiguration, EmailTemplate
+from portfolio.models import (
+    ContactMessage,
+    EmailConfiguration,
+    EmailTemplate,
+    OG_MAX_HEIGHT,
+    OG_MAX_WIDTH,
+    Profile,
+)
 
 
 class EmailConfigurationSingleActiveTests(TestCase):
@@ -135,3 +146,73 @@ class ContactMessageLanguageTests(TestCase):
                 language=code,
             )
             self.assertEqual(m.language, code)
+
+
+def _png_upload(name, width, height):
+    img = Image.new("RGBA", (width, height), (255, 0, 0, 255))
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return SimpleUploadedFile(name, buf.getvalue(), content_type="image/png")
+
+
+class ProfileOgImageResizeTests(TestCase):
+    """og_image is downscaled to fit 1200x630 on save, preserving aspect."""
+
+    def _profile(self, og_upload):
+        return Profile.objects.create(
+            full_name="N", headline="H", bio="B", email="x@x.test",
+            og_image=og_upload,
+        )
+
+    def _dims(self, profile):
+        profile.og_image.open("rb")
+        try:
+            with Image.open(profile.og_image) as img:
+                return img.width, img.height
+        finally:
+            profile.og_image.close()
+
+    def test_oversized_image_is_downscaled(self):
+        p = self._profile(_png_upload("og.png", 4000, 3000))
+        w, h = self._dims(p)
+        self.assertLessEqual(w, OG_MAX_WIDTH)
+        self.assertLessEqual(h, OG_MAX_HEIGHT)
+        # Aspect preserved: 4000/3000 == w/h within 1px rounding.
+        self.assertAlmostEqual(w / h, 4000 / 3000, places=2)
+
+    def test_square_image_fits_within_short_side(self):
+        p = self._profile(_png_upload("og.png", 2000, 2000))
+        w, h = self._dims(p)
+        self.assertEqual(w, OG_MAX_HEIGHT)
+        self.assertEqual(h, OG_MAX_HEIGHT)
+
+    def test_already_small_image_is_untouched(self):
+        p = self._profile(_png_upload("og.png", 800, 400))
+        w, h = self._dims(p)
+        self.assertEqual((w, h), (800, 400))
+
+    def test_exact_size_image_is_untouched(self):
+        p = self._profile(_png_upload("og.png", OG_MAX_WIDTH, OG_MAX_HEIGHT))
+        w, h = self._dims(p)
+        self.assertEqual((w, h), (OG_MAX_WIDTH, OG_MAX_HEIGHT))
+
+
+class ProfileBrandingFieldsTests(TestCase):
+    """logo and favicon are real ImageFields that can be stored and read back."""
+
+    def test_logo_and_favicon_persist(self):
+        p = Profile.objects.create(
+            full_name="N", headline="H", bio="B", email="x@x.test",
+            logo=_png_upload("logo.png", 400, 100),
+            favicon=_png_upload("favicon.png", 512, 512),
+        )
+        p.refresh_from_db()
+        self.assertTrue(p.logo.name.endswith(".png"))
+        self.assertTrue(p.favicon.name.endswith(".png"))
+
+    def test_branding_fields_optional(self):
+        p = Profile.objects.create(
+            full_name="N", headline="H", bio="B", email="x@x.test",
+        )
+        self.assertFalse(bool(p.logo))
+        self.assertFalse(bool(p.favicon))
