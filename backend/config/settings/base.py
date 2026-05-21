@@ -46,7 +46,7 @@ UNFOLD = {
     "SITE_TITLE": "Portfolio Admin",
     "SITE_HEADER": "Portfolio Admin",
     "SITE_SYMBOL": "deployed_code",
-    "SITE_ICON": "portfolio.admin.site_favicon_url",
+    "SITE_FAVICONS": "portfolio.admin.site_favicons",
     "ENVIRONMENT": "portfolio.admin.project_version_environment",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": False,
