@@ -18,6 +18,10 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { serializeJsonLd } from "@/lib/jsonLd";
 import type { Profile } from "@/lib/types";
 
+// cookies() + ISR-cached fetches collide and produce DYNAMIC_SERVER_USAGE;
+// force per-request rendering (see /projects/[slug] for the full note).
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value as Locale | undefined;
