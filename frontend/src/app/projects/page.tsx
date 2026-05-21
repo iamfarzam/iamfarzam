@@ -7,6 +7,10 @@ import { fetchProjects } from "@/lib/api";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { serializeJsonLd } from "@/lib/jsonLd";
 
+// cookies() + ISR-cached fetches collide and produce DYNAMIC_SERVER_USAGE;
+// force per-request rendering (see /projects/[slug] for the full note).
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Projects",
   description: "A showcase of my engineering work.",

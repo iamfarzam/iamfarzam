@@ -11,6 +11,12 @@ import { defaultLocale, locales, type Locale } from "@/i18n/config";
 import { ApiNotFoundError, fetchProject, fetchProjects } from "@/lib/api";
 import { serializeJsonLd } from "@/lib/jsonLd";
 
+// The page reads NEXT_LOCALE from cookies(), which marks the render as
+// dynamic. With NEXT_PUBLIC_REVALIDATE set in prod, the shared fetch
+// helper otherwise schedules ISR for the project fetch, and Next aborts
+// the render with DYNAMIC_SERVER_USAGE. Force per-request rendering.
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
