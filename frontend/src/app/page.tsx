@@ -43,6 +43,8 @@ export default async function HomePage() {
     meta_title: "",
     meta_description: "",
     og_image: null,
+    logo: null,
+    favicon: null,
   };
 
   const [profileResult, skillsResult, projectsResult, experienceResult, educationResult] = await Promise.allSettled([

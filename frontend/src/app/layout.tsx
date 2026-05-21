@@ -71,6 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const title = profile.meta_title || fallbackTitle;
     const description = profile.meta_description || profile.headline;
     const ogImage = profile.og_image || undefined;
+    const favicon = profile.favicon || undefined;
 
     return {
       ...baseDefaults,
@@ -83,6 +84,9 @@ export async function generateMetadata(): Promise<Metadata> {
       authors: [{ name: profile.full_name, url: SITE_URL }],
       creator: profile.full_name,
       publisher: profile.full_name,
+      icons: favicon
+        ? { icon: favicon, shortcut: favicon, apple: favicon }
+        : undefined,
       openGraph: {
         title,
         description,
@@ -134,7 +138,7 @@ export default async function RootLayout({
       <body className="min-h-screen bg-bg font-sans text-text antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <Header />
+            <Header logo={profile?.logo ?? null} />
             <main className="pt-16">{children}</main>
             <Footer profile={profile} />
             <ScrollToTop />
