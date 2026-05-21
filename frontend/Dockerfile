@@ -39,6 +39,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# next/image optimization requires sharp at runtime in standalone mode;
+# otherwise every optimized image request 500s with "sharp is required".
+# Install into the standalone bundle's node_modules so server.js resolves it.
+RUN npm install --prefix /app sharp && \
+    chown -R nextjs:nodejs /app/node_modules /app/package.json /app/package-lock.json 2>/dev/null || true
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
