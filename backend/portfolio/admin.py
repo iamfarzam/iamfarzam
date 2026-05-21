@@ -75,6 +75,17 @@ class ProfileAdmin(ModelAdmin, TabbedTranslationAdmin):
             },
         ),
         (
+            "Branding",
+            {
+                "fields": ("logo", "favicon"),
+                "classes": ["collapse"],
+                "description": (
+                    "Logo replaces the site title text in the header when set. "
+                    "Favicon is the browser tab icon (upload a square PNG; browsers auto-scale)."
+                ),
+            },
+        ),
+        (
             "Social Links",
             {
                 "fields": ("github_url", "linkedin_url", "twitter_url", "website_url"),

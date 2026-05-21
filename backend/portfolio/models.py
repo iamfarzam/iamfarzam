@@ -1,5 +1,36 @@
+from io import BytesIO
+
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import models
+from PIL import Image
+
+OG_MAX_WIDTH = 1200
+OG_MAX_HEIGHT = 630
+
+
+def _fit_og_image(field_file):
+    """Downscale an uploaded og_image to fit within 1200x630, preserving aspect.
+
+    No-op if the source already fits. Never upscales. Preserves PNG transparency.
+    Leaves the underlying field file positioned at 0 so Django can write it.
+    """
+    field_file.seek(0)
+    data = field_file.read()
+    field_file.seek(0)
+    with Image.open(BytesIO(data)) as img:
+        img.load()
+        if img.width <= OG_MAX_WIDTH and img.height <= OG_MAX_HEIGHT:
+            return None
+        resized = img.copy()
+        resized.thumbnail((OG_MAX_WIDTH, OG_MAX_HEIGHT), Image.Resampling.LANCZOS)
+        fmt = (img.format or "PNG").upper()
+        buf = BytesIO()
+        save_kwargs = {"optimize": True}
+        if fmt in {"JPEG", "JPG"}:
+            save_kwargs["quality"] = 90
+        resized.save(buf, format=fmt, **save_kwargs)
+        return ContentFile(buf.getvalue())
 
 
 class Profile(models.Model):
@@ -11,6 +42,16 @@ class Profile(models.Model):
     bio = models.TextField()
     avatar = models.ImageField(upload_to="profile/", blank=True)
     resume = models.FileField(upload_to="profile/", blank=True)
+    logo = models.ImageField(
+        upload_to="profile/",
+        blank=True,
+        help_text="Header brand mark. PNG recommended; replaces the site title text when set.",
+    )
+    favicon = models.ImageField(
+        upload_to="profile/",
+        blank=True,
+        help_text="Browser tab icon. Upload a square PNG (512x512 is plenty); browsers auto-scale.",
+    )
     email = models.EmailField()
     location = models.CharField(max_length=100, blank=True)
     github_url = models.URLField(blank=True)
@@ -33,6 +74,13 @@ class Profile(models.Model):
         # Enforce singleton: delete all other instances before saving.
         if not self.pk:
             Profile.objects.all().delete()
+        if self.og_image:
+            try:
+                resized = _fit_og_image(self.og_image)
+            except Exception:
+                resized = None
+            if resized is not None:
+                self.og_image.save(self.og_image.name, resized, save=False)
         super().save(*args, **kwargs)
 
 
