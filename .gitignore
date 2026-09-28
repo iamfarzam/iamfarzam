@@ -254,5 +254,8 @@ Thumbs.db
 /AGENTS.md
 /output/
 
+# Local exact-match privacy denylist; never publish its values.
+/.privacy-patterns.json
+
 # Private demo source, uploads, models, data, and deployment configuration.
 /demos/
