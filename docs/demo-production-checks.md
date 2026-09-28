@@ -7,8 +7,10 @@ fictional. No live deployment or production database was changed.
 
 ## Completed checks
 
-- 112 backend tests passed on Linux, including symlink rejection and Linux
+- The full backend suite passed on Linux, including symlink rejection and Linux
   publication ownership. Django found no configuration errors or migration drift.
+  Current suite sizes are recorded in [production-readiness.md](production-readiness.md)
+  rather than repeated here, where they go stale as tests are added.
   Publication creates a verified snapshot that an existing uploader write handle
   cannot modify; altered snapshots are rejected before becoming public.
 - Fresh-install readiness passed through production Nginx with no profile records.

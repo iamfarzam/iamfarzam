@@ -22,22 +22,34 @@ Thanks for your interest in contributing! Here's how to get started.
    ```bash
    git checkout -b feat/your-feature
    ```
-2. Make your changes
-3. Ensure the backend passes checks:
+2. Enable the privacy pre-commit hook once per checkout:
    ```bash
-   cd backend && python manage.py check
+   git config --local core.hooksPath .githooks
    ```
-4. Ensure the frontend builds:
+3. Make your changes
+4. Ensure the backend passes the same checks as CI:
    ```bash
-   cd frontend && npm run build
+   cd backend && python manage.py check && \
+       python manage.py makemigrations --check --dry-run && \
+       python manage.py test portfolio.tests
    ```
-5. Commit with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
+5. Ensure the frontend passes the same checks as CI:
+   ```bash
+   cd frontend && npm test && npm run lint && npm run build
+   ```
+6. For deployment or infrastructure changes, also run:
+   ```bash
+   bash -n deploy.sh
+   node --test scripts/deployment.test.mjs scripts/check-private-files.test.mjs
+   docker compose -f docker-compose.prod.yml config --quiet
+   ```
+7. Commit with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
    - `feat:` for new features
    - `fix:` for bug fixes
    - `docs:` for documentation
    - `refactor:` for code restructuring
    - `chore:` for maintenance tasks
-6. Push and open a pull request against `master`
+8. Push and open a pull request against `master`
 
 ## Guidelines
 

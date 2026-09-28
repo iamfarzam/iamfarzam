@@ -30,10 +30,12 @@ Nginx trusts Cloudflare's officially published edge networks for visitor IP rest
    its previous in-memory queue is not automatically copied into the new volume.
    Apply that infrastructure change in a planned maintenance window.
 3. Review new settings against the current TLS configuration. In particular,
-   enabling `SECURE_SSL_REDIRECT=True` with an HTTP origin hop requires trusted
-   HTTPS forwarding. Verify `INTERNAL_API_FORWARD_PROTO=https` for SSR when that
-   redirect is enabled. Set `NGINX_TRUSTED_PROXY` only to the actual trusted peer
-   if forwarding client addresses. Keep the current listener and proxy upstream.
+   enabling `SECURE_SSL_REDIRECT=True` with an HTTP origin hop requires
+   `NGINX_PROXY_SCHEME=https`; otherwise Django 301s every API, admin and health
+   request. `deploy.sh` refuses to deploy when those two disagree. Verify
+   `INTERNAL_API_FORWARD_PROTO=https` for SSR when that redirect is enabled. Set
+   `NGINX_TRUSTED_PROXY` only to the actual trusted peer if forwarding client
+   addresses. Keep the current listener and proxy upstream.
 4. Update the existing checkout to the tested `master` revision with
    `git pull --ff-only` once these commits have been pushed. Use the existing
    production `.env` and Compose project name when validating the model.
