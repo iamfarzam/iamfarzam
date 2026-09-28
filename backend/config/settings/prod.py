@@ -73,14 +73,21 @@ SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD", default=False, cast=bool)
 
 SESSION_COOKIE_SECURE = config(
     "SESSION_COOKIE_SECURE",
-    default=SECURE_SSL_REDIRECT,
+    default=SECURE_SSL_REDIRECT or DEMOS_ENABLED,
     cast=bool,
 )
 CSRF_COOKIE_SECURE = config(
     "CSRF_COOKIE_SECURE",
-    default=SECURE_SSL_REDIRECT,
+    default=SECURE_SSL_REDIRECT or DEMOS_ENABLED,
     cast=bool,
 )
+
+# __Host- cookies prevent a sibling demo host from shadowing portfolio cookies.
+SESSION_COOKIE_NAME = "__Host-portfolio-session" if DEMOS_ENABLED else "sessionid"
+CSRF_COOKIE_NAME = "__Host-portfolio-csrf" if DEMOS_ENABLED else "csrftoken"
+if DEMOS_ENABLED and not (SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE):
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured("Production demo hosting requires secure portfolio session and CSRF cookies.")
 
 
 def _csv(value: str) -> list[str]:

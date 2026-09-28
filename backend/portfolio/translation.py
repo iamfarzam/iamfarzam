@@ -6,6 +6,7 @@ from .models import (
     Experience,
     Profile,
     Project,
+    ProjectDemo,
     Skill,
     SkillCategory,
 )
@@ -29,6 +30,11 @@ class SkillTranslation(TranslationOptions):
 @register(Project)
 class ProjectTranslation(TranslationOptions):
     fields = ("title", "summary", "description")
+
+
+@register(ProjectDemo)
+class ProjectDemoTranslation(TranslationOptions):
+    fields = ("instructions", "disclosure")
 
 
 @register(Experience)

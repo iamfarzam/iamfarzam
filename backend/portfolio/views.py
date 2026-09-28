@@ -57,7 +57,7 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "slug"
 
     def get_queryset(self):
-        return Project.objects.filter(is_active=True).prefetch_related("technologies")
+        return Project.objects.filter(is_active=True).select_related("demo_config").prefetch_related("technologies")
 
     def get_serializer_class(self):
         if self.action == "retrieve":

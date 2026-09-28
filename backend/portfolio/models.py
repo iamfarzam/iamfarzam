@@ -141,6 +141,33 @@ class Project(models.Model):
         return self.title
 
 
+class ProjectDemo(models.Model):
+    """Public availability for a privately uploaded, immutable demo release."""
+
+    project = models.OneToOneField(Project, related_name="demo_config", on_delete=models.CASCADE)
+    release = models.CharField(max_length=63, help_text="Select a validated SFTP release.")
+    enabled = models.BooleanField(default=False)
+    instructions = models.TextField(blank=True)
+    disclosure = models.TextField(blank=True)
+    last_checked_at = models.DateTimeField(null=True, blank=True, editable=False)
+    check_result = models.CharField(max_length=300, blank=True, editable=False)
+
+    def __str__(self):
+        return f"{self.project.title} demo"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from .demos import check_readiness, validate_identifier
+
+        super().clean()
+        validate_identifier(self.release)
+        if self.enabled and self.project_id:
+            try:
+                check_readiness(self.project.slug, self.release)
+            except ValidationError as exc:
+                raise ValidationError({"enabled": exc.messages}) from exc
+
+
 class Experience(models.Model):
     """Work experience entry."""
 
