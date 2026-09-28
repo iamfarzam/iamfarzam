@@ -53,6 +53,9 @@ services:
     restart: unless-stopped
     networks:
       - portfolio_net
+    depends_on:
+      backend:
+        condition: service_healthy
 
   frontend:
     container_name: ${COMPOSE_PROJECT_NAME}-frontend
@@ -64,6 +67,7 @@ services:
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
         NEXT_PUBLIC_SITE_TITLE: ${NEXT_PUBLIC_SITE_TITLE:-Portfolio}
         NEXT_PUBLIC_REVALIDATE: ${NEXT_PUBLIC_REVALIDATE:-0}
+        PUBLIC_MEDIA_BASE_URL: ${PUBLIC_MEDIA_BASE_URL:-}
     env_file: .env
     environment:
       # Next.js standalone server defaults to binding only to the container's
@@ -75,11 +79,8 @@ services:
     networks:
       - portfolio_net
     healthcheck:
-      # "Server responded with any HTTP status" is the right liveness signal:
-      # we don't want broken SSR (e.g. unreachable API) to falsely fail the
-      # healthcheck, but we DO want to catch a hung process or unbound port.
-      # `wget -S` prints the HTTP/ status line to stderr regardless of code.
-      test: ["CMD-SHELL", "wget -q -t1 -T5 -S -O /dev/null http://127.0.0.1:3000/ 2>&1 | grep -q 'HTTP/' || exit 1"]
+      # Require both Next.js and its private Django connection to be ready.
+      test: ["CMD", "wget", "-q", "-t1", "-T5", "-O", "/dev/null", "http://127.0.0.1:3000/healthz"]
       interval: 10s
       timeout: 8s
       retries: 6

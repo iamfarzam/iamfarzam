@@ -34,6 +34,9 @@ async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> 
   const res = await fetch(`${API_BASE}${endpoint}`, {
     headers: {
       "Accept-Language": acceptLang,
+      ...(process.env.INTERNAL_API_URL && process.env.NEXT_PUBLIC_SITE_URL
+        ? { Host: new URL(process.env.NEXT_PUBLIC_SITE_URL).host }
+        : {}),
       ...(process.env.INTERNAL_API_URL && process.env.INTERNAL_API_FORWARD_PROTO === "https"
         ? { "X-Forwarded-Proto": "https" }
         : {}),

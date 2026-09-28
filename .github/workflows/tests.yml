@@ -19,6 +19,7 @@ jobs:
       - run: python manage.py check
       - run: python manage.py makemigrations --check --dry-run
       - run: python manage.py test portfolio.tests
+      - run: pip install pip-audit && pip-audit -r requirements.txt
   frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -36,3 +37,37 @@ jobs:
       - run: npm test
       - run: npm run lint
       - run: npm run build
+  production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure isolated production stack
+        run: |
+          cp .env.example .env
+          sed -i 's/replace-with-a-long-random-secret-key-min-50-chars/isolated-ci-only-0123456789abcdef0123456789abcdef0123456789abcdef/' .env
+          sed -i 's/NGINX_PROXY_SCHEME=auto/NGINX_PROXY_SCHEME=https/' .env
+          sed -i 's/NGINX_BIND_ADDRESS=0.0.0.0/NGINX_BIND_ADDRESS=127.0.0.1/' .env
+          sed -i 's/NGINX_HTTP_PORT=80/NGINX_HTTP_PORT=8080/' .env
+          mkdir -p fixtures demos/published demos/config demos/staging
+          bash -n deploy.sh
+          node --test scripts/deployment.test.mjs scripts/check-private-files.test.mjs
+          docker compose -f docker-compose.prod.yml config --quiet
+      - name: Build and start production images
+        run: docker compose -f docker-compose.prod.yml up --build -d --wait --wait-timeout 180
+      - name: Verify production services
+        run: |
+          docker compose -f docker-compose.prod.yml exec -T backend python manage.py check --deploy --fail-level WARNING
+          docker compose -f docker-compose.prod.yml exec -T backend python manage.py migrate --check
+          docker compose -f docker-compose.prod.yml exec -T backend python manage.py test portfolio.tests --settings=config.settings.dev
+          docker compose -f docker-compose.prod.yml exec -T nginx nginx -t
+          curl --fail --max-time 15 -H 'Host: example.com' http://127.0.0.1:8080/healthz/
+          curl --fail --max-time 15 -H 'Host: example.com' http://127.0.0.1:8080/frontend-healthz/
+          curl --fail --max-time 15 -H 'Host: example.com' http://127.0.0.1:8080/ -o /dev/null
+          SMOKE_HOST=example.com node scripts/production-smoke.mjs
+          docker compose -f docker-compose.prod.yml exec -T celery celery -A config inspect ping --timeout 10
+      - name: Logs
+        if: failure()
+        run: docker compose -f docker-compose.prod.yml logs --tail=100
+      - name: Clean up
+        if: always()
+        run: docker compose -f docker-compose.prod.yml down -v

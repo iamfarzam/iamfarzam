@@ -15,6 +15,9 @@ services:
   redis:
     container_name: portfolio-redis
     image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -44,6 +47,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import os,urllib.request; h=(os.environ.get('NGINX_SERVER_NAMES') or 'localhost').split()[0]; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/healthz/', headers={'Host':h,'X-Forwarded-Proto':'https'}), timeout=3)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
 
   celery:
     container_name: portfolio-celery
@@ -57,6 +66,8 @@ services:
       - backend_logs:/app/logs
     restart: unless-stopped
     depends_on:
+      backend:
+        condition: service_healthy
       redis:
         condition: service_healthy
       postgres:
@@ -72,12 +83,20 @@ services:
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
         NEXT_PUBLIC_SITE_TITLE: ${NEXT_PUBLIC_SITE_TITLE:-Portfolio}
         NEXT_PUBLIC_REVALIDATE: ${NEXT_PUBLIC_REVALIDATE:-0}
+        PUBLIC_MEDIA_BASE_URL: ${PUBLIC_MEDIA_BASE_URL:-}
     env_file: .env
     environment:
       HOSTNAME: 0.0.0.0
     restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-t1", "-T5", "-O", "/dev/null", "http://127.0.0.1:3000/healthz"]
+      interval: 10s
+      timeout: 8s
+      retries: 6
+      start_period: 30s
 
   nginx:
     container_name: portfolio-nginx
@@ -86,12 +105,13 @@ services:
     environment:
       DEMOS_BASE_DOMAIN: ${DEMOS_BASE_DOMAIN:-example.com}
       NGINX_PROXY_SCHEME: ${NGINX_PROXY_SCHEME:-auto}
+      NGINX_TRUSTED_PROXY: ${NGINX_TRUSTED_PROXY:-127.0.0.1}
       DEMOS_AUTH_HOST: ${DEMOS_AUTH_HOST:-localhost}
       DEMOS_GATE_SECRET: ${DEMOS_GATE_SECRET:-}
       NGINX_BACKEND: portfolio-backend:8000
       NGINX_FRONTEND: portfolio-frontend:3000
     ports:
-      - "80:80"
+      - "${NGINX_BIND_ADDRESS:-0.0.0.0}:${NGINX_HTTP_PORT:-80}:80"
     volumes:
       - ./nginx/demos.conf:/etc/nginx/templates/demos.conf.template:ro
       - ${DEMOS_HOST_ROOT:-./demos}/published:/demos/published:ro
@@ -103,10 +123,13 @@ services:
       - default
     restart: unless-stopped
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
 
 volumes:
+  redis_data:
   postgres_data:
   backend_static:
   backend_media:
