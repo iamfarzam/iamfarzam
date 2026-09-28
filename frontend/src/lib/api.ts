@@ -34,8 +34,10 @@ async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> 
   const res = await fetch(`${API_BASE}${endpoint}`, {
     headers: {
       "Accept-Language": acceptLang,
+      // fetch() silently discards a Host header, so the public host has to
+      // travel as X-Forwarded-Host; Django reads it via USE_X_FORWARDED_HOST.
       ...(process.env.INTERNAL_API_URL && process.env.NEXT_PUBLIC_SITE_URL
-        ? { Host: new URL(process.env.NEXT_PUBLIC_SITE_URL).host }
+        ? { "X-Forwarded-Host": new URL(process.env.NEXT_PUBLIC_SITE_URL).host }
         : {}),
       ...(process.env.INTERNAL_API_URL && process.env.INTERNAL_API_FORWARD_PROTO === "https"
         ? { "X-Forwarded-Proto": "https" }

@@ -31,7 +31,7 @@ class ProductionSettingsTests(SimpleTestCase):
                 "['DEBUG', 'SECURE_SSL_REDIRECT', 'SESSION_COOKIE_SECURE', "
                 "'CSRF_COOKIE_SECURE', 'SECURE_HSTS_SECONDS', "
                 "'SECURE_HSTS_INCLUDE_SUBDOMAINS', 'SECURE_HSTS_PRELOAD', "
-                "'SILENCED_SYSTEM_CHECKS', 'CACHES', 'REST_FRAMEWORK']}))"
+                "'SILENCED_SYSTEM_CHECKS', 'CACHES', 'REST_FRAMEWORK', 'USE_X_FORWARDED_HOST']}))"
             )],
             cwd=settings.BASE_DIR,
             env=env,
@@ -56,6 +56,8 @@ class ProductionSettingsTests(SimpleTestCase):
         self.assertEqual(result["CACHES"]["default"]["BACKEND"], "django.core.cache.backends.redis.RedisCache")
         self.assertEqual(result["CACHES"]["default"]["LOCATION"], "redis://redis:6379/1")
         self.assertEqual(result["REST_FRAMEWORK"]["NUM_PROXIES"], 1)
+        # Server-side rendering can only present the public host this way.
+        self.assertTrue(result["USE_X_FORWARDED_HOST"])
 
     def test_isolated_http_override_and_custom_cache(self):
         result = self.read_settings({
@@ -67,6 +69,15 @@ class ProductionSettingsTests(SimpleTestCase):
         self.assertFalse(result["CSRF_COOKIE_SECURE"])
         self.assertEqual(result["SECURE_HSTS_SECONDS"], 0)
         self.assertEqual(result["CACHES"]["default"]["LOCATION"], "redis://cache:6379/2")
+
+    def test_broker_without_a_database_still_yields_a_reachable_cache(self):
+        result = self.read_settings({"CELERY_BROKER_URL": "redis://redis:6379"})
+        self.assertEqual(result["CACHES"]["default"]["LOCATION"], "redis://redis:6379/1")
+
+    def test_non_redis_broker_is_never_used_as_a_cache_location(self):
+        result = self.read_settings({"CELERY_BROKER_URL": "amqp://broker:example-password@rabbit:5672//"})
+        self.assertNotIn("redis", result["CACHES"]["default"]["BACKEND"])
+        self.assertNotIn("amqp", json.dumps(result["CACHES"]))
 
     def test_existing_proxy_deployments_keep_their_redirect_default(self):
         result = self.read_settings()

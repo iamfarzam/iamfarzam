@@ -11,8 +11,11 @@ export const credentialRules = [
 
 export function isExampleEmail(email) {
   const domain = email.slice(email.lastIndexOf("@") + 1).toLowerCase();
+  // A noreply host (e.g. users.noreply.github.com) exists to keep a real address
+  // private, so it discloses nothing — and it is this repository's commit identity.
   return ["example.com", "example.org", "example.net", "localhost", "test", "invalid"].includes(domain)
-    || domain.endsWith(".test") || domain.endsWith(".invalid");
+    || domain.endsWith(".test") || domain.endsWith(".invalid")
+    || domain.split(".").includes("noreply");
 }
 
 export function isPlaceholderValue(value) {

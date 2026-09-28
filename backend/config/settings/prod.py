@@ -58,6 +58,11 @@ else:
     }
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Node's fetch() silently drops a Host header, so server-side rendering cannot
+# present the public host that way and would otherwise arrive as the colour's
+# internal container name. Nginx overwrites this header on every public path, so
+# a visitor cannot choose it, and ALLOWED_HOSTS still validates whatever arrives.
+USE_X_FORWARDED_HOST = True
 # Preserve existing installations: opt in after verifying the TLS proxy hop.
 SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
 SECURE_HSTS_SECONDS = config(
@@ -127,11 +132,22 @@ def _derive_csrf_trusted_origins() -> list[str]:
 CSRF_TRUSTED_ORIGINS = _derive_csrf_trusted_origins()
 
 # Contact throttles must be shared across workers and deployment colours.
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": config("DJANGO_CACHE_URL", default=CELERY_BROKER_URL.rsplit("/", 1)[0] + "/1"),
+# Derive the cache database from the broker only when it is actually Redis, and
+# by URL parts: a broker written without a database ("redis://redis:6379") would
+# otherwise yield "redis://1" and take the throttle cache down after an upgrade.
+_broker = urlparse(CELERY_BROKER_URL)
+_default_cache_url = (
+    _broker._replace(path="/1").geturl() if _broker.scheme in {"redis", "rediss"} else ""
+)
+_cache_url = config("DJANGO_CACHE_URL", default=_default_cache_url)
+if _cache_url:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": _cache_url,
+        }
     }
-}
+# Otherwise keep Django's per-process default: a non-Redis broker gives us no
+# shared cache to borrow, and set DJANGO_CACHE_URL to share throttles again.
 # Nginx supplies exactly one trusted client address; visitor headers are replaced.
 REST_FRAMEWORK["NUM_PROXIES"] = 1

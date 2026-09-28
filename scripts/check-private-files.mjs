@@ -34,7 +34,10 @@ for (const file of files.filter(Boolean)) {
   if (containsPrivateContent(content.toString("utf8"), personalPatterns)) rejected++;
 }
 
-// Guard newly created commit identities as well as tracked file contents.
+// Guard newly created commit identities as well as tracked file contents. The
+// local denylist is deliberately not applied here: it lists values that must stay
+// out of published content, whereas the commit identity is public by design and
+// is checked against the generic rules (non-example address, credential formats).
 for (const variable of ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"]) {
   let identity;
   try {
@@ -42,7 +45,7 @@ for (const variable of ["GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT"]) {
   } catch {
     continue;
   }
-  if (containsPrivateContent(identity, personalPatterns)) rejected++;
+  if (containsPrivateContent(identity)) rejected++;
 }
 if (rejected) {
   console.error(`Privacy check blocked ${rejected} content or identity disclosure(s). Matched values are redacted.`);

@@ -19,10 +19,18 @@
 
 ## Checklist
 
+These mirror the checks CI runs; run the ones your change touches.
+
 - [ ] Code follows the project's style and conventions
-- [ ] No secrets, credentials, or `.env` values are committed
-- [ ] Frontend builds without errors (`npm run build`)
-- [ ] Backend passes Django system checks (`python manage.py check`)
+- [ ] Privacy guard passes (`node scripts/check-private-files.mjs`) — no secrets,
+      credentials, `.env` values or `demos/` content committed
+- [ ] Backend: `python manage.py check`, `python manage.py makemigrations --check --dry-run`
+      and `python manage.py test portfolio.tests` pass from `backend/`
+- [ ] Frontend: `npm test`, `npm run lint` and `npm run build` pass from `frontend/`
+- [ ] Infrastructure/deploy changes: `bash -n deploy.sh`,
+      `node --test scripts/deployment.test.mjs scripts/check-private-files.test.mjs`
+      and `docker compose -f docker-compose.prod.yml config --quiet` pass
+- [ ] Dependency changes: `npm audit --omit=dev` and `pip-audit -r requirements.txt` are clean
 - [ ] Documentation has been updated (if applicable)
 - [ ] Changes are mobile-responsive (if frontend)
 

@@ -5,8 +5,10 @@ export async function GET() {
     const base = process.env.INTERNAL_API_URL || "http://localhost:8000/api/v1";
     const url = new URL("/healthz/", base);
     const headers: Record<string, string> = {};
+    // fetch() silently discards a Host header, so the public host has to travel
+    // as X-Forwarded-Host; otherwise Django rejects the colour's internal name.
     if (process.env.NEXT_PUBLIC_SITE_URL) {
-      headers.Host = new URL(process.env.NEXT_PUBLIC_SITE_URL).host;
+      headers["X-Forwarded-Host"] = new URL(process.env.NEXT_PUBLIC_SITE_URL).host;
     }
     if (process.env.INTERNAL_API_FORWARD_PROTO === "https") {
       headers["X-Forwarded-Proto"] = "https";

@@ -80,6 +80,46 @@ preflight() {
     [[ -f "$APP_FILE" ]]   || die "$APP_FILE missing — run from the repo root"
     [[ -f "$ENV_FILE" ]]   || die "$ENV_FILE missing — copy .env.example and fill in secrets"
     git rev-parse --git-dir >/dev/null 2>&1 || die "Not inside a git repository"
+    check_required_env
+    check_proxy_scheme
+    check_compose_models
+}
+
+# Fail on a missing value before spending a full image build to discover it.
+check_required_env() {
+    local missing=() name
+    for name in DJANGO_SECRET_KEY DATABASE_URL POSTGRES_PASSWORD ALLOWED_HOSTS \
+                NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_API_URL NGINX_SERVER_NAMES \
+                CELERY_BROKER_URL; do
+        [[ -n "$(env_value "$name")" ]] || missing+=("$name")
+    done
+    [[ ${#missing[@]} -eq 0 ]] || die "${ENV_FILE} is missing values for: ${missing[*]}"
+}
+
+check_compose_models() {
+    docker compose -f "$INFRA_FILE" config --quiet >/dev/null 2>&1 \
+        || die "$INFRA_FILE is not a valid Compose model"
+    COMPOSE_PROJECT_NAME="portfolio-blue" docker compose -f "$APP_FILE" config --quiet >/dev/null 2>&1 \
+        || die "$APP_FILE is not a valid Compose model"
+}
+
+env_value() {
+    grep -E "^$1=" "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '[:space:]' || true
+}
+
+check_proxy_scheme() {
+    # The hop into container nginx is plain HTTP. With SECURE_SSL_REDIRECT on,
+    # Django 301s everything unless nginx asserts https, which would only be
+    # discovered after the flip — so refuse the deploy up front instead.
+    local redirect scheme
+    redirect="$(env_value SECURE_SSL_REDIRECT | tr '[:upper:]' '[:lower:]')"
+    scheme="$(env_value NGINX_PROXY_SCHEME | tr '[:upper:]' '[:lower:]')"
+    case "$redirect" in
+        1|true|yes|on)
+            [[ "$scheme" == "https" ]] || die \
+                "SECURE_SSL_REDIRECT is enabled but NGINX_PROXY_SCHEME=${scheme:-auto}; set NGINX_PROXY_SCHEME=https in ${ENV_FILE}"
+            ;;
+    esac
 }
 
 # ---------------------------------------------------------------------------
@@ -120,7 +160,9 @@ resolve_version() {
     fi
     if git describe --tags --abbrev=0 >/dev/null 2>&1; then
         local desc
-        desc="$(git describe --tags --always --dirty=.dirty 2>/dev/null)"
+        # SemVer build metadata, not a fourth version part: "0.21.0.dirty" is not
+        # a version, and PROJECT_VERSION is asserted to be SemVer.
+        desc="$(git describe --tags --always --dirty=+dirty 2>/dev/null)"
         echo "${desc#v}"
     else
         local count sha dirty=""
@@ -210,6 +252,20 @@ smoke_test_internal() {
     return 1
 }
 
+status_via_nginx() {
+    local host="$1" path="$2" timeout="$3"
+    # BusyBox wget has no --max-redirect and follows a 301 to the real public
+    # domain, which would smoke-test the OLD live site instead of this stack.
+    # Read the first status line only, so a redirect is never mistaken for a pass.
+    docker exec portfolio-nginx sh -c \
+        "wget -S -T ${timeout} -O /dev/null --header='Host: ${host}' 'http://127.0.0.1${path}' 2>&1 | grep -m1 'HTTP/'" \
+        2>/dev/null | grep -oE 'HTTP/[0-9.]+ [0-9]{3}' | grep -oE '[0-9]{3}$'
+}
+
+probe_via_nginx() {
+    [[ "$(status_via_nginx "$1" "$2" "$3")" =~ ^2[0-9][0-9]$ ]]
+}
+
 smoke_test_public() {
     local host
     host="$(primary_host)"
@@ -217,12 +273,17 @@ smoke_test_public() {
     # Use 127.0.0.1 explicitly: 'localhost' often resolves to IPv6 ::1 first
     # in alpine /etc/hosts, and nginx in this image listens on IPv4 only.
     for _ in $(seq 1 15); do
-        if docker exec portfolio-nginx wget -q -T 5 -O /dev/null --header="Host: ${host}" \
-            "http://127.0.0.1${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1 \
-            && docker exec portfolio-nginx wget -q -T 5 -O /dev/null --header="Host: ${host}" \
-            "http://127.0.0.1/frontend-healthz/" >/dev/null 2>&1 \
-            && docker exec portfolio-nginx wget -q -T 10 -O /dev/null --header="Host: ${host}" \
-            "http://127.0.0.1/" >/dev/null 2>&1; then
+        if probe_via_nginx "$host" "${PUBLIC_HEALTH_PATH}" 5 \
+            && probe_via_nginx "$host" "/frontend-healthz/" 5 \
+            && probe_via_nginx "$host" "/api/v1/projects/" 5 \
+            && probe_via_nginx "$host" "/" 10; then
+            # The private demo gate must never be reachable from the public origin.
+            local gate_status
+            gate_status="$(status_via_nginx "$host" "/internal/demos/authorize/" 5)"
+            if [[ "$gate_status" != "404" ]]; then
+                warn "Private demo gate is publicly reachable (HTTP ${gate_status:-no response})"
+                return 1
+            fi
             ok "Public endpoint responds"
             return 0
         fi

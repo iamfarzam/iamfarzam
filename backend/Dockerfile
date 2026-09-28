@@ -10,8 +10,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Pin pip before it resolves anything, so the audited resolver installs the app.
 RUN pip install --no-cache-dir --upgrade pip==26.2.1
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
