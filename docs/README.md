@@ -4,7 +4,7 @@ A full-stack, dynamic portfolio website built with **Next.js** and **Django REST
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS v4, Framer Motion |
+| Frontend | Next.js 15 (App Router), TypeScript, Tailwind CSS v4, Framer Motion |
 | Backend | Django 5, Django REST Framework, Unfold Admin |
 | Database | PostgreSQL 16 |
 | Deployment | Docker Compose, Nginx, Gunicorn |
