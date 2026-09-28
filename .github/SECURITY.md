@@ -24,6 +24,8 @@ You can expect an initial response within 48 hours.
 ## Security Practices
 
 - All secrets are managed via environment variables (`.env` files, never committed)
+- Staged content and commit identities are checked by a redacting privacy guard;
+  see [repository privacy](../docs/privacy.md).
 - API contact endpoint is rate-limited
 - CORS is restricted to configured origins
 - Django security middleware is enabled (CSRF, XSS, clickjacking protection)

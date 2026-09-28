@@ -1,4 +1,4 @@
-<h1 align="center">Hi, I'm Portfolio Contributor</h1>
+<h1 align="center">Portfolio</h1>
 
 <p align="center">
   Backend developer who likes building reliable systems and shipping them carefully.<br/>
@@ -26,12 +26,6 @@
 ### Featured projects
 
 - **[Portfolio Website](docs/README.md)** — this repo. A full-stack, content-managed portfolio in Next.js + Django + DRF, deployed with Docker.
-- More on my [GitHub](https://github.com/portfolio-owner).
-
-### Find me
-
-[![GitHub](https://img.shields.io/badge/GitHub-portfolio-owner-181717?style=flat&logo=github)](https://github.com/portfolio-owner)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/portfolio-owner-portfolio-owner)
 
 ---
 
