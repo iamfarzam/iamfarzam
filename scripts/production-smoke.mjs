@@ -34,7 +34,12 @@ async function request(path) {
 for (const path of ["/healthz/", "/frontend-healthz/"]) {
   const response = await request(path);
   assert.equal(response.status, 200, `${path} must be ready`);
-  assert.deepEqual(await response.json(), { ready: true });
+  const body = await response.json();
+  assert.equal(body.ready, true, `${path} must report ready`);
+  // The backend probe also reports each dependency it verified; none may be false.
+  for (const [dependency, ok] of Object.entries(body)) {
+    assert.notEqual(ok, false, `${path} reports ${dependency} as not ready`);
+  }
   console.log(`PASS ${path}`);
 }
 
