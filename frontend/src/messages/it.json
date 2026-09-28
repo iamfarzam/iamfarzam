@@ -43,7 +43,9 @@
     "built": "Creato",
     "tech_count": "Tecnologie",
     "no_featured": "Progetti in evidenza in arrivo.",
-    "no_summary": "Riepilogo in arrivo."
+    "no_summary": "Riepilogo in arrivo.",
+    "visit_website": "Visita il sito",
+    "try_demo": "Prova la demo interattiva"
   },
   "experience": {
     "title": "Esperienza",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "Demo Live"
+    "live_demo": "Demo Live",
+    "visit_website": "Visita il sito",
+    "try_demo": "Prova la demo interattiva"
   }
 }

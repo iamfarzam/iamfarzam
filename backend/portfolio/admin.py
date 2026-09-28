@@ -30,6 +30,7 @@ from .models import (
     Skill,
     SkillCategory,
 )
+from .demo_admin import ProjectDemoInline
 
 logger = logging.getLogger(__name__)
 
@@ -165,12 +166,14 @@ class SkillCategoryAdmin(ModelAdmin, TabbedTranslationAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(ModelAdmin, TabbedTranslationAdmin):
+    inlines = [ProjectDemoInline]
     list_display = [
         "title",
         "show_featured",
         "tech_list",
         "order",
         "show_status",
+        "demo_availability",
     ]
     list_editable = ["order"]
     list_filter = ["is_featured", "is_active", "technologies"]
@@ -178,6 +181,12 @@ class ProjectAdmin(ModelAdmin, TabbedTranslationAdmin):
     search_fields = ["title", "summary"]
     prepopulated_fields = {"slug": ("title",)}
     filter_horizontal = ["technologies"]
+
+    @display(description="Demo")
+    def demo_availability(self, obj):
+        from .demos import demo_public_info
+        return "Enabled" if demo_public_info(obj) else "Unavailable"
+
     fieldsets = [
         (
             "Project Details",

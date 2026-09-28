@@ -43,7 +43,9 @@
     "built": "제작",
     "tech_count": "기술",
     "no_featured": "주요 프로젝트가 곧 공개됩니다.",
-    "no_summary": "요약이 곧 제공됩니다."
+    "no_summary": "요약이 곧 제공됩니다.",
+    "visit_website": "웹사이트 방문",
+    "try_demo": "인터랙티브 데모 체험"
   },
   "experience": {
     "title": "경력",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "라이브 데모"
+    "live_demo": "라이브 데모",
+    "visit_website": "웹사이트 방문",
+    "try_demo": "인터랙티브 데모 체험"
   }
 }

@@ -43,7 +43,9 @@
     "built": "Készült",
     "tech_count": "Technológiák",
     "no_featured": "Kiemelt projektek hamarosan.",
-    "no_summary": "Összefoglaló hamarosan."
+    "no_summary": "Összefoglaló hamarosan.",
+    "visit_website": "Weboldal megnyitása",
+    "try_demo": "Interaktív bemutató kipróbálása"
   },
   "experience": {
     "title": "Tapasztalat",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "Élő Demó"
+    "live_demo": "Élő Demó",
+    "visit_website": "Weboldal megnyitása",
+    "try_demo": "Interaktív bemutató kipróbálása"
   }
 }

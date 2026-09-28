@@ -170,6 +170,8 @@ export default function GlobalError({
             <button className="btn btn-primary" onClick={() => reset()}>
               Try Again
             </button>
+            {/* Recover with a full reload when the router or root layout has failed. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a className="btn btn-outline" href="/">
               Go Home
             </a>

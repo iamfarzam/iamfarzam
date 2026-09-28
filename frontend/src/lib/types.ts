@@ -37,6 +37,12 @@ export interface Technology {
 }
 
 export interface ProjectSummary {
+  demo?: {
+    url: string;
+    type: "static" | "backend";
+    instructions: string;
+    disclosure: string;
+  } | null;
   title: string;
   slug: string;
   summary: string;

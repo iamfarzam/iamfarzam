@@ -96,6 +96,7 @@ class TechnologySerializer(serializers.ModelSerializer):
 
 
 class ProjectListSerializer(serializers.ModelSerializer):
+    demo = serializers.SerializerMethodField()
     technologies = TechnologySerializer(many=True, read_only=True)
     thumbnail = serializers.SerializerMethodField()
 
@@ -104,14 +105,19 @@ class ProjectListSerializer(serializers.ModelSerializer):
         fields = [
             "title", "slug", "summary", "thumbnail",
             "technologies", "github_url", "live_url", "is_featured",
-            "created_at", "updated_at",
+            "created_at", "updated_at", "demo",
         ]
 
     def get_thumbnail(self, obj):
         return safe_file_url(obj.thumbnail, self.context.get("request"))
 
+    def get_demo(self, obj):
+        from .demos import demo_public_info
+        return demo_public_info(obj)
+
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
+    demo = serializers.SerializerMethodField()
     technologies = TechnologySerializer(many=True, read_only=True)
     thumbnail = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
@@ -121,7 +127,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
         fields = [
             "title", "slug", "summary", "description", "thumbnail", "image",
             "technologies", "github_url", "live_url", "is_featured",
-            "created_at", "updated_at",
+            "created_at", "updated_at", "demo",
         ]
 
     def get_thumbnail(self, obj):
@@ -129,6 +135,10 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         return safe_file_url(obj.image, self.context.get("request"))
+
+    def get_demo(self, obj):
+        from .demos import demo_public_info
+        return demo_public_info(obj)
 
 
 class ExperienceSerializer(serializers.ModelSerializer):

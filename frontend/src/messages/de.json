@@ -43,7 +43,9 @@
     "built": "Erstellt",
     "tech_count": "Technologien",
     "no_featured": "Empfohlene Projekte folgen in Kürze.",
-    "no_summary": "Zusammenfassung folgt in Kürze."
+    "no_summary": "Zusammenfassung folgt in Kürze.",
+    "visit_website": "Website besuchen",
+    "try_demo": "Interaktive Demo testen"
   },
   "experience": {
     "title": "Erfahrung",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "Live-Demo"
+    "live_demo": "Live-Demo",
+    "visit_website": "Website besuchen",
+    "try_demo": "Interaktive Demo testen"
   }
 }

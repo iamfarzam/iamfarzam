@@ -32,7 +32,12 @@ export class ApiNotFoundError extends Error {
 async function fetchAPI<T>(endpoint: string, locale: string = "en"): Promise<T> {
   const acceptLang = normalizeApiLocale(locale);
   const res = await fetch(`${API_BASE}${endpoint}`, {
-    headers: { "Accept-Language": acceptLang },
+    headers: {
+      "Accept-Language": acceptLang,
+      ...(process.env.INTERNAL_API_URL && process.env.INTERNAL_API_FORWARD_PROTO === "https"
+        ? { "X-Forwarded-Proto": "https" }
+        : {}),
+    },
     ...cacheOption,
   });
   if (res.status === 404) {

@@ -43,7 +43,9 @@
     "built": "Creado",
     "tech_count": "Tecnologías",
     "no_featured": "Próximamente proyectos destacados.",
-    "no_summary": "Resumen próximamente."
+    "no_summary": "Resumen próximamente.",
+    "visit_website": "Visitar sitio web",
+    "try_demo": "Probar demo interactiva"
   },
   "experience": {
     "title": "Experiencia",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "Demo en vivo"
+    "live_demo": "Demo en vivo",
+    "visit_website": "Visitar sitio web",
+    "try_demo": "Probar demo interactiva"
   }
 }

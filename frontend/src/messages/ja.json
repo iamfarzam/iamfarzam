@@ -43,7 +43,9 @@
     "built": "制作年",
     "tech_count": "使用技術",
     "no_featured": "注目プロジェクトは近日公開予定です。",
-    "no_summary": "概要は近日公開予定です。"
+    "no_summary": "概要は近日公開予定です。",
+    "visit_website": "ウェブサイトを見る",
+    "try_demo": "操作できるデモを試す"
   },
   "experience": {
     "title": "経歴",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "ライブデモ"
+    "live_demo": "ライブデモ",
+    "visit_website": "ウェブサイトを見る",
+    "try_demo": "操作できるデモを試す"
   }
 }

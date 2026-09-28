@@ -29,7 +29,11 @@ services:
     env_file: .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.prod
+      - DEMOS_ROOT=/app/demos
     volumes:
+      - ${DEMOS_HOST_ROOT:-./demos}/published:/app/demos/published:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/config:/app/demos/config:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/staging:/app/demos/staging:ro
       - backend_static:/app/staticfiles
       - backend_media:/app/media
       - backend_logs:/app/logs
@@ -69,6 +73,8 @@ services:
         NEXT_PUBLIC_SITE_TITLE: ${NEXT_PUBLIC_SITE_TITLE:-Portfolio}
         NEXT_PUBLIC_REVALIDATE: ${NEXT_PUBLIC_REVALIDATE:-0}
     env_file: .env
+    environment:
+      HOSTNAME: 0.0.0.0
     restart: unless-stopped
     depends_on:
       - backend
@@ -77,12 +83,24 @@ services:
     container_name: portfolio-nginx
     image: nginx:alpine
     env_file: .env
+    environment:
+      DEMOS_BASE_DOMAIN: ${DEMOS_BASE_DOMAIN:-example.com}
+      NGINX_PROXY_SCHEME: ${NGINX_PROXY_SCHEME:-auto}
+      DEMOS_AUTH_HOST: ${DEMOS_AUTH_HOST:-localhost}
+      DEMOS_GATE_SECRET: ${DEMOS_GATE_SECRET:-}
+      NGINX_BACKEND: portfolio-backend:8000
+      NGINX_FRONTEND: portfolio-frontend:3000
     ports:
       - "80:80"
     volumes:
+      - ./nginx/demos.conf:/etc/nginx/templates/demos.conf.template:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/published:/demos/published:ro
       - ./nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
       - backend_static:/static:ro
       - backend_media:/media:ro
+    networks:
+      - demo_edge
+      - default
     restart: unless-stopped
     depends_on:
       - frontend
@@ -93,3 +111,7 @@ volumes:
   backend_static:
   backend_media:
   backend_logs:
+
+networks:
+  demo_edge:
+    name: portfolio_demo_edge

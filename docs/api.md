@@ -58,6 +58,21 @@ Returns skill categories with nested skills.
 
 Returns all active projects.
 
+Project list and detail responses also include `demo`, either `null` or:
+
+```json
+{
+  "url": "https://demo-sample-project.example.com/",
+  "type": "static",
+  "instructions": "Explore the fictional sample workspace and reset it when finished.",
+  "disclosure": "Interactive workflow replica with synthetic data."
+}
+```
+
+Runtime type is `static` or `backend`. Existing `live_url` retains the project's
+website link. Private release paths, service registry and readiness diagnostics
+are never included. See [Private demos](demos.md) for upload and activation.
+
 **Response:**
 
 ```json

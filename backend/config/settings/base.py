@@ -237,6 +237,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 # but image URLs must be reachable from external clients and OG scrapers.
 PUBLIC_MEDIA_BASE_URL = config("PUBLIC_MEDIA_BASE_URL", default="")
 
+# Demo content is uploaded separately; never bundled into application images.
+DEMOS_ENABLED = config("DEMOS_ENABLED", default=False, cast=bool)
+DEMOS_ROOT = Path(config("DEMOS_ROOT", default=str(BASE_DIR.parent / "demos")))
+# Root DNS zone: demos use demo-<project>.<zone>, compatible with first-level TLS.
+DEMOS_BASE_DOMAIN = config("DEMOS_BASE_DOMAIN", default="example.com")
+DEMOS_GATE_SECRET = config("DEMOS_GATE_SECRET", default="")
+DEMOS_HEALTH_TIMEOUT = 2
+DEMOS_PROXY_URL = config("DEMOS_PROXY_URL", default="http://nginx")
+
+# Demo subdomains must never receive portfolio cookies.
+SESSION_COOKIE_DOMAIN = None
+CSRF_COOKIE_DOMAIN = None
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery

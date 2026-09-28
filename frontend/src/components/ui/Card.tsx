@@ -17,6 +17,7 @@ interface CardProps {
   technologies?: { name: string; icon: string }[];
   githubUrl?: string;
   liveUrl?: string;
+  demoUrl?: string;
 }
 
 export default function Card({
@@ -27,11 +28,12 @@ export default function Card({
   technologies = [],
   githubUrl,
   liveUrl,
+  demoUrl,
 }: CardProps) {
   const t = useTranslations();
   const visibleTechs = technologies.slice(0, MAX_TECH_BADGES);
   const hiddenCount = technologies.length - visibleTechs.length;
-  const hasLinks = Boolean(githubUrl || liveUrl);
+  const hasLinks = Boolean(githubUrl || liveUrl || demoUrl);
 
   return (
     <motion.article
@@ -105,7 +107,13 @@ export default function Card({
                 rel="noopener noreferrer"
                 className="text-sm text-text-muted transition-colors hover:text-accent"
               >
-                {t("card.live_demo")} &rarr;
+                {t("card.visit_website")} &rarr;
+              </a>
+            )}
+            {demoUrl && (
+              <a href={demoUrl} target="_blank" rel="noopener noreferrer"
+                className="text-sm font-medium text-accent hover:underline">
+                {t("card.try_demo")} &rarr;
               </a>
             )}
           </div>

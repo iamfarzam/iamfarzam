@@ -7,7 +7,7 @@
 
 For local development without Docker:
 - Python 3.12+
-- Node.js 20+
+- Node.js 22 LTS (22.12 or later)
 
 ## Setup with Docker (Recommended)
 

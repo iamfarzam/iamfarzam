@@ -40,15 +40,24 @@ services:
     env_file: .env
     environment:
       ACTIVE_COLOR: ${ACTIVE_COLOR:-blue}
+      NGINX_PROXY_SCHEME: ${NGINX_PROXY_SCHEME:-auto}
+      DEMOS_BASE_DOMAIN: ${DEMOS_BASE_DOMAIN:-example.com}
+      DEMOS_AUTH_HOST: ${DEMOS_AUTH_HOST:-localhost}
+      DEMOS_GATE_SECRET: ${DEMOS_GATE_SECRET:-}
+      NGINX_BACKEND: portfolio-${ACTIVE_COLOR:-blue}-backend:8000
+      NGINX_FRONTEND: portfolio-${ACTIVE_COLOR:-blue}-frontend:3000
     ports:
       - "80:80"
     volumes:
+      - ./nginx/demos.conf:/etc/nginx/templates/demos.conf.template:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/published:/demos/published:ro
       - ./nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
       - backend_static:/static:ro
       - backend_media:/media:ro
-    restart: unless-stopped
     networks:
+      - demo_edge
       - portfolio_net
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,5 +72,7 @@ volumes:
     name: portfolio_backend_media
 
 networks:
+  demo_edge:
+    name: portfolio_demo_edge
   portfolio_net:
     name: portfolio_net
