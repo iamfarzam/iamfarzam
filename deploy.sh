@@ -35,7 +35,7 @@ STATE_FILE=".deployed.state"
 VERSION_FILE="backend/VERSION"
 ENV_FILE=".env"
 HEALTHCHECK_TIMEOUT=120
-PUBLIC_HEALTH_PATH="/api/v1/profile/"
+PUBLIC_HEALTH_PATH="/healthz/"
 
 if [[ -t 1 ]]; then
     BOLD=$'\033[1m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'; RED=$'\033[31m'; CYAN=$'\033[36m'; RESET=$'\033[0m'

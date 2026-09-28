@@ -32,7 +32,11 @@ services:
     env_file: .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.dev
+      - DEMOS_ROOT=/app/demos
     volumes:
+      - ${DEMOS_HOST_ROOT:-./demos}/published:/app/demos/published:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/config:/app/demos/config:ro
+      - ${DEMOS_HOST_ROOT:-./demos}/staging:/app/demos/staging:ro
       - ./backend:/app
       - backend_media:/app/media
       - ./fixtures:/app/fixtures:ro

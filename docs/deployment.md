@@ -1,5 +1,7 @@
 # Deployment
 
+Optional private interactive demos are documented in [demos.md](demos.md).
+
 ## Docker Compose (Self-Hosted VPS)
 
 ### Prerequisites
@@ -41,6 +43,7 @@ CORS_ALLOWED_ORIGINS=https://yourdomain.com
 CSRF_TRUSTED_ORIGINS=https://yourdomain.com
 NEXT_PUBLIC_API_URL=https://yourdomain.com/api/v1
 INTERNAL_API_URL=http://backend:8000/api/v1
+INTERNAL_API_FORWARD_PROTO=https
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 ```
 
@@ -67,6 +70,13 @@ NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 
 ### SSL/TLS
 
+When HTTPS terminates at an outer reverse proxy, set `NGINX_PROXY_SCHEME=https`
+and restrict the Nginx origin listener to that trusted proxy. This preserves
+secure Django admin requests through the private HTTP hop. Keep
+`INTERNAL_API_FORWARD_PROTO=https` for server-rendered API requests if Django's
+`SECURE_SSL_REDIRECT` is enabled. When Nginx terminates TLS itself, leave
+`NGINX_PROXY_SCHEME=auto`.
+
 For HTTPS, add your SSL certificates to the Nginx configuration. Update `nginx/default.conf`:
 
 ```nginx
@@ -86,6 +96,9 @@ server {
 ---
 
 ## Updating Content
+
+The `/healthz/` readiness endpoint checks database connectivity and works before
+any profile exists. Create a profile and projects in admin after a fresh install.
 
 1. Log into Django admin at `/admin/`
 2. Add or edit content
