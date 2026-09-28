@@ -11,10 +11,12 @@ describe("internal API HTTPS forwarding", () => {
   it("preserves HTTPS for server fetches through the configured private HTTP hop", async () => {
     vi.stubEnv("INTERNAL_API_URL", "http://backend:8000/api/v1");
     vi.stubEnv("INTERNAL_API_FORWARD_PROTO", "https");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://example.com");
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => [] });
     vi.stubGlobal("fetch", fetchMock);
     await fetchProjects();
     expect(fetchMock.mock.calls[0][1].headers["X-Forwarded-Proto"]).toBe("https");
+    expect(fetchMock.mock.calls[0][1].headers.Host).toBe("example.com");
   });
 
   it("does not assert HTTPS when private forwarding is unconfigured", async () => {

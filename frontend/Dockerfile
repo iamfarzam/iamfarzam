@@ -24,6 +24,7 @@ ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_SITE_TITLE
 ARG NEXT_PUBLIC_REVALIDATE
+ARG PUBLIC_MEDIA_BASE_URL
 RUN --mount=type=cache,target=/app/.next/cache npm run build
 
 # --- Production ---

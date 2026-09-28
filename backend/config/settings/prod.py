@@ -58,6 +58,7 @@ else:
     }
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Preserve existing installations: opt in after verifying the TLS proxy hop.
 SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
 SECURE_HSTS_SECONDS = config(
     "SECURE_HSTS_SECONDS",
@@ -70,6 +71,9 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
     cast=bool,
 )
 SECURE_HSTS_PRELOAD = config("SECURE_HSTS_PRELOAD", default=False, cast=bool)
+# These optional, domain-wide policies require the domain owner's explicit opt-in.
+# Keep all other deployment warnings active, including HTTPS and cookie checks.
+SILENCED_SYSTEM_CHECKS = ["security.W005", "security.W021"]
 
 SESSION_COOKIE_SECURE = config(
     "SESSION_COOKIE_SECURE",
@@ -121,3 +125,13 @@ def _derive_csrf_trusted_origins() -> list[str]:
 
 
 CSRF_TRUSTED_ORIGINS = _derive_csrf_trusted_origins()
+
+# Contact throttles must be shared across workers and deployment colours.
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": config("DJANGO_CACHE_URL", default=CELERY_BROKER_URL.rsplit("/", 1)[0] + "/1"),
+    }
+}
+# Nginx supplies exactly one trusted client address; visitor headers are replaced.
+REST_FRAMEWORK["NUM_PROXIES"] = 1

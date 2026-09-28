@@ -173,10 +173,14 @@ reload_nginx() {
     log "Reloading nginx"
     # Recreate nginx so the templated default.conf is regenerated with the
     # new ACTIVE_COLOR. Faster and safer than a hot reload + manual rewrite.
-    infra_compose up -d --force-recreate --no-deps nginx
+    if ! infra_compose up -d --force-recreate --no-deps nginx; then
+        warn "nginx recreation failed"
+        return 1
+    fi
     sleep 2
     if ! infra_compose exec -T nginx nginx -t >/dev/null 2>&1; then
-        die "nginx config invalid after reload"
+        warn "nginx config invalid after reload"
+        return 1
     fi
     ok "nginx now points at ${1:-?} colour"
 }
@@ -213,8 +217,12 @@ smoke_test_public() {
     # Use 127.0.0.1 explicitly: 'localhost' often resolves to IPv6 ::1 first
     # in alpine /etc/hosts, and nginx in this image listens on IPv4 only.
     for _ in $(seq 1 15); do
-        if docker exec portfolio-nginx wget -qO- --header="Host: ${host}" \
-            "http://127.0.0.1${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1; then
+        if docker exec portfolio-nginx wget -q -T 5 -O /dev/null --header="Host: ${host}" \
+            "http://127.0.0.1${PUBLIC_HEALTH_PATH}" >/dev/null 2>&1 \
+            && docker exec portfolio-nginx wget -q -T 5 -O /dev/null --header="Host: ${host}" \
+            "http://127.0.0.1/frontend-healthz/" >/dev/null 2>&1 \
+            && docker exec portfolio-nginx wget -q -T 10 -O /dev/null --header="Host: ${host}" \
+            "http://127.0.0.1/" >/dev/null 2>&1; then
             ok "Public endpoint responds"
             return 0
         fi
@@ -259,6 +267,9 @@ cmd_deploy() {
     local current_active target
 
     current_active="$(read_state active || true)"
+    if [[ "$mode" == "fresh" ]] && [[ -n "$current_active" ]]; then
+        die "An active deployment already exists; use deploy instead of fresh"
+    fi
     if [[ "$mode" == "fresh" ]] || [[ -z "$current_active" ]]; then
         target="blue"
         current_active=""
@@ -289,8 +300,13 @@ cmd_deploy() {
     app_compose "$target" build
     ok "Build done"
 
+    log "Checking production security settings before startup"
+    app_compose "$target" run --rm --no-deps backend python manage.py check --deploy --fail-level WARNING
+
     log "Bringing up ${target} stack with healthcheck wait"
     if ! app_compose "$target" up -d --wait --wait-timeout "$HEALTHCHECK_TIMEOUT"; then
+        app_compose "$target" logs --tail=80
+        app_compose "$target" down
         die "Healthcheck timed out for ${target} — leaving ${current_active:-nothing} active"
     fi
     ok "${target} stack healthy"
@@ -315,9 +331,7 @@ cmd_deploy() {
 
     log "Flipping nginx to ${target}"
     set_active_colour_in_env "$target"
-    reload_nginx "$target"
-
-    if ! smoke_test_public; then
+    if ! reload_nginx "$target" || ! smoke_test_public; then
         warn "Public smoke test failed — flipping nginx back to ${current_active:-(no previous)}"
         if [[ -n "$current_active" ]]; then
             set_active_colour_in_env "$current_active"
@@ -372,9 +386,12 @@ cmd_rollback() {
 
     log "Flipping nginx back to ${previous}"
     set_active_colour_in_env "$previous"
-    reload_nginx "$previous"
-
-    smoke_test_public || die "Public smoke test failed after rollback flip"
+    if ! reload_nginx "$previous" || ! smoke_test_public; then
+        warn "Rollback verification failed; restoring ${active} upstream"
+        set_active_colour_in_env "$active"
+        reload_nginx "$active"
+        die "Rollback verification failed; deployment state retained"
+    fi
 
     log "Tearing down failed ${active} stack"
     app_compose "$active" down
