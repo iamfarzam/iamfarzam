@@ -1,0 +1,8 @@
+demos
+.git
+.env*
+output
+fixtures
+node_modules
+**/node_modules
+**/.next

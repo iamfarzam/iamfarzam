@@ -1,0 +1,9 @@
+.env*
+media
+logs
+staticfiles
+db.sqlite3
+__pycache__
+**/__pycache__
+.venv
+demos
