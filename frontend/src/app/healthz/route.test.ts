@@ -17,7 +17,10 @@ describe("frontend readiness", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("Cache-Control")).toBe("no-store");
     expect(fetchMock.mock.calls[0][0].href).toBe("http://portfolio-blue-backend:8000/healthz/");
-    expect(fetchMock.mock.calls[0][1].headers).toEqual({ Host: "example.com", "X-Forwarded-Proto": "https" });
+    expect(fetchMock.mock.calls[0][1].headers).toEqual({
+      "X-Forwarded-Host": "example.com",
+      "X-Forwarded-Proto": "https",
+    });
   });
 
   it.each([

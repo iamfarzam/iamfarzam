@@ -16,7 +16,7 @@ describe("internal API HTTPS forwarding", () => {
     vi.stubGlobal("fetch", fetchMock);
     await fetchProjects();
     expect(fetchMock.mock.calls[0][1].headers["X-Forwarded-Proto"]).toBe("https");
-    expect(fetchMock.mock.calls[0][1].headers.Host).toBe("example.com");
+    expect(fetchMock.mock.calls[0][1].headers["X-Forwarded-Host"]).toBe("example.com");
   });
 
   it("does not assert HTTPS when private forwarding is unconfigured", async () => {
