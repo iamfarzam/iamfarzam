@@ -247,3 +247,7 @@ Thumbs.db
 
 # One-off helper scripts and throwaway working files
 /tmp/
+
+# Local contributor instructions and generated artifacts
+/AGENTS.md
+/output/
