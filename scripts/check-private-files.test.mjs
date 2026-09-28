@@ -60,6 +60,12 @@ test("guard rejects staged disclosures and commit identities without printing va
     git("add", "safe.md");
     assert.equal(run().status, 0);
 
+    // A forwarding noreply identity keeps the real address private, so the guard
+    // must not block the identity this repository actually commits with.
+    git("config", "user.email", "1234567+maintainer@users.noreply.github.com");
+    assert.equal(run().status, 0);
+    git("config", "user.email", "maintainer@example.invalid");
+
     const privateEmail = "fictional-person@" + "mail-provider.com";
     writeFileSync(join(directory, "safe.md"), `Contact: ${privateEmail}\n`);
     git("add", "safe.md");
@@ -104,6 +110,13 @@ test("guard rejects staged disclosures and commit identities without printing va
     result = run();
     assert.equal(result.status, 1);
     assert.ok(!(result.stdout + result.stderr).includes(privateName));
+
+    // The denylist governs published content, not the public commit identity.
+    writeFileSync(join(directory, "safe.md"), "Safe content\n");
+    git("add", "safe.md");
+    git("config", "user.name", privateName);
+    assert.equal(run().status, 0);
+    git("config", "user.name", "Repository Maintainer");
     git("add", ".privacy-patterns.json");
     assert.equal(run().status, 1);
   } finally {
