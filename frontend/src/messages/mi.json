@@ -43,7 +43,9 @@
     "built": "Hangaia",
     "tech_count": "Hangarau",
     "no_featured": "Ka tae mai ngā kaupapa whakaata ākuanei.",
-    "no_summary": "Ka tae mai te whakarāpopototanga ākuanei."
+    "no_summary": "Ka tae mai te whakarāpopototanga ākuanei.",
+    "visit_website": "Tirohia te paetukutuku",
+    "try_demo": "Whakamātauhia te whakaaturanga pāhekoheko"
   },
   "experience": {
     "title": "Wheako",
@@ -89,6 +91,8 @@
   },
   "card": {
     "github": "GitHub",
-    "live_demo": "Demo Ora"
+    "live_demo": "Demo Ora",
+    "visit_website": "Tirohia te paetukutuku",
+    "try_demo": "Whakamātauhia te whakaaturanga pāhekoheko"
   }
 }

@@ -19,6 +19,16 @@ function makeProject(overrides: Partial<ProjectSummary> = {}): ProjectSummary {
 }
 
 describe("ProjectsSection", () => {
+  it("distinguishes an interactive demo from the existing website", () => {
+    render(<ProjectsSection projects={[makeProject({
+      live_url: "https://website.example",
+      demo: { url: "https://demo-sample.example.com/", type: "static", instructions: "", disclosure: "Synthetic data" },
+    })]} />);
+    expect(screen.getByText(/card.try_demo/)).toHaveAttribute("href", "https://demo-sample.example.com/");
+    expect(screen.getByText(/card.visit_website/)).toHaveAttribute("href", "https://website.example");
+    expect(screen.getByText(/card.try_demo/)).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
   it("renders the empty-state message when no projects are featured", () => {
     render(<ProjectsSection projects={[]} />);
     expect(screen.getByText("projects.no_featured")).toBeInTheDocument();

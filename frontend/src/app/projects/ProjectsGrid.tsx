@@ -71,6 +71,7 @@ export default function ProjectsGrid({ projects }: ProjectsGridProps) {
               technologies={project.technologies || []}
               githubUrl={project.github_url}
               liveUrl={project.live_url}
+              demoUrl={project.demo?.url}
             />
           ))}
         </AnimatePresence>

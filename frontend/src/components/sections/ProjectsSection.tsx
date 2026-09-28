@@ -32,6 +32,7 @@ export default function ProjectsSection({ projects }: ProjectsProps) {
               technologies={project.technologies}
               githubUrl={project.github_url}
               liveUrl={project.live_url}
+              demoUrl={project.demo?.url}
             />
           ))}
         </div>
