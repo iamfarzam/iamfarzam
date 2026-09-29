@@ -108,16 +108,28 @@ env_value() {
 }
 
 check_proxy_scheme() {
-    # The hop into container nginx is plain HTTP. With SECURE_SSL_REDIRECT on,
-    # Django 301s everything unless nginx asserts https, which would only be
-    # discovered after the flip — so refuse the deploy up front instead.
     local redirect scheme
     redirect="$(env_value SECURE_SSL_REDIRECT | tr '[:upper:]' '[:lower:]')"
     scheme="$(env_value NGINX_PROXY_SCHEME | tr '[:upper:]' '[:lower:]')"
     case "$redirect" in
         1|true|yes|on)
+            # The hop into container nginx is plain HTTP. With SECURE_SSL_REDIRECT
+            # on, Django 301s everything unless nginx asserts https, which would
+            # only be discovered after the flip — so refuse up front instead.
             [[ "$scheme" == "https" ]] || die \
                 "SECURE_SSL_REDIRECT is enabled but NGINX_PROXY_SCHEME=${scheme:-auto}; set NGINX_PROXY_SCHEME=https in ${ENV_FILE}"
+            ;;
+        *)
+            # 'check --deploy --fail-level WARNING' rejects this below anyway
+            # (security.W008), but only after a full image build and as a raw
+            # Django error. An .env predating these variables lands here.
+            die "SECURE_SSL_REDIRECT is not enabled in ${ENV_FILE}; production requires
+  SECURE_SSL_REDIRECT=True
+  SESSION_COOKIE_SECURE=True
+  CSRF_COOKIE_SECURE=True
+  NGINX_PROXY_SCHEME=https          (this Nginx is reached over a trusted HTTP hop)
+  INTERNAL_API_FORWARD_PROTO=https  (so server-side rendering is not redirected)
+Confirm TLS terminates at your proxy before enabling these."
             ;;
     esac
 }

@@ -63,7 +63,10 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # internal container name. Nginx overwrites this header on every public path, so
 # a visitor cannot choose it, and ALLOWED_HOSTS still validates whatever arrives.
 USE_X_FORWARDED_HOST = True
-# Preserve existing installations: opt in after verifying the TLS proxy hop.
+# Defaults to False only so importing these settings never forces a redirect on a
+# host whose TLS hop is unverified. It is not a deployable production value:
+# `check --deploy --fail-level WARNING` rejects it (security.W008), and deploy.sh
+# refuses earlier. Enable it in .env once TLS terminates at your proxy.
 SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
 SECURE_HSTS_SECONDS = config(
     "SECURE_HSTS_SECONDS",
