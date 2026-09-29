@@ -83,3 +83,23 @@ class ProductionSettingsTests(SimpleTestCase):
         result = self.read_settings()
         self.assertFalse(result["SECURE_SSL_REDIRECT"])
         self.assertEqual(result["SECURE_HSTS_SECONDS"], 0)
+
+    def test_edge_redirect_topology_is_accepted_with_secure_cookies(self):
+        result = self.read_settings({
+            "SECURE_SSL_REDIRECT": "False",
+            "SESSION_COOKIE_SECURE": "True",
+            "CSRF_COOKIE_SECURE": "True",
+        })
+        self.assertFalse(result["SECURE_SSL_REDIRECT"])
+        self.assertIn("security.W008", result["SILENCED_SYSTEM_CHECKS"])
+
+    def test_edge_redirect_topology_needs_explicitly_secure_cookies(self):
+        result = self.read_settings({"SECURE_SSL_REDIRECT": "False"})
+        self.assertNotIn("security.W008", result["SILENCED_SYSTEM_CHECKS"])
+
+    def test_absent_redirect_setting_is_never_treated_as_an_opt_out(self):
+        result = self.read_settings({
+            "SESSION_COOKIE_SECURE": "True",
+            "CSRF_COOKIE_SECURE": "True",
+        })
+        self.assertNotIn("security.W008", result["SILENCED_SYSTEM_CHECKS"])

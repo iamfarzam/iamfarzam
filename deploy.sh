@@ -119,17 +119,32 @@ check_proxy_scheme() {
             [[ "$scheme" == "https" ]] || die \
                 "SECURE_SSL_REDIRECT is enabled but NGINX_PROXY_SCHEME=${scheme:-auto}; set NGINX_PROXY_SCHEME=https in ${ENV_FILE}"
             ;;
-        *)
+        "")
             # 'check --deploy --fail-level WARNING' rejects this below anyway
             # (security.W008), but only after a full image build and as a raw
             # Django error. An .env predating these variables lands here.
-            die "SECURE_SSL_REDIRECT is not enabled in ${ENV_FILE}; production requires
-  SECURE_SSL_REDIRECT=True
-  SESSION_COOKIE_SECURE=True
-  CSRF_COOKIE_SECURE=True
-  NGINX_PROXY_SCHEME=https          (this Nginx is reached over a trusted HTTP hop)
-  INTERNAL_API_FORWARD_PROTO=https  (so server-side rendering is not redirected)
-Confirm TLS terminates at your proxy before enabling these."
+            die "SECURE_SSL_REDIRECT is not set in ${ENV_FILE}. Choose the topology:
+  SECURE_SSL_REDIRECT=True   Django redirects; also set NGINX_PROXY_SCHEME=https
+  SECURE_SSL_REDIRECT=False  the edge already redirects (e.g. Cloudflare
+                             'Always Use HTTPS'); also set SESSION_COOKIE_SECURE=True
+                             and CSRF_COOKIE_SECURE=True"
+            ;;
+        *)
+            # The edge redirects. Django's redirect would be redundant, and with an
+            # edge that reaches the origin over HTTP it would loop. Still require
+            # the cookie flags the redirect would otherwise have implied.
+            local session_secure csrf_secure
+            session_secure="$(env_value SESSION_COOKIE_SECURE | tr '[:upper:]' '[:lower:]')"
+            csrf_secure="$(env_value CSRF_COOKIE_SECURE | tr '[:upper:]' '[:lower:]')"
+            for pair in "SESSION_COOKIE_SECURE:$session_secure" "CSRF_COOKIE_SECURE:$csrf_secure"; do
+                case "${pair#*:}" in
+                    1|true|yes|on) ;;
+                    *) die "SECURE_SSL_REDIRECT is disabled, so ${pair%%:*} must be True in ${ENV_FILE}" ;;
+                esac
+            done
+            if [[ "$scheme" != "https" ]]; then
+                warn "NGINX_PROXY_SCHEME=${scheme:-auto} replaces the edge's X-Forwarded-Proto, so Django will treat HTTPS visitors as insecure; set https when the edge terminates TLS"
+            fi
             ;;
     esac
 }

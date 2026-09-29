@@ -171,6 +171,21 @@ test("refuses to deploy an env predating the HTTPS settings, before building", (
   assert.doesNotMatch(result.calls, / up /);
 });
 
+test("deploys when the edge performs the HTTPS redirect and cookies are secure", () => {
+  const atEdge = COMPLETE_ENV.replace("SECURE_SSL_REDIRECT=True", "SECURE_SSL_REDIRECT=False")
+    + "SESSION_COOKIE_SECURE=True\nCSRF_COOKIE_SECURE=True\n";
+  const result = runDeployment("health", "deploy", "", false, atEdge);
+  assert.match(result.calls, /portfolio-green up/);
+});
+
+test("refuses an edge-redirect deployment whose cookies are not secure", () => {
+  const atEdge = COMPLETE_ENV.replace("SECURE_SSL_REDIRECT=True", "SECURE_SSL_REDIRECT=False");
+  const result = runDeployment("", "deploy", "", false, atEdge);
+  assert.match(result.state, /active=blue/);
+  assert.doesNotMatch(result.calls, / build/);
+  assert.doesNotMatch(result.calls, / up /);
+});
+
 test("accepts a consistent HTTPS redirect and proxy scheme", () => {
   const result = runDeployment("health");
   assert.match(result.calls, /portfolio-green up/);

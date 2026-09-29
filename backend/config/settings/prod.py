@@ -63,11 +63,15 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # internal container name. Nginx overwrites this header on every public path, so
 # a visitor cannot choose it, and ALLOWED_HOSTS still validates whatever arrives.
 USE_X_FORWARDED_HOST = True
-# Defaults to False only so importing these settings never forces a redirect on a
-# host whose TLS hop is unverified. It is not a deployable production value:
-# `check --deploy --fail-level WARNING` rejects it (security.W008), and deploy.sh
-# refuses earlier. Enable it in .env once TLS terminates at your proxy.
-SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
+# Two supported topologies: Django performs the HTTPS redirect, or the edge does
+# (Cloudflare "Always Use HTTPS", or any proxy that redirects before the origin).
+# In the second, Django's redirect is redundant, and enabling it against an edge
+# that reaches the origin over HTTP causes a redirect loop. Distinguish an
+# explicit opt-out from an absent value so only the former is treated as a
+# deliberate choice; see the security.W008 handling below.
+_ssl_redirect_configured = config("SECURE_SSL_REDIRECT", default="").strip()
+SECURE_SSL_REDIRECT = _ssl_redirect_configured.lower() in {"1", "true", "yes", "on"}
+_redirect_handled_at_edge = bool(_ssl_redirect_configured) and not SECURE_SSL_REDIRECT
 SECURE_HSTS_SECONDS = config(
     "SECURE_HSTS_SECONDS",
     default=31536000 if SECURE_SSL_REDIRECT else 0,
@@ -93,6 +97,13 @@ CSRF_COOKIE_SECURE = config(
     default=SECURE_SSL_REDIRECT or DEMOS_ENABLED,
     cast=bool,
 )
+
+# W008 asks for Django's own redirect. When the edge already redirects, that is a
+# deliberate topology rather than a finding — but only accept it once the cookie
+# flags it would otherwise have implied are set explicitly, so this can never be
+# reached by leaving the value unset. Every other HTTPS check stays active.
+if _redirect_handled_at_edge and SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE:
+    SILENCED_SYSTEM_CHECKS = [*SILENCED_SYSTEM_CHECKS, "security.W008"]
 
 # __Host- cookies prevent a sibling demo host from shadowing portfolio cookies.
 SESSION_COOKIE_NAME = "__Host-portfolio-session" if DEMOS_ENABLED else "sessionid"
