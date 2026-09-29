@@ -191,6 +191,15 @@ test("accepts a consistent HTTPS redirect and proxy scheme", () => {
   assert.match(result.calls, /portfolio-green up/);
 });
 
+test("creates the shared logs volume before the app stack needs it", () => {
+  // The app stack declares it external, so nothing else would create it.
+  const result = runDeployment("health");
+  const created = result.calls.indexOf("volume create portfolio_backend_logs");
+  assert.notEqual(created, -1, "expected the shared logs volume to be created");
+  assert.ok(created < result.calls.indexOf("portfolio-green up"),
+    "the volume must exist before the candidate colour starts");
+});
+
 test("a dirty checkout still stamps a SemVer version into the image", () => {
   const result = runDeployment("health", "deploy", "", true);
   // PROJECT_VERSION is asserted to be SemVer, so the marker is build metadata.

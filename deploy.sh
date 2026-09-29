@@ -222,6 +222,9 @@ ensure_infra_up() {
     # Compose owns the portfolio_net network on first up; the app stack
     # declares it as external so it just attaches.
     infra_compose up -d --wait
+    # Both colours share this one; no infra service mounts it, and Compose only
+    # creates volumes a service uses, so create it here. Idempotent.
+    docker volume create portfolio_backend_logs >/dev/null
     ok "Infra healthy"
 }
 
