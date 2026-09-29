@@ -44,8 +44,7 @@
     "tech_count": "Tehnologii",
     "no_featured": "Proiecte recomandate în curând.",
     "no_summary": "Rezumat în curând.",
-    "visit_website": "Vizitează site-ul",
-    "try_demo": "Încearcă demonstrația interactivă"
+    "interactive_demo": "Demonstrație interactivă"
   },
   "experience": {
     "title": "Experiență",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Demo Live",
-    "visit_website": "Vizitează site-ul",
-    "try_demo": "Încearcă demonstrația interactivă"
+    "interactive_demo": "Demonstrație interactivă"
   }
 }

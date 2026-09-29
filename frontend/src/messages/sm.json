@@ -44,8 +44,7 @@
     "tech_count": "Tekonolosi",
     "no_featured": "O loo o mai poloketi faapitoa.",
     "no_summary": "O loo o mai le otootoga.",
-    "visit_website": "Asiasi i le upega tafaʻilagi",
-    "try_demo": "Faataʻitaʻi le faaaliga fegalegaleai"
+    "interactive_demo": "Faaaliga fegalegaleai"
   },
   "experience": {
     "title": "Poto",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Demo Tuusao",
-    "visit_website": "Asiasi i le upega tafaʻilagi",
-    "try_demo": "Faataʻitaʻi le faaaliga fegalegaleai"
+    "interactive_demo": "Faaaliga fegalegaleai"
   }
 }

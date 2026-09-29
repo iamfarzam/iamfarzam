@@ -44,8 +44,7 @@
     "tech_count": "Tecnologias",
     "no_featured": "Projetos em destaque em breve.",
     "no_summary": "Resumo em breve.",
-    "visit_website": "Visitar site",
-    "try_demo": "Experimentar demonstração interativa"
+    "interactive_demo": "Demonstração interativa"
   },
   "experience": {
     "title": "Experiência",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Demo ao vivo",
-    "visit_website": "Visitar site",
-    "try_demo": "Experimentar demonstração interativa"
+    "interactive_demo": "Demonstração interativa"
   }
 }

@@ -44,8 +44,7 @@
     "tech_count": "Teknolojiler",
     "no_featured": "Öne çıkan projeler çok yakında.",
     "no_summary": "Özet çok yakında.",
-    "visit_website": "Web sitesini ziyaret et",
-    "try_demo": "Etkileşimli demoyu dene"
+    "interactive_demo": "Etkileşimli demo"
   },
   "experience": {
     "title": "Deneyim",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Canlı Demo",
-    "visit_website": "Web sitesini ziyaret et",
-    "try_demo": "Etkileşimli demoyu dene"
+    "interactive_demo": "Etkileşimli demo"
   }
 }

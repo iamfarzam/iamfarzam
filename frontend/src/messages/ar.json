@@ -44,8 +44,7 @@
     "tech_count": "التقنيات",
     "no_featured": "المشاريع المميزة قادمة قريبًا.",
     "no_summary": "الملخص قادم قريبًا.",
-    "visit_website": "زيارة الموقع",
-    "try_demo": "تجربة العرض التفاعلي"
+    "interactive_demo": "العرض التفاعلي"
   },
   "experience": {
     "title": "الخبرات",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "عرض مباشر",
-    "visit_website": "زيارة الموقع",
-    "try_demo": "تجربة العرض التفاعلي"
+    "interactive_demo": "العرض التفاعلي"
   }
 }

@@ -107,13 +107,13 @@ export default function Card({
                 rel="noopener noreferrer"
                 className="text-sm text-text-muted transition-colors hover:text-accent"
               >
-                {t("card.visit_website")} &rarr;
+                {t("card.live_demo")} &rarr;
               </a>
             )}
             {demoUrl && (
               <a href={demoUrl} target="_blank" rel="noopener noreferrer"
                 className="text-sm font-medium text-accent hover:underline">
-                {t("card.try_demo")} &rarr;
+                {t("card.interactive_demo")} &rarr;
               </a>
             )}
           </div>
