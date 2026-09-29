@@ -29,26 +29,47 @@ Nginx trusts Cloudflare's officially published edge networks for visitor IP rest
    account for queued jobs. Enabling AOF recreates an existing Redis container;
    its previous in-memory queue is not automatically copied into the new volume.
    Apply that infrastructure change in a planned maintenance window.
-3. Add the HTTPS settings an older `.env` predates. The production security check
-   fails the release on `security.W008` unless `SECURE_SSL_REDIRECT=True`, and
-   `deploy.sh` now refuses before building rather than after. Once TLS terminates
-   at your proxy, set all of these together:
+3. Declare which component performs the HTTPS redirect. An `.env` predating these
+   variables leaves it unset, and the release check then fails on `security.W008`;
+   `deploy.sh` refuses before building rather than after. Both topologies are
+   supported, and neither is more correct than the other.
+
+   **The edge redirects** — Cloudflare "Always Use HTTPS", or any proxy that
+   redirects before the origin. Django's own redirect is redundant here, and
+   enabling it against an edge that reaches the origin over HTTP causes a
+   redirect loop:
 
    ```dotenv
-   SECURE_SSL_REDIRECT=True
+   SECURE_SSL_REDIRECT=False
    SESSION_COOKIE_SECURE=True
    CSRF_COOKIE_SECURE=True
    NGINX_PROXY_SCHEME=https
    INTERNAL_API_FORWARD_PROTO=https
    ```
 
-   `NGINX_PROXY_SCHEME=https` is required with the redirect: the origin hop into
-   container Nginx is plain HTTP, so `auto` would make Django 301 every API, admin
+   The cookie flags are required: without Django's redirect they would otherwise
+   default to off. `security.W008` is silenced only for this exact combination, so
+   it can never be silenced by leaving the value unset.
+
+   **Django redirects** — no redirect upstream of the origin:
+
+   ```dotenv
+   SECURE_SSL_REDIRECT=True
+   NGINX_PROXY_SCHEME=https
+   INTERNAL_API_FORWARD_PROTO=https
+   ```
+
+   In both cases `NGINX_PROXY_SCHEME=https` preserves the visitor's scheme: the
+   origin hop into container Nginx is plain HTTP, and `auto` would replace the
+   edge's `X-Forwarded-Proto: https`, making Django treat HTTPS visitors as
+   insecure. With Django redirecting, `auto` additionally 301s every API, admin
    and health request. `INTERNAL_API_FORWARD_PROTO=https` keeps server-side
-   rendering from being redirected. Do not expose that HTTP listener to untrusted
-   clients once Nginx asserts HTTPS. Set `NGINX_TRUSTED_PROXY` only to the actual
-   trusted peer if forwarding client addresses. Keep the current listener and
-   proxy upstream.
+   rendering from being redirected.
+
+   Because Nginx then asserts HTTPS, do not leave that HTTP listener reachable by
+   arbitrary clients — restrict origin port 80 to your edge. Set
+   `NGINX_TRUSTED_PROXY` only to the actual trusted peer if forwarding client
+   addresses. Keep the current listener and proxy upstream.
 4. Update the existing checkout to the tested `master` revision with
    `git pull --ff-only` once these commits have been pushed. Use the existing
    production `.env` and Compose project name when validating the model.
