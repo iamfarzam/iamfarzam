@@ -19,6 +19,8 @@ const COMPLETE_ENV = [
   "NEXT_PUBLIC_SITE_URL=https://example.com",
   "NEXT_PUBLIC_API_URL=https://example.com/api/v1",
   "CELERY_BROKER_URL=redis://redis:6379/0",
+  "SECURE_SSL_REDIRECT=True",
+  "NGINX_PROXY_SCHEME=https",
   "",
 ].join("\n");
 
@@ -152,14 +154,25 @@ test("refuses to deploy when a required env value is missing", () => {
 });
 
 test("refuses to deploy when the HTTPS redirect and proxy scheme disagree", () => {
-  const result = runDeployment("", "deploy", "SECURE_SSL_REDIRECT=True\nNGINX_PROXY_SCHEME=auto\n");
+  const mismatched = COMPLETE_ENV.replace("NGINX_PROXY_SCHEME=https", "NGINX_PROXY_SCHEME=auto");
+  const result = runDeployment("", "deploy", "", false, mismatched);
   assert.match(result.env, /ACTIVE_COLOR=blue/);
   assert.match(result.state, /active=blue/);
+  assert.doesNotMatch(result.calls, / build/);
+  assert.doesNotMatch(result.calls, / up /);
+});
+
+test("refuses to deploy an env predating the HTTPS settings, before building", () => {
+  // security.W008 would reject this anyway, but only after a full image build.
+  const legacy = COMPLETE_ENV.replace("SECURE_SSL_REDIRECT=True\n", "");
+  const result = runDeployment("", "deploy", "", false, legacy);
+  assert.match(result.state, /active=blue/);
+  assert.doesNotMatch(result.calls, / build/);
   assert.doesNotMatch(result.calls, / up /);
 });
 
 test("accepts a consistent HTTPS redirect and proxy scheme", () => {
-  const result = runDeployment("health", "deploy", "SECURE_SSL_REDIRECT=True\nNGINX_PROXY_SCHEME=https\n");
+  const result = runDeployment("health");
   assert.match(result.calls, /portfolio-green up/);
 });
 
