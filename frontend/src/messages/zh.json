@@ -44,8 +44,7 @@
     "tech_count": "技术栈",
     "no_featured": "精选项目即将上线。",
     "no_summary": "项目摘要即将上线。",
-    "visit_website": "访问网站",
-    "try_demo": "体验交互演示"
+    "interactive_demo": "交互演示"
   },
   "experience": {
     "title": "工作经历",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "在线演示",
-    "visit_website": "访问网站",
-    "try_demo": "体验交互演示"
+    "interactive_demo": "交互演示"
   }
 }

@@ -44,8 +44,7 @@
     "tech_count": "Technológiák",
     "no_featured": "Kiemelt projektek hamarosan.",
     "no_summary": "Összefoglaló hamarosan.",
-    "visit_website": "Weboldal megnyitása",
-    "try_demo": "Interaktív bemutató kipróbálása"
+    "interactive_demo": "Interaktív bemutató"
   },
   "experience": {
     "title": "Tapasztalat",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Élő Demó",
-    "visit_website": "Weboldal megnyitása",
-    "try_demo": "Interaktív bemutató kipróbálása"
+    "interactive_demo": "Interaktív bemutató"
   }
 }

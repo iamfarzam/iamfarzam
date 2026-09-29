@@ -36,7 +36,7 @@ describe("Card", () => {
   it("hides the link row when neither GitHub nor live URL is set", () => {
     const { container } = render(<Card {...baseProps} />);
     expect(screen.queryByText(/card\.github/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/card\.visit_website/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/card.live_demo/)).not.toBeInTheDocument();
     // The dedicated link row has the border-t separator class — confirm it's absent
     expect(container.querySelector(".border-t")).toBeNull();
   });
@@ -44,13 +44,13 @@ describe("Card", () => {
   it("renders only the GitHub link when only github_url is provided", () => {
     render(<Card {...baseProps} githubUrl="https://github.com/x/y" />);
     expect(screen.getByText(/card\.github/)).toBeInTheDocument();
-    expect(screen.queryByText(/card\.visit_website/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/card.live_demo/)).not.toBeInTheDocument();
   });
 
   it("renders only the live link when only live_url is provided", () => {
     render(<Card {...baseProps} liveUrl="https://example.com" />);
     expect(screen.queryByText(/card\.github/)).not.toBeInTheDocument();
-    expect(screen.getByText(/card\.visit_website/)).toBeInTheDocument();
+    expect(screen.getByText(/card.live_demo/)).toBeInTheDocument();
   });
 
   it("renders both links when both URLs are provided", () => {
@@ -62,7 +62,7 @@ describe("Card", () => {
       />,
     );
     expect(screen.getByText(/card\.github/)).toBeInTheDocument();
-    expect(screen.getByText(/card\.visit_website/)).toBeInTheDocument();
+    expect(screen.getByText(/card.live_demo/)).toBeInTheDocument();
   });
 
   it("caps visible technology badges and shows an overflow indicator", () => {

@@ -44,8 +44,7 @@
     "tech_count": "Tech",
     "no_featured": "Featured projects coming soon.",
     "no_summary": "Summary coming soon.",
-    "visit_website": "Visit website",
-    "try_demo": "Try interactive demo"
+    "interactive_demo": "Interactive Demo"
   },
   "experience": {
     "title": "Experience",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "Live Demo",
-    "visit_website": "Visit website",
-    "try_demo": "Try interactive demo"
+    "interactive_demo": "Interactive Demo"
   }
 }

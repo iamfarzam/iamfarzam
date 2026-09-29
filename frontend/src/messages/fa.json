@@ -44,8 +44,7 @@
     "tech_count": "فناوری‌ها",
     "no_featured": "پروژه‌های ویژه به‌زودی منتشر می‌شوند.",
     "no_summary": "خلاصه به‌زودی منتشر می‌شود.",
-    "visit_website": "مشاهده وب‌سایت",
-    "try_demo": "آزمایش دموی تعاملی"
+    "interactive_demo": "دموی تعاملی"
   },
   "experience": {
     "title": "تجربه",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "دمو زنده",
-    "visit_website": "مشاهده وب‌سایت",
-    "try_demo": "آزمایش دموی تعاملی"
+    "interactive_demo": "دموی تعاملی"
   }
 }

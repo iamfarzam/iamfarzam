@@ -44,8 +44,7 @@
     "tech_count": "ٹیکنالوجی",
     "no_featured": "نمایاں پراجیکٹس جلد آرہے ہیں۔",
     "no_summary": "خلاصہ جلد آرہا ہے۔",
-    "visit_website": "ویب سائٹ دیکھیں",
-    "try_demo": "تعاملی ڈیمو آزمائیں"
+    "interactive_demo": "تعاملی ڈیمو"
   },
   "experience": {
     "title": "تجربہ",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "لائیو ڈیمو",
-    "visit_website": "ویب سائٹ دیکھیں",
-    "try_demo": "تعاملی ڈیمو آزمائیں"
+    "interactive_demo": "تعاملی ڈیمو"
   }
 }

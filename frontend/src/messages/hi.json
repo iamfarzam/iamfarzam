@@ -44,8 +44,7 @@
     "tech_count": "तकनीक",
     "no_featured": "फीचर्ड प्रोजेक्ट जल्द ही आ रहे हैं।",
     "no_summary": "सारांश जल्द ही आ रहा है।",
-    "visit_website": "वेबसाइट देखें",
-    "try_demo": "इंटरैक्टिव डेमो आज़माएँ"
+    "interactive_demo": "इंटरैक्टिव डेमो"
   },
   "experience": {
     "title": "अनुभव",
@@ -92,7 +91,6 @@
   "card": {
     "github": "GitHub",
     "live_demo": "लाइव डेमो",
-    "visit_website": "वेबसाइट देखें",
-    "try_demo": "इंटरैक्टिव डेमो आज़माएँ"
+    "interactive_demo": "इंटरैक्टिव डेमो"
   }
 }
