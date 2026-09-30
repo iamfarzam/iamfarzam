@@ -1,0 +1,156 @@
+{% extends "admin/base.html" %}
+
+{% comment %}
+Replaces Unfold's default index, which lists the same applications the sidebar
+already navigates. The sidebar stays the only place to reach model lists; this
+page reports counts, trends and demo readiness instead.
+{% endcomment %}
+
+{% load i18n unfold %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col gap-6">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            {% for card in kpi_cards %}
+                {% component "unfold/components/card.html" with href=card.href size="md" %}
+                    <div class="flex flex-col">
+                        <div class="flex flex-row gap-2 items-center">
+                            <span class="material-symbols-outlined text-base-400 text-xl dark:text-base-500">{{ card.icon }}</span>
+                            <p class="font-medium text-subtle text-xs truncate uppercase">{{ card.title }}</p>
+                        </div>
+
+                        <p class="font-semibold mt-2 text-3xl text-important">{{ card.value }}</p>
+                        <p class="mt-1 text-subtle text-xs">{{ card.footer }}</p>
+                    </div>
+                {% endcomponent %}
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {% component "unfold/components/card.html" with title=_("Messages received") description=trend_window title_icon="mail" %}
+                <div style="height: 240px">
+                    {% component "unfold/components/chart/bar.html" with data=messages_chart %}{% endcomponent %}
+                </div>
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" with title=_("Replies sent") description=trend_window title_icon="send" %}
+                <div style="height: 240px">
+                    {% component "unfold/components/chart/line.html" with data=email_chart %}{% endcomponent %}
+                </div>
+            {% endcomponent %}
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {% component "unfold/components/card.html" with title=_("Most used technologies") description=_("Across active projects") title_icon="stack" %}
+                {% if has_technology_chart %}
+                    <div style="height: 240px">
+                        {% component "unfold/components/chart/bar.html" with data=technology_chart %}{% endcomponent %}
+                    </div>
+                {% else %}
+                    {% component "unfold/components/text.html" with class="text-subtle" %}
+                        {% trans "No technologies are linked to an active project yet." %}
+                    {% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" with title=_("Enquiry languages") description=_("All messages received") title_icon="translate" %}
+                {% if has_language_chart %}
+                    <div style="height: 240px">
+                        {% component "unfold/components/chart/bar.html" with data=language_chart %}{% endcomponent %}
+                    </div>
+                {% else %}
+                    {% component "unfold/components/text.html" with class="text-subtle" %}
+                        {% trans "No contact messages have arrived yet." %}
+                    {% endcomponent %}
+                {% endif %}
+            {% endcomponent %}
+        </div>
+
+        {% component "unfold/components/card.html" with title=_("Interactive demos") description=_("Availability as a visitor sees it") title_icon="play_circle" %}
+            {% if not demos_enabled %}
+                <p class="mb-4 text-red-600 text-sm dark:text-red-400">
+                    {% trans "Demo hosting is off. Set DEMOS_ENABLED=True in the server environment and redeploy." %}
+                </p>
+            {% endif %}
+
+            <div class="overflow-x-auto scrollbar-default">
+                <table class="border-separate border-spacing-none w-full">
+                    <thead>
+                        <tr class="bg-base-50 dark:bg-white/[.02]">
+                            <th class="border-b border-base-200 font-semibold px-3 py-2 text-important text-left whitespace-nowrap dark:border-base-800">{% trans "Project" %}</th>
+                            <th class="border-b border-base-200 font-semibold px-3 py-2 text-important text-left whitespace-nowrap dark:border-base-800">{% trans "Release" %}</th>
+                            <th class="border-b border-base-200 font-semibold px-3 py-2 text-important text-left whitespace-nowrap dark:border-base-800">{% trans "State" %}</th>
+                            <th class="border-b border-base-200 font-semibold px-3 py-2 text-important text-left dark:border-base-800">{% trans "Detail" %}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in demo_rows %}
+                            <tr>
+                                <td class="align-middle border-b border-base-200 px-3 py-2 text-sm dark:border-base-800">
+                                    <a href="{{ row.href }}" class="font-medium text-primary-600 whitespace-nowrap dark:text-primary-400">{{ row.title }}</a>
+                                </td>
+
+                                <td class="align-middle border-b border-base-200 px-3 py-2 text-sm text-subtle whitespace-nowrap dark:border-base-800">
+                                    {{ row.release|default:"—" }}
+                                </td>
+
+                                <td class="align-middle border-b border-base-200 px-3 py-2 dark:border-base-800">
+                                    {% component "unfold/helpers/label.html" with variant=row.variant text=row.state %}{% endcomponent %}
+                                </td>
+
+                                <td class="align-middle border-b border-base-200 px-3 py-2 text-sm text-subtle dark:border-base-800">
+                                    {% if row.url %}
+                                        <a href="{{ row.url }}" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400">{{ row.url }}</a>
+                                    {% else %}
+                                        {{ row.detail }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="px-3 py-2 text-sm text-subtle">{% trans "No projects exist yet." %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title=_("Latest messages") title_icon="forum" %}
+            <div class="flex flex-col gap-3">
+                {% for message in recent_messages %}
+                    <div class="flex flex-col">
+                        <div class="flex flex-row gap-2 items-center">
+                            <a href="{% url 'admin:portfolio_contactmessage_change' message.pk %}" class="font-medium text-primary-600 text-sm dark:text-primary-400">
+                                {{ message.subject }}
+                            </a>
+
+                            {% if not message.is_read %}
+                                {% component "unfold/helpers/label.html" with variant="warning" size="md" text=_("Unread") %}{% endcomponent %}
+                            {% endif %}
+                        </div>
+
+                        <p class="text-subtle text-xs">{{ message.name }} &middot; {{ message.email }} &middot; {{ message.created_at|date:"j M Y, H:i" }}</p>
+                    </div>
+                {% empty %}
+                    {% component "unfold/components/text.html" with class="text-subtle" %}
+                        {% trans "No contact messages have arrived yet." %}
+                    {% endcomponent %}
+                {% endfor %}
+            </div>
+
+            {% if recent_messages %}
+                <p class="mt-4">
+                    <a href="{{ message_changelist }}" class="font-medium text-primary-600 text-sm dark:text-primary-400">{% trans "All messages" %}</a>
+                </p>
+            {% endif %}
+        {% endcomponent %}
+    </div>
+{% endblock %}
