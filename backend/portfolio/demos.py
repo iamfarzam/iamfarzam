@@ -197,37 +197,67 @@ def check_backend_health(slug, service, release):
         raise ValidationError("Registered demo service must report ready and the selected release at /healthz.") from exc
 
 
-def demo_public_info(project):
-    if not settings.DEMOS_ENABLED or len(settings.DEMOS_GATE_SECRET) < 32:
-        return None
+def backend_ready(slug, service, release):
+    """Cached readiness for a registered backend demo service."""
     try:
-        demo = project.demo_config
-        if not demo.enabled or not project.is_active:
-            return None
+        url = registered_service(service)
+    except ValidationError:
+        return False
+    key = "demo-health:" + hashlib.sha256(
+        f"{settings.DEMOS_ROOT}:{url}:{settings.DEMOS_GATE_SECRET}:{slug}:{release}".encode()
+    ).hexdigest()
+    ready = cache.get(key)
+    if ready is None:
+        try:
+            check_backend_health(slug, service, release)
+            ready = True
+        except ValidationError:
+            ready = False
+        cache.set(key, ready, 15)
+    return ready
+
+
+def demo_availability(project):
+    """Return ``(public payload or None, reason, code)`` for one project's demo.
+
+    Availability spans hosting settings, files on disk, a database row and, for
+    backend demos, a live service. The code names which of those layers stopped
+    the demo so administration and ``demo_doctor`` can say more than
+    "unavailable"; the reason is the sentence they render. Neither reaches a
+    public response, because a visitor must not learn whether a demo exists but
+    is misconfigured.
+    """
+    if not settings.DEMOS_ENABLED:
+        return None, "Demo hosting is off; set DEMOS_ENABLED=True and redeploy.", "hosting_off"
+    if len(settings.DEMOS_GATE_SECRET) < 32:
+        return None, "DEMOS_GATE_SECRET must hold at least 32 characters.", "hosting_off"
+    demo = getattr(project, "demo_config", None)
+    if demo is None:
+        return None, "No demo configuration. Add one on this project and select a release.", "unconfigured"
+    if not project.is_active:
+        return None, "The project itself is inactive, so its demo stays private.", "not_enabled"
+    if not demo.enabled:
+        return None, "The demo configuration exists but is not enabled.", "not_enabled"
+    try:
         manifest = load_release(project.slug, demo.release)
-        if manifest["type"] == "backend":
-            url = registered_service(manifest["service"])
-            key = "demo-health:" + hashlib.sha256(
-                f"{settings.DEMOS_ROOT}:{url}:{settings.DEMOS_GATE_SECRET}:{project.slug}:{demo.release}".encode()
-            ).hexdigest()
-            ready = cache.get(key)
-            if ready is None:
-                try:
-                    check_backend_health(project.slug, manifest["service"], demo.release)
-                    ready = True
-                except ValidationError:
-                    ready = False
-                cache.set(key, ready, 15)
-            if not ready:
-                return None
-        return {
-            "url": f"https://{demo_hostname(project.slug)}/",
-            "type": manifest["type"],
-            "instructions": demo.instructions,
-            "disclosure": demo.disclosure,
-        }
-    except (AttributeError, ValidationError):
-        return None
+        url = f"https://{demo_hostname(project.slug)}/"
+    except ValidationError as exc:
+        return None, "; ".join(exc.messages), "invalid_release"
+    if manifest["type"] == "backend" and not backend_ready(project.slug, manifest["service"], demo.release):
+        return None, (
+            f"Registered service {manifest['service']!r} is not reporting release "
+            f"{demo.release} ready at /healthz."
+        ), "service_down"
+    return {
+        "url": url,
+        "type": manifest["type"],
+        "instructions": demo.instructions,
+        "disclosure": demo.disclosure,
+    }, "", "served"
+
+
+def demo_public_info(project):
+    return demo_availability(project)[0]
 
 
 def request_asset(manifest, root, uri, accepts_html=False):

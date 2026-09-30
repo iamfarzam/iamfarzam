@@ -30,7 +30,7 @@ from .models import (
     Skill,
     SkillCategory,
 )
-from .demo_admin import ProjectDemoInline
+from .demo_admin import DEMO_STATE_LABELS, ProjectDemoInline, demo_state
 
 logger = logging.getLogger(__name__)
 
@@ -173,7 +173,8 @@ class ProjectAdmin(ModelAdmin, TabbedTranslationAdmin):
         "tech_list",
         "order",
         "show_status",
-        "demo_availability",
+        "show_demo",
+        "demo_detail",
     ]
     list_editable = ["order"]
     list_filter = ["is_featured", "is_active", "technologies"]
@@ -181,11 +182,21 @@ class ProjectAdmin(ModelAdmin, TabbedTranslationAdmin):
     search_fields = ["title", "summary"]
     prepopulated_fields = {"slug": ("title",)}
     filter_horizontal = ["technologies"]
+    # The demo columns read the reverse one-to-one on every row.
+    list_select_related = ["demo_config"]
 
-    @display(description="Demo")
-    def demo_availability(self, obj):
-        from .demos import demo_public_info
-        return "Enabled" if demo_public_info(obj) else "Unavailable"
+    @display(description="Demo", label=DEMO_STATE_LABELS)
+    def show_demo(self, obj):
+        return demo_state(obj)[0]
+
+    @display(description="Demo detail")
+    def demo_detail(self, obj):
+        # A bare "Unavailable" hides whether the release, the service or the
+        # configuration is at fault, so name the blocking condition here.
+        state, detail = demo_state(obj)
+        if state != "Live":
+            return detail
+        return format_html('<a href="{}" target="_blank" rel="noopener noreferrer">{}</a>', detail, detail)
 
     fieldsets = [
         (

@@ -6,7 +6,7 @@ from django.utils import timezone
 from modeltranslation.admin import TranslationStackedInline
 from unfold.admin import StackedInline
 
-from .demos import check_readiness, load_release, release_path
+from .demos import check_readiness, demo_availability, load_release, release_path
 from .models import ProjectDemo
 
 
@@ -56,7 +56,7 @@ class ProjectDemoInline(StackedInline, TranslationStackedInline):
     model = ProjectDemo
     form = ProjectDemoForm
     # A blank form must render on every project page, or an operator never sees
-    # where to configure the demo and every published release stays private.
+    # where to configure the demo and every release stays unavailable.
     extra = 1
     max_num = 1
     verbose_name = "Demo"
@@ -76,3 +76,31 @@ class ProjectDemoInline(StackedInline, TranslationStackedInline):
             return load_release(obj.project.slug, obj.release)["type"]
         except ValidationError:
             return "Invalid or missing release"
+
+
+#: Availability code -> (changelist state, Unfold label variant).
+DEMO_STATES = {
+    "served": ("Live", "success"),
+    "unconfigured": ("Not configured", ""),
+    "not_enabled": ("Not enabled", "warning"),
+    "hosting_off": ("Hosting off", "danger"),
+    "invalid_release": ("Blocked", "danger"),
+    "service_down": ("Blocked", "danger"),
+}
+
+DEMO_STATE_LABELS = {state: variant for state, variant in DEMO_STATES.values()}
+
+
+def demo_state(project):
+    """Return ``(state, detail)`` for one project, memoized per instance.
+
+    The changelist renders the state and the detail in separate columns, so
+    evaluating once per row keeps a single readiness probe per project.
+    """
+    cached = getattr(project, "_demo_state", None)
+    if cached is None:
+        info, reason, code = demo_availability(project)
+        state = DEMO_STATES.get(code, ("Blocked", "danger"))[0]
+        cached = (state, info["url"] if info else reason)
+        project._demo_state = cached
+    return cached

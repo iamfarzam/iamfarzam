@@ -306,6 +306,63 @@ class DemoTests(TestCase):
         with self.assertRaises(ValidationError):
             load_release("sample", "v1", verify=True)
 
+    def test_availability_reason_names_the_blocking_condition(self):
+        from portfolio.demos import demo_availability
+
+        info, reason, code = demo_availability(self.project)
+        self.assertEqual(info["url"], "https://demo-sample.example.com/")
+        self.assertEqual((reason, code), ("", "served"))
+
+        self.demo.enabled = False
+        self.demo.save()
+        self.project.refresh_from_db()
+        info, reason, code = demo_availability(self.project)
+        self.assertEqual(code, "not_enabled")
+        self.assertIn("not enabled", reason)
+
+        self.demo.delete()
+        self.project.refresh_from_db()
+        self.assertEqual(demo_availability(self.project)[2], "unconfigured")
+
+        with override_settings(DEMOS_ENABLED=False):
+            self.assertEqual(demo_availability(self.project)[2], "hosting_off")
+        with override_settings(DEMOS_GATE_SECRET="short"):
+            self.assertEqual(demo_availability(self.project)[2], "hosting_off")
+
+    def test_invalid_release_and_inactive_project_are_distinguished(self):
+        from portfolio.demos import demo_availability
+
+        self.demo.release = "missing"
+        self.demo.save(update_fields=["release"])
+        self.project.refresh_from_db()
+        self.assertEqual(demo_availability(self.project)[2], "invalid_release")
+        self.project.is_active = False
+        self.project.save(update_fields=["is_active"])
+        self.assertEqual(demo_availability(self.project)[2], "not_enabled")
+
+    def test_reason_never_reaches_a_public_response(self):
+        self.demo.release = "missing"
+        self.demo.save(update_fields=["release"])
+        self.project.refresh_from_db()
+        data = ProjectDetailSerializer(self.project).data
+        self.assertIsNone(data["demo"])
+        self.assertNotIn("manifest", json.dumps(data))
+
+    def test_project_list_reports_why_a_demo_is_not_served(self):
+        from django.contrib.auth import get_user_model
+
+        user = get_user_model().objects.create_superuser("lister", "lister@example.test", "test-password")
+        self.client.force_login(user)
+        response = self.client.get("/admin/portfolio/project/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Live")
+        self.assertContains(response, 'href="https://demo-sample.example.com/"')
+
+        self.demo.delete()
+        response = self.client.get("/admin/portfolio/project/")
+        self.assertContains(response, "Not configured")
+        self.assertContains(response, "No demo configuration")
+
     def test_project_page_offers_a_blank_demo_form_when_none_exists(self):
         from django.contrib.auth import get_user_model
 
@@ -317,3 +374,22 @@ class DemoTests(TestCase):
         # Without a rendered blank form an operator never finds where to
         # configure a demo, and every uploaded release stays unavailable.
         self.assertContains(response, 'name="demo_config-0-release"')
+
+    def test_demo_doctor_reports_each_blocking_layer(self):
+        from io import StringIO
+
+        output = StringIO()
+        call_command("demo_doctor", stdout=output)
+        report = output.getvalue()
+        self.assertIn("sample", report)
+        self.assertIn("SERVED", report)
+        self.assertIn("1 of 1 reported demos are being served.", report)
+
+        self.demo.delete()
+        output = StringIO()
+        call_command("demo_doctor", "sample", stdout=output)
+        report = output.getvalue()
+        self.assertIn("No demo configuration", report)
+        self.assertIn("v1", report)
+        with self.assertRaisesMessage(CommandError, "1 demos are not being served."):
+            call_command("demo_doctor", fail_on_unavailable=True, stdout=StringIO())
