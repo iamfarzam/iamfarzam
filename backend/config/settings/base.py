@@ -48,6 +48,7 @@ UNFOLD = {
     "SITE_SYMBOL": "deployed_code",
     "SITE_FAVICONS": "portfolio.admin.site_favicons",
     "ENVIRONMENT": "portfolio.admin.project_version_environment",
+    "DASHBOARD_CALLBACK": "portfolio.dashboard.dashboard_callback",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": False,
     "COLORS": {
@@ -69,6 +70,17 @@ UNFOLD = {
         "show_search": True,
         "show_all_applications": False,
         "navigation": [
+            {
+                "title": "Overview",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "icon": "dashboard",
+                        "link": "/admin/",
+                    },
+                ],
+            },
             {
                 "title": "Content",
                 "separator": True,
@@ -165,7 +177,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # Searched before app templates, so admin/index.html here replaces
+        # Unfold's default dashboard instead of losing to it.
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
