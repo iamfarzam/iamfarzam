@@ -231,6 +231,21 @@ release, enter instructions/disclosure, and enable it. Saving an enabled demo
 verifies checksums and backend readiness. Saving a disabled configuration also
 records readiness feedback, which can be inspected before enabling it.
 
+A release on disk is not a public demo on its own: a project also needs a saved,
+enabled Demo configuration. The project list shows the resulting state per
+project alongside the condition blocking it — `Not configured`, `Not enabled`,
+`Hosting off` or `Blocked` — and the admin dashboard repeats that table. For the
+full picture from a shell, including the releases present for each slug:
+
+```bash
+python manage.py demo_doctor                       # every project
+python manage.py demo_doctor sample-project        # one project
+python manage.py demo_doctor --verify              # re-check checksums and readiness
+```
+
+`demo_doctor` only reads; `--fail-on-unavailable` makes it exit non-zero so a
+deployment check can assert that every demo is being served.
+
 The project API exposes only a public demo URL, runtime, instructions and
 disclosure; private paths and upstreams are excluded. Cards and project detail
 pages distinguish the existing website from the interactive demo.
