@@ -55,7 +55,9 @@ class ProjectDemoForm(forms.ModelForm):
 class ProjectDemoInline(StackedInline, TranslationStackedInline):
     model = ProjectDemo
     form = ProjectDemoForm
-    extra = 0
+    # A blank form must render on every project page, or an operator never sees
+    # where to configure the demo and every published release stays private.
+    extra = 1
     max_num = 1
     verbose_name = "Demo"
     readonly_fields = ("runtime", "check_result", "last_checked_at")

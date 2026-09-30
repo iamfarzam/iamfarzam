@@ -305,3 +305,15 @@ class DemoTests(TestCase):
         (self.release / "manifest.json").write_text(json.dumps(manifest))
         with self.assertRaises(ValidationError):
             load_release("sample", "v1", verify=True)
+
+    def test_project_page_offers_a_blank_demo_form_when_none_exists(self):
+        from django.contrib.auth import get_user_model
+
+        self.demo.delete()
+        user = get_user_model().objects.create_superuser("editor", "editor@example.test", "test-password")
+        self.client.force_login(user)
+        response = self.client.get(f"/admin/portfolio/project/{self.project.pk}/change/")
+        self.assertEqual(response.status_code, 200)
+        # Without a rendered blank form an operator never finds where to
+        # configure a demo, and every uploaded release stays unavailable.
+        self.assertContains(response, 'name="demo_config-0-release"')
